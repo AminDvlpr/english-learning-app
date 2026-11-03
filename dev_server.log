@@ -1,0 +1,18 @@
+
+> my-app@0.1.0 dev
+> next dev
+
+  ▲ Next.js 14.2.35
+  - Local:        http://localhost:3000
+
+ ✓ Starting...
+ ✓ Ready in 1801ms
+ ○ Compiling / ...
+ ✓ Compiled / in 12s (1496 modules)
+ GET / 200 in 13258ms
+ ✓ Compiled in 1274ms (735 modules)
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 5.5s (1467 modules)
+ GET /assets/rive/cafe-scene.riv 404 in 5593ms
+ GET / 200 in 274ms
+ GET /assets/rive/cafe-scene.riv 404 in 39ms
