@@ -12,6 +12,12 @@ import { sampleCafeLesson } from "@/data/sample-cafe-lesson"
 import { staggerContainerVariant } from "@/lib/motion-tokens"
 import { useLearnerStore } from "@/store/useLearnerStore"
 import { LearnerStateInspector } from "@/components/canvas/LearnerStateInspector"
+import { HeadingIntroBlock, CalloutBlock, ToggleTableBlock } from "@/components/canvas/blocks"
+import {
+  HeadingIntroBlock as HeadingIntroBlockType,
+  CalloutBlock as CalloutBlockType,
+  ToggleTableBlock as ToggleTableBlockType
+} from "@/types"
 
 export default function Home() {
   const blockStates = useLearnerStore(state => state.blockStates)
@@ -52,37 +58,44 @@ export default function Home() {
 
             return (
               <MotionBlockWrapper key={block.blockId} block={block} state={bState}>
-              <Card className="w-full">
-                <CardHeader>
-                  <CardTitle className="text-lg flex justify-between items-center">
-                    <span className="capitalize">{block.type.replace('_', ' ')}</span>
-                    <Badge>{block.difficultyLevel || 'N/A'}</Badge>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <pre className="text-xs text-muted-foreground overflow-x-auto whitespace-pre-wrap text-left dir-ltr p-2 bg-muted rounded-md border border-border">
-                    {JSON.stringify(block, null, 2)}
-                  </pre>
-                  {/* Additional rendering logic for specific blocks to show bilingual compatibility */}
-                  {block.type === 'callout' && block.bilingualExample && (
-                    <div className="mt-4 p-4 border rounded-md bg-background">
-                      <p className="font-semibold mb-2">Bilingual Example:</p>
-                      <p dir="ltr" className="text-left font-mono bg-muted p-2 rounded">{block.bilingualExample.en}</p>
-                      <p dir="rtl" className="text-right font-vazirmatn mt-2">{block.bilingualExample.fa}</p>
-                    </div>
-                  )}
-                  {block.type === 'interactive_checkpoint' && block.question && (
-                    <div className="mt-4 p-4 border rounded-md bg-background">
-                      <p className="font-semibold mb-2" dir="rtl">{block.question.prompt}</p>
-                      {block.question.options && block.question.options.map(opt => (
-                        <p key={opt.id} dir="ltr" className="text-left font-mono mt-1 text-sm bg-muted p-2 rounded">
-                          - {opt.text}
-                        </p>
-                      ))}
-                    </div>
-                  )}
-                </CardContent>
-                </Card>
+                {block.type === 'heading_intro' && (
+                  <HeadingIntroBlock block={block as HeadingIntroBlockType} state={bState} />
+                )}
+
+                {block.type === 'callout' && (
+                  <CalloutBlock block={block as CalloutBlockType} state={bState} />
+                )}
+
+                {block.type === 'toggle_table' && (
+                  <ToggleTableBlock block={block as ToggleTableBlockType} state={bState} />
+                )}
+
+                {/* Keep raw JSON previews for remaining block types (Motion Canvas, Interactive Checkpoints) for future phases */}
+                {(block.type !== 'heading_intro' && block.type !== 'callout' && block.type !== 'toggle_table') && (
+                  <Card className="w-full">
+                    <CardHeader>
+                      <CardTitle className="text-lg flex justify-between items-center">
+                        <span className="capitalize">{block.type.replace('_', ' ')}</span>
+                        <Badge>{block.difficultyLevel || 'N/A'}</Badge>
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <pre className="text-xs text-muted-foreground overflow-x-auto whitespace-pre-wrap text-left dir-ltr p-2 bg-muted rounded-md border border-border">
+                        {JSON.stringify(block, null, 2)}
+                      </pre>
+                      {block.type === 'interactive_checkpoint' && block.question && (
+                        <div className="mt-4 p-4 border rounded-md bg-background">
+                          <p className="font-semibold mb-2" dir="rtl">{block.question.prompt}</p>
+                          {block.question.options && block.question.options.map(opt => (
+                            <p key={opt.id} dir="ltr" className="text-left font-mono mt-1 text-sm bg-muted p-2 rounded">
+                              - {opt.text}
+                            </p>
+                          ))}
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                )}
               </MotionBlockWrapper>
             )
           })}
