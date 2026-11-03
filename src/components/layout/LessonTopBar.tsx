@@ -2,10 +2,11 @@
 
 import * as React from "react"
 import { motion } from "framer-motion"
-import { X, Flame, Heart } from "lucide-react"
+import { X, Flame, Heart, Volume2, VolumeX } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
+import { audioFeedback } from "@/lib/audio-feedback"
 
 export interface LessonTopBarProps {
   title: string
@@ -22,6 +23,17 @@ export function LessonTopBar({
   hearts = 5,
   onClose,
 }: LessonTopBarProps) {
+  const [isMuted, setIsMuted] = React.useState(false)
+
+  React.useEffect(() => {
+    setIsMuted(audioFeedback.isMuted())
+  }, [])
+
+  const handleToggleMute = () => {
+    const newMutedState = audioFeedback.toggleMute()
+    setIsMuted(newMutedState)
+  }
+
   return (
     <motion.header
       initial={{ y: -20, opacity: 0 }}
@@ -46,7 +58,7 @@ export function LessonTopBar({
           <Progress value={progress} className="w-full" indicatorClassName="bg-success" />
         </div>
 
-        {/* Right: Stats (Streak, Hearts) */}
+        {/* Right: Stats (Streak, Hearts, Audio Toggle) */}
         <div className="flex items-center gap-4 flex-1 justify-end">
           <div className="flex items-center gap-1.5 text-warning font-bold">
             <Flame className="h-5 w-5 fill-warning text-warning" />
@@ -56,6 +68,13 @@ export function LessonTopBar({
             <Heart className="h-5 w-5 fill-destructive text-destructive" />
             <span>{hearts}</span>
           </div>
+          <Button variant="ghost" size="icon" onClick={handleToggleMute} aria-label={isMuted ? "Unmute" : "Mute"}>
+            {isMuted ? (
+                <VolumeX className="h-5 w-5 text-muted-foreground" />
+            ) : (
+                <Volume2 className="h-5 w-5 text-muted-foreground" />
+            )}
+          </Button>
         </div>
 
       </div>
