@@ -10,15 +10,19 @@ import { Badge } from "@/components/ui/badge"
 import { MotionBlockWrapper } from "@/components/motion/MotionBlockWrapper"
 import { sampleCafeLesson } from "@/data/sample-cafe-lesson"
 import { staggerContainerVariant } from "@/lib/motion-tokens"
+import { useLearnerStore } from "@/store/useLearnerStore"
+import { LearnerStateInspector } from "@/components/canvas/LearnerStateInspector"
 
 export default function Home() {
-  const [progress, setProgress] = React.useState(25)
+  const blockStates = useLearnerStore(state => state.blockStates)
+  const xp = useLearnerStore(state => state.xp)
 
   React.useEffect(() => {
-    const interval = setInterval(() => {
-      setProgress((prev) => (prev >= 100 ? 0 : prev + 25))
-    }, 3000)
-    return () => clearInterval(interval)
+    useLearnerStore.persist.onFinishHydration(() => {
+      if (useLearnerStore.getState().currentLessonId !== 'lesson_cafe_001') {
+        useLearnerStore.getState().initializeLesson('lesson_cafe_001', sampleCafeLesson)
+      }
+    })
   }, [])
 
   return (
@@ -26,27 +30,28 @@ export default function Home() {
       topBar={
         <LessonTopBar
           title="Polite Ordering in an English Café"
-          progress={progress}
+          progress={Math.min(100, xp)} // Simple progress mapping
           streak={12}
           hearts={4}
         />
       }
     >
-      <motion.div
-        variants={staggerContainerVariant}
-        initial="initial"
-        whileInView="whileInView"
-        viewport={{ once: true, margin: "-100px" }}
-        className="flex flex-col gap-8 pb-24 max-w-2xl mx-auto w-full"
-      >
-        <Badge variant="outline" className="w-fit self-center mb-4">Smart Canvas Preview</Badge>
+      <div className="flex gap-8 relative max-w-5xl mx-auto w-full px-4">
+        {/* Left Side: Lesson Canvas */}
+        <motion.div
+          variants={staggerContainerVariant}
+          initial="initial"
+          whileInView="whileInView"
+          viewport={{ once: true, margin: "-100px" }}
+          className="flex flex-col gap-8 pb-24 flex-1"
+        >
+          <Badge variant="outline" className="w-fit self-center mb-4">Smart Canvas Interactive</Badge>
 
-        {sampleCafeLesson.map((block, index) => {
-          // For demo purposes, we assign mock states based on index
-          const state = index === 0 ? "completed" : index === 1 ? "active" : index === 3 ? "verification-required" : index === 5 ? "adaptive-remediation" : "locked";
+          {sampleCafeLesson.map((block) => {
+            const bState = blockStates[block.blockId]?.state || 'locked';
 
-          return (
-            <MotionBlockWrapper key={block.blockId} block={block} state={state}>
+            return (
+              <MotionBlockWrapper key={block.blockId} block={block} state={bState}>
               <Card className="w-full">
                 <CardHeader>
                   <CardTitle className="text-lg flex justify-between items-center">
@@ -77,12 +82,17 @@ export default function Home() {
                     </div>
                   )}
                 </CardContent>
-              </Card>
-            </MotionBlockWrapper>
-          )
-        })}
+                </Card>
+              </MotionBlockWrapper>
+            )
+          })}
+        </motion.div>
 
-      </motion.div>
+        {/* Right Side: Diagnostic Inspector */}
+        <div className="hidden lg:block w-80 shrink-0">
+          <LearnerStateInspector />
+        </div>
+      </div>
     </AppShell>
   )
 }
