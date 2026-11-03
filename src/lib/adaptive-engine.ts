@@ -29,8 +29,19 @@ export function evaluateCheckpointAttempt(
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _currentDifficulty: DifficultyLevel
 ): EvaluationResult {
-  const option = block.question.options?.find(opt => opt.id === selectedOptionId);
-  const isCorrect = option?.correct || false;
+  let isCorrect = false;
+  let feedback: string | undefined = undefined;
+
+  if (block.checkpointMode === 'slot_matching') {
+    const expected = block.question.slots?.map(s => s.expected) || [];
+    isCorrect = selectedOptionId === JSON.stringify(expected);
+  } else if (block.checkpointMode === 'micro_sprint_reflex' && selectedOptionId === 'timeout') {
+    isCorrect = false;
+  } else {
+    const option = block.question.options?.find(opt => opt.id === selectedOptionId);
+    isCorrect = option?.correct || false;
+    feedback = option?.feedback;
+  }
 
   if (isCorrect) {
     if (attemptCount === 1) {
@@ -43,7 +54,7 @@ export function evaluateCheckpointAttempt(
         nextState: 'completed',
         triggerRemediationAnimation: false,
         provideSmartHint: false,
-        feedback: option?.feedback
+        feedback: feedback
       };
     } else {
       return {
@@ -55,7 +66,7 @@ export function evaluateCheckpointAttempt(
         nextState: 'completed',
         triggerRemediationAnimation: false,
         provideSmartHint: false,
-        feedback: option?.feedback
+        feedback: feedback
       };
     }
   } else {
@@ -68,7 +79,7 @@ export function evaluateCheckpointAttempt(
       nextState: 'adaptive-remediation',
       triggerRemediationAnimation: block.adaptiveRules.onFailure.triggerRemediationAnimation,
       provideSmartHint: block.adaptiveRules.onFailure.provideSmartHint,
-      feedback: option?.feedback || block.adaptiveRules.onFailure.smartHintText
+      feedback: feedback || block.adaptiveRules.onFailure.smartHintText
     };
   }
 }
