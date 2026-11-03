@@ -42,7 +42,7 @@ export const sampleCafeLesson: LessonBlock[] = [
     type: 'interactive_checkpoint',
     blockId: 'blk_eng_042',
     order: 4,
-    checkpointMode: 'multiple_choice_motion',
+    checkpointMode: 'branching_decision',
     motionSceneId: 'scene_cafe_ordering',
     triggerTimestamp: 18.5,
     difficultyLevel: 'intermediate',

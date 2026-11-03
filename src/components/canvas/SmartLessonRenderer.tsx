@@ -1,6 +1,6 @@
 "use client"
 
-import React from "react"
+import React, { useEffect } from "react"
 import { motion } from "framer-motion"
 import { LessonBlock } from "@/types"
 import { staggerContainerVariant } from "@/lib/motion-tokens"
@@ -8,6 +8,7 @@ import { useLearnerStore } from "@/store/useLearnerStore"
 import { MotionBlockWrapper } from "@/components/motion/MotionBlockWrapper"
 import { useInteractiveLesson } from "@/hooks/useInteractiveLesson"
 import { HeadingIntroBlock, CalloutBlock, ToggleTableBlock, MotionCanvasBlock } from "@/components/canvas/blocks"
+import { InteractiveCheckpointBlock } from "@/components/checkpoints/InteractiveCheckpointBlock"
 import {
   HeadingIntroBlock as HeadingIntroBlockType,
   CalloutBlock as CalloutBlockType,
@@ -16,8 +17,6 @@ import {
   InteractiveCheckpointBlock as InteractiveCheckpointBlockType
 } from "@/types"
 import { Badge } from "@/components/ui/badge"
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
 
 interface SmartLessonRendererProps {
   lesson: LessonBlock[]
@@ -25,7 +24,13 @@ interface SmartLessonRendererProps {
 
 export function SmartLessonRenderer({ lesson }: SmartLessonRendererProps) {
   const blockStates = useLearnerStore(state => state.blockStates)
-  const submitCheckpointAnswer = useLearnerStore(state => state.submitCheckpointAnswer)
+  const initializeLesson = useLearnerStore(state => state.initializeLesson)
+
+  useEffect(() => {
+    if (Object.keys(blockStates).length === 0) {
+      initializeLesson('lesson-1', lesson)
+    }
+  }, [blockStates, initializeLesson, lesson])
 
   const {
     currentTimeSec,
@@ -97,33 +102,10 @@ export function SmartLessonRenderer({ lesson }: SmartLessonRendererProps) {
                 )}
 
                 {block.type === 'interactive_checkpoint' && (
-                  <Card className={`w-full transition-all duration-300 ${bState === 'locked' ? 'opacity-50 backdrop-blur-[2px]' : ''}`}>
-                    <CardHeader>
-                      <CardTitle className="text-lg flex justify-between items-center">
-                        <span className="capitalize">Interactive Checkpoint</span>
-                        <Badge>{block.difficultyLevel || 'N/A'}</Badge>
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="p-4 border rounded-md bg-background">
-                        <p className="font-semibold mb-4" dir="rtl">{(block as InteractiveCheckpointBlockType).question.prompt}</p>
-                        <div className="flex flex-col gap-2">
-                          {(block as InteractiveCheckpointBlockType).question.options?.map(opt => (
-                            <Button
-                              key={opt.id}
-                              variant="outline"
-                              className="justify-start font-mono h-auto py-3 text-left whitespace-normal"
-                              dir="ltr"
-                              onClick={() => submitCheckpointAnswer(block.blockId, opt.id)}
-                              disabled={bState !== 'verification-required' && bState !== 'adaptive-remediation'}
-                            >
-                              {opt.text}
-                            </Button>
-                          ))}
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
+                  <InteractiveCheckpointBlock
+                    block={block as InteractiveCheckpointBlockType}
+                    state={bState}
+                  />
                 )}
               </MotionBlockWrapper>
             </div>
