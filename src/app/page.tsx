@@ -1,101 +1,145 @@
-import Image from "next/image";
+"use client"
+
+import * as React from "react"
+import { motion } from "framer-motion"
+import { Info, CheckCircle2, ArrowRight } from "lucide-react"
+
+import { AppShell } from "@/components/layout/AppShell"
+import { LessonTopBar } from "@/components/layout/LessonTopBar"
+import { Button } from "@/components/ui/button"
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+
+import {
+  headingMaskedReveal,
+  fadeUpVariant,
+  scalePopInVariant,
+  calloutSlideVariant,
+  iconJiggleVariant,
+  checkpointElasticVariant,
+  staggerContainerVariant,
+} from "@/lib/motion-tokens"
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [progress, setProgress] = React.useState(25)
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      setProgress((prev) => (prev >= 100 ? 0 : prev + 25))
+    }, 3000)
+    return () => clearInterval(interval)
+  }, [])
+
+  return (
+    <AppShell
+      topBar={
+        <LessonTopBar
+          title="Basics 1: Greetings & Introductions"
+          progress={progress}
+          streak={12}
+          hearts={4}
+        />
+      }
+    >
+      <motion.div
+        variants={staggerContainerVariant}
+        initial="initial"
+        whileInView="whileInView"
+        viewport={{ once: true, margin: "-100px" }}
+        className="flex flex-col gap-12 pb-24"
+      >
+        {/* 1. Heading Masked Reveal */}
+        <div className="flex flex-col gap-4">
+          <Badge variant="outline" className="w-fit">Motion Token Gallery</Badge>
+          <motion.h1
+            variants={headingMaskedReveal}
+            className="text-4xl md:text-5xl font-bold tracking-tight"
           >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            Design System & Choreography
+          </motion.h1>
+          <motion.p
+            variants={fadeUpVariant}
+            className="text-lg text-muted-foreground"
           >
-            Read our docs
-          </a>
+            Welcome to the Smart Canvas learning environment. Scroll down to see all 5 entrance animation tokens in action, running at a smooth 60fps.
+          </motion.p>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+
+        <hr className="border-border" />
+
+        {/* 2. Paragraph/Card Fade-Up */}
+        <motion.div variants={fadeUpVariant}>
+          <Card>
+            <CardHeader>
+              <CardTitle>Standard Card Fade-Up</CardTitle>
+              <CardDescription>Using `fadeUpVariant` and `UI_SPRING`</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p className="text-muted-foreground leading-relaxed">
+                This is a standard text block or card entering the viewport. It uses a gentle Y-axis translation and opacity fade, driven by our standard UI spring physics to ensure a natural, non-distracting entrance.
+              </p>
+            </CardContent>
+            <CardFooter className="gap-2">
+              <Button variant="default">Primary Action</Button>
+              <Button variant="outline">Secondary</Button>
+            </CardFooter>
+          </Card>
+        </motion.div>
+
+        {/* 3. Motion Canvas Scale Pop-in */}
+        <motion.div variants={scalePopInVariant} className="w-full aspect-video bg-muted rounded-xl border flex items-center justify-center relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 to-emerald-500/10" />
+          <div className="flex flex-col items-center gap-4 z-10 text-center p-6">
+            <div className="h-16 w-16 bg-primary rounded-2xl shadow-lg flex items-center justify-center text-primary-foreground">
+              <ArrowRight className="h-8 w-8" />
+            </div>
+            <h3 className="text-xl font-semibold">Motion Canvas Scale Pop-in</h3>
+            <p className="text-sm text-muted-foreground">Used for interactive media or focal learning elements.</p>
+          </div>
+        </motion.div>
+
+        {/* 4. Callout Left-to-Right + Icon Spring Jiggle */}
+        <motion.div
+          variants={calloutSlideVariant}
+          className="flex gap-4 p-4 rounded-lg bg-warning/10 border border-warning/20 text-warning-foreground"
         >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+          <motion.div variants={iconJiggleVariant} className="flex-shrink-0 mt-0.5">
+            <Info className="h-6 w-6 text-warning" />
+          </motion.div>
+          <div className="flex flex-col gap-1">
+            <h4 className="font-semibold text-warning-foreground">Important Grammatical Note</h4>
+            <p className="text-sm opacity-90">
+              Notice how the container slides in from the left, and a fraction of a second later, the icon jiggles into place using the elastic checkpoint spring.
+            </p>
+          </div>
+        </motion.div>
+
+        {/* 5. Checkpoint Elastic Pop-in */}
+        <div className="py-12 flex justify-center">
+          <motion.div variants={checkpointElasticVariant} className="max-w-md w-full">
+            <Card className="border-success/30 shadow-lg shadow-success/10">
+              <CardHeader className="text-center pb-2">
+                <div className="mx-auto w-12 h-12 rounded-full bg-success/20 flex items-center justify-center mb-4">
+                  <CheckCircle2 className="h-6 w-6 text-success" />
+                </div>
+                <CardTitle className="text-success">Checkpoint Reached!</CardTitle>
+                <CardDescription>Using `checkpointElasticVariant`</CardDescription>
+              </CardHeader>
+              <CardContent className="text-center pb-6">
+                <p className="text-sm text-muted-foreground">
+                  This elastic pop-in uses a higher stiffness and mass for a dramatic, rewarding reveal when a learner successfully completes a major section.
+                </p>
+              </CardContent>
+              <CardFooter className="justify-center">
+                <Button variant="success" className="w-full sm:w-auto font-semibold">
+                  Continue Learning
+                </Button>
+              </CardFooter>
+            </Card>
+          </motion.div>
+        </div>
+
+      </motion.div>
+    </AppShell>
+  )
 }
