@@ -12,11 +12,12 @@ import { sampleCafeLesson } from "@/data/sample-cafe-lesson"
 import { staggerContainerVariant } from "@/lib/motion-tokens"
 import { useLearnerStore } from "@/store/useLearnerStore"
 import { LearnerStateInspector } from "@/components/canvas/LearnerStateInspector"
-import { HeadingIntroBlock, CalloutBlock, ToggleTableBlock } from "@/components/canvas/blocks"
+import { HeadingIntroBlock, CalloutBlock, ToggleTableBlock, MotionCanvasBlock } from "@/components/canvas/blocks"
 import {
   HeadingIntroBlock as HeadingIntroBlockType,
   CalloutBlock as CalloutBlockType,
-  ToggleTableBlock as ToggleTableBlockType
+  ToggleTableBlock as ToggleTableBlockType,
+  MotionCanvasBlock as MotionCanvasBlockType
 } from "@/types"
 
 export default function Home() {
@@ -70,8 +71,12 @@ export default function Home() {
                   <ToggleTableBlock block={block as ToggleTableBlockType} state={bState} />
                 )}
 
-                {/* Keep raw JSON previews for remaining block types (Motion Canvas, Interactive Checkpoints) for future phases */}
-                {(block.type !== 'heading_intro' && block.type !== 'callout' && block.type !== 'toggle_table') && (
+                {block.type === 'motion_canvas' && (
+                  <MotionCanvasBlock block={block as MotionCanvasBlockType} state={bState} />
+                )}
+
+                {/* Keep raw JSON previews for remaining block types (Interactive Checkpoints) for future phases */}
+                {(block.type !== 'heading_intro' && block.type !== 'callout' && block.type !== 'toggle_table' && block.type !== 'motion_canvas') && (
                   <Card className="w-full">
                     <CardHeader>
                       <CardTitle className="text-lg flex justify-between items-center">
