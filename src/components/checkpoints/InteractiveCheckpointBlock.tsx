@@ -7,6 +7,8 @@ import { CHECKPOINT_ELASTIC_SPRING } from '@/lib/motion-tokens'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { useLearnerStore } from '@/store/useLearnerStore'
+import { audioFeedback } from '@/lib/audio-feedback'
+import { AdaptiveFeedbackBanner } from './AdaptiveFeedbackBanner'
 
 import { SlotMatchingExercise } from './SlotMatchingExercise'
 import { BranchingDecisionExercise } from './BranchingDecisionExercise'
@@ -32,14 +34,57 @@ export function InteractiveCheckpointBlock({ block, state }: Props) {
   const isActiveChallenge = isVerification || isRemediation
 
   let feedbackText = null
-  if (isRemediation) {
-    const attempts = blockStates[block.blockId]?.attempts || []
+  let xpAwarded = 0
+  let gemsAwarded = 0
+
+  const blockState = blockStates[block.blockId]
+  const attempts = blockState?.attempts || []
+
+  if (isRemediation || isCompleted) {
     if (attempts.length > 0) {
         const lastAttempt = attempts[attempts.length - 1]
         const matchedOption = block.question.options?.find(opt => opt.id === lastAttempt.selectedOptionId)
-        feedbackText = matchedOption?.feedback || block.adaptiveRules.onFailure.smartHintText
+        feedbackText = matchedOption?.feedback
+        if (isCompleted && attempts.length === 1) {
+            xpAwarded = block.adaptiveRules.onFirstTrySuccess.xp || 25
+            gemsAwarded = block.adaptiveRules.onFirstTrySuccess.gems || 0
+        } else if (isCompleted && attempts.length > 1) {
+            xpAwarded = 10 // Assisted success XP
+        }
     }
   }
+
+  const handleRetry = () => {
+    useLearnerStore.setState((state) => {
+        const currentBlockState = state.blockStates[block.blockId]
+        if (currentBlockState) {
+            return {
+                ...state,
+                blockStates: {
+                    ...state.blockStates,
+                    [block.blockId]: {
+                        ...currentBlockState,
+                        state: 'verification-required'
+                    }
+                }
+            }
+        }
+        return state
+    })
+  }
+
+  // Effect to play sound when state changes to completion/remediation
+  React.useEffect(() => {
+    if (isCompleted) {
+      if (attempts.length === 1) {
+        audioFeedback.playSuccessChime()
+      } else {
+        audioFeedback.playAssistedSuccessChime()
+      }
+    } else if (isRemediation) {
+      audioFeedback.playRemediationTone()
+    }
+  }, [state, isCompleted, isRemediation, attempts.length])
 
   return (
     <motion.div
@@ -126,20 +171,32 @@ export function InteractiveCheckpointBlock({ block, state }: Props) {
                 {block.checkpointMode === 'micro_sprint_reflex' && (
                   <MicroSprintReflexExercise block={block} onSubmit={handleSubmit} state={state} />
                 )}
-
-                {feedbackText && (
-                  <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: 'auto' }}
-                    className="mt-4 p-3 rounded-md bg-destructive/10 text-destructive text-sm font-semibold border border-destructive/20 text-center"
-                    dir="ltr"
-                  >
-                    {feedbackText}
-                  </motion.div>
-                )}
               </motion.div>
             )}
           </AnimatePresence>
+
+          {/* Adaptive Feedback Banner rendered below the exercise content */}
+          {(isCompleted || isRemediation) && (
+             <div className="mt-6">
+                <AdaptiveFeedbackBanner
+                  state={state}
+                  feedbackText={feedbackText || undefined}
+                  smartHintText={block.adaptiveRules.onFailure.smartHintText}
+                  targetPhraseEn={block.question.targetPhraseEn}
+                  xpAwarded={xpAwarded}
+                  gemsAwarded={gemsAwarded}
+                  onSpeakNormal={() => {
+                     const phrase = block.question.targetPhraseEn || block.adaptiveRules.onFailure.smartHintText
+                     if (phrase) audioFeedback.speakEnglishPhrase(phrase, 1.0)
+                  }}
+                  onSpeakSlow={() => {
+                     const phrase = block.question.targetPhraseEn || block.adaptiveRules.onFailure.smartHintText
+                     if (phrase) audioFeedback.speakEnglishPhrase(phrase, 0.75)
+                  }}
+                  onRetry={handleRetry}
+                />
+             </div>
+          )}
         </CardContent>
       </Card>
     </motion.div>
