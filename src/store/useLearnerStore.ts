@@ -64,19 +64,28 @@ export const useLearnerStore = create<LearnerStore>()(
       ...initialState,
 
       initializeLesson: (lessonId, blocks) => {
-        const blockStates: Record<string, BlockRuntimeState> = {};
-        blocks.forEach((block, index) => {
-          blockStates[block.blockId] = {
-            blockId: block.blockId,
-            state: index === 0 ? 'active' : 'locked',
-            attempts: [],
-            isHintActive: false,
-          };
+        const currentBlockStates = get().blockStates;
+        const newBlockStates: Record<string, BlockRuntimeState> = { ...currentBlockStates };
+        blocks.forEach((block) => {
+          if (!newBlockStates[block.blockId]) {
+            newBlockStates[block.blockId] = {
+              blockId: block.blockId,
+              state: 'locked',
+              attempts: [],
+              isHintActive: false,
+            };
+          }
         });
+
+        // Ensure first block is active if not completed
+        if (blocks.length > 0 && newBlockStates[blocks[0].blockId].state !== 'completed') {
+            newBlockStates[blocks[0].blockId].state = 'active';
+        }
+
         set({
           currentLessonId: lessonId,
           lessonBlocks: blocks,
-          blockStates,
+          blockStates: newBlockStates,
           activeBlockId: blocks[0]?.blockId || null,
           masteryScore: 0,
           currentDifficulty: 'beginner',
@@ -89,7 +98,7 @@ export const useLearnerStore = create<LearnerStore>()(
         const { blockStates, lessonBlocks } = get();
         const blockState = blockStates[blockId];
 
-        if (!blockState || blockState.state === 'locked' || blockState.state === 'verification-required') {
+        if (!blockState) {
             return;
         }
 
@@ -100,8 +109,14 @@ export const useLearnerStore = create<LearnerStore>()(
         let nextActiveBlockId = get().activeBlockId;
 
         if (blockIndex !== -1 && blockIndex + 1 < lessonBlocks.length) {
-            const nextBlockId = lessonBlocks[blockIndex + 1].blockId;
-            newBlockStates[nextBlockId] = { ...newBlockStates[nextBlockId], state: 'active' };
+            const nextBlock = lessonBlocks[blockIndex + 1];
+            const nextBlockId = nextBlock.blockId;
+            if (newBlockStates[nextBlockId].state !== 'completed') {
+                newBlockStates[nextBlockId] = {
+                    ...newBlockStates[nextBlockId],
+                    state: nextBlock.type === 'interactive_checkpoint' ? 'verification-required' : 'active'
+                };
+            }
             nextActiveBlockId = nextBlockId;
         }
 

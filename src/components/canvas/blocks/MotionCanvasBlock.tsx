@@ -7,47 +7,50 @@ import { BlockLearnerState } from "@/types/lesson"
 import { RiveSceneController } from "@/components/motion/RiveSceneController"
 import { scalePopInVariant } from "@/lib/motion-tokens"
 import { useLearnerStore } from "@/store/useLearnerStore"
-import { Play, Pause, Minimize2, Maximize2, RotateCcw, Check, X } from "lucide-react"
+import { Play, Pause, Minimize2, Maximize2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 
 interface MotionCanvasBlockProps {
   block: MotionCanvasBlockType
   state: BlockLearnerState
-  currentTimeSec: number
+  currentTimeSec?: number
   isPlaying: boolean
   onPlayPause: () => void
 }
 
-export function MotionCanvasBlock({ block, state, currentTimeSec, isPlaying, onPlayPause }: MotionCanvasBlockProps) {
+export function MotionCanvasBlock({ block, state, isPlaying, onPlayPause }: MotionCanvasBlockProps) {
   const [isPip, setIsPip] = useState(false)
 
-  // Learner store binding for diagnostic testing buttons
   const { riveSignals, completeContentBlock } = useLearnerStore()
 
+  // Independent timeline for 15s sequence
+  const TOTAL_DURATION = 15.0
+  const FIRST_CHECKPOINT = 4.0
+  const [localTime, setLocalTime] = useState(0)
+
+  React.useEffect(() => {
+    if (!isPlaying) return
+    const interval = setInterval(() => {
+      setLocalTime(prev => {
+        const next = prev + 0.1
+        if (next >= TOTAL_DURATION) {
+          clearInterval(interval)
+          if (state === 'active') completeContentBlock(block.blockId)
+          return TOTAL_DURATION
+        }
+        // Auto-complete at first checkpoint timestamp (4.0s)
+        if (prev < FIRST_CHECKPOINT && next >= FIRST_CHECKPOINT && state === 'active') {
+          completeContentBlock(block.blockId)
+        }
+        return next
+      })
+    }, 100)
+    return () => clearInterval(interval)
+  }, [isPlaying, state, block.blockId, completeContentBlock])
+
   // Helper for timeline progress
-  const progressPercent = (currentTimeSec / block.maxContinuousDurationSec) * 100
-
-  // Manual tests per requirements (using internal state override for testing UI, ideally this is driven by the store during real usage)
-  const [testState, setTestState] = useState<{ isCorrect: boolean | null, triggerName: string | null, resetCounter: number }>({
-    isCorrect: null, triggerName: null, resetCounter: 0
-  })
-
-  const runDiagnostic = (action: 'success' | 'error' | 'reset') => {
-    if (action === 'success') {
-      setTestState(prev => ({ isCorrect: true, triggerName: 'success', resetCounter: prev.resetCounter }))
-    } else if (action === 'error') {
-      setTestState(prev => ({ isCorrect: false, triggerName: 'error', resetCounter: prev.resetCounter }))
-    } else if (action === 'reset') {
-      setTestState(prev => ({ isCorrect: null, triggerName: 'reset', resetCounter: prev.resetCounter + 1 }))
-      // In real scenario, we might want a store action for reset, but omitting here since we removed setCurrentTimeSec from local state.
-    }
-  }
-
-  // Merge store signals with diagnostic overrides for the Rive controller
-  const mergedIsCorrect = testState.isCorrect !== null ? testState.isCorrect : riveSignals.isCorrect
-  const mergedTriggerName = testState.triggerName || riveSignals.triggerName
-  const mergedResetCounter = testState.resetCounter || riveSignals.resetCounter
+  const progressPercent = (localTime / TOTAL_DURATION) * 100
 
   return (
     <AnimatePresence>
@@ -65,11 +68,11 @@ export function MotionCanvasBlock({ block, state, currentTimeSec, isPlaying, onP
         <div className="relative group">
           <RiveSceneController
             assetPath={block.assetPath}
-            isCorrect={mergedIsCorrect}
+            isCorrect={riveSignals.isCorrect}
             difficultyLevel={riveSignals.difficultyLevel}
-            triggerName={mergedTriggerName}
-            resetCounter={mergedResetCounter}
-            currentTimeSec={currentTimeSec}
+            triggerName={riveSignals.triggerName}
+            resetCounter={riveSignals.resetCounter}
+            currentTimeSec={localTime}
             motionSceneId={block.motionSceneId}
           />
 
@@ -92,12 +95,10 @@ export function MotionCanvasBlock({ block, state, currentTimeSec, isPlaying, onP
               className="absolute top-0 left-0 h-full bg-primary transition-all duration-75"
               style={{ width: `${progressPercent}%` }}
             />
-            {block.triggerTimestamp && (
-               <div
+            <div
                  className="absolute top-0 w-1 h-full bg-destructive"
-                 style={{ left: `${(block.triggerTimestamp / block.maxContinuousDurationSec) * 100}%` }}
+                 style={{ left: `${(FIRST_CHECKPOINT / TOTAL_DURATION) * 100}%` }}
                />
-            )}
           </div>
 
           <div className="flex justify-between items-center text-sm">
@@ -106,33 +107,11 @@ export function MotionCanvasBlock({ block, state, currentTimeSec, isPlaying, onP
                 {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
               </Button>
               <Badge variant="outline" className="font-mono">
-                {currentTimeSec.toFixed(1)}s / {block.maxContinuousDurationSec.toFixed(1)}s
+                {localTime.toFixed(1)}s / {TOTAL_DURATION.toFixed(1)}s
               </Badge>
-            </div>
-
-            {/* Diagnostic Buttons */}
-            <div className="flex items-center gap-2">
-              <Button variant="ghost" size="icon" onClick={() => runDiagnostic('success')} title="Test Success">
-                <Check className="w-4 h-4 text-success" />
-              </Button>
-              <Button variant="ghost" size="icon" onClick={() => runDiagnostic('error')} title="Test Error">
-                <X className="w-4 h-4 text-destructive" />
-              </Button>
-              <Button variant="ghost" size="icon" onClick={() => runDiagnostic('reset')} title="Test Reset">
-                <RotateCcw className="w-4 h-4 text-muted-foreground" />
-              </Button>
             </div>
           </div>
         </div>
-
-        {state === 'active' && !isPip && (
-          <Button
-            className="mt-4 w-full sm:w-auto self-start"
-            onClick={() => completeContentBlock(block.blockId)}
-          >
-            Complete & Continue
-          </Button>
-        )}
       </motion.div>
     </AnimatePresence>
   )

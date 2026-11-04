@@ -1,8 +1,6 @@
 import * as React from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { ToggleTableBlock as ToggleTableBlockType } from "@/types"
-import { Button } from "@/components/ui/button"
-import { useLearnerStore } from "@/store/useLearnerStore"
 import { BlockLearnerState } from "@/types/lesson"
 import { ChevronDown, Volume2 } from "lucide-react"
 import { cn } from "@/lib/utils"
@@ -10,14 +8,10 @@ import type { Variants } from "framer-motion"
 
 interface ToggleTableBlockProps {
   block: ToggleTableBlockType
-  state: BlockLearnerState
+  state?: BlockLearnerState
 }
 
-export function ToggleTableBlock({ block, state }: ToggleTableBlockProps) {
-  const completeContentBlock = useLearnerStore(s => s.completeContentBlock)
-  const isCompleted = state === 'completed'
-  const isActive = state === 'active'
-
+export function ToggleTableBlock({ block }: ToggleTableBlockProps) {
   const [openItemIndices, setOpenItemIndices] = React.useState<number[]>([])
 
   const toggleItem = (index: number) => {
@@ -51,19 +45,19 @@ export function ToggleTableBlock({ block, state }: ToggleTableBlockProps) {
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, margin: "-50px" }}
-      className="flex flex-col gap-6 p-6 rounded-xl border border-slate-200/80 dark:border-slate-800 bg-card shadow-sm"
+      className="flex flex-col gap-6"
     >
       {block.items && block.items.length > 0 && (
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-px bg-slate-200 dark:bg-slate-800 rounded-lg overflow-hidden">
           {block.items.map((item, index) => {
             const isOpen = openItemIndices.includes(index)
             return (
-              <div key={index} className="border border-slate-200 dark:border-slate-800 rounded-lg overflow-hidden bg-background">
+              <div key={index} className="bg-card">
                 <button
                   onClick={() => toggleItem(index)}
-                  className="w-full flex items-center justify-between p-4 text-left hover:bg-slate-50 dark:hover:bg-slate-900/50 transition-colors"
+                  className="w-full flex items-center justify-between p-4 text-left hover:bg-slate-50/50 dark:hover:bg-slate-900/50 transition-colors"
                 >
-                  <span className="font-medium text-foreground">{item.title}</span>
+                  <span className="font-semibold font-sans text-foreground">{item.title}</span>
                   <motion.div
                     animate={{ rotate: isOpen ? 180 : 0 }}
                     transition={{ duration: 0.2, ease: "easeInOut" }}
@@ -163,20 +157,6 @@ export function ToggleTableBlock({ block, state }: ToggleTableBlockProps) {
         </div>
       )}
 
-      {isActive && (
-        <Button
-          className="mt-2 w-full sm:w-auto self-start"
-          onClick={() => completeContentBlock(block.blockId)}
-        >
-          Continue / مطالعه شد و ادامه (+5 XP)
-        </Button>
-      )}
-
-      {isCompleted && (
-        <div className="mt-2 w-full sm:w-auto self-start px-4 py-2 bg-muted text-muted-foreground rounded-md text-sm font-medium text-center">
-          Completed
-        </div>
-      )}
     </motion.div>
   )
 }

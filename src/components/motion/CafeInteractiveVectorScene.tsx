@@ -22,10 +22,10 @@ export function CafeInteractiveVectorScene({
     if (isCorrect === true || triggerName === 'success') return 'success_celebration'
     if (isCorrect === false || triggerName === 'error' || triggerName === 'remediation') return 'remediation_explanation'
 
-    // Simulate pausing exactly at or after triggerTimestamp (typically 18.5s)
-    if (currentTimeSec >= 18.5 && currentTimeSec < 19) return 'checkpoint_paused'
+    // Simulate pausing exactly at or after triggerTimestamp (now 4.0s)
+    if (currentTimeSec >= 4.0 && currentTimeSec < 4.5) return 'checkpoint_paused'
 
-    if (currentTimeSec > 0 && currentTimeSec < 45) return 'dialogue_playing'
+    if (currentTimeSec > 0 && currentTimeSec < 15.0) return 'dialogue_playing'
     return 'idle'
   }, [currentTimeSec, isCorrect, triggerName])
 
@@ -77,10 +77,10 @@ export function CafeInteractiveVectorScene({
                  className="absolute bottom-3 w-4 h-1 bg-stone-800 rounded-full"
                  animate={
                    state === 'success_celebration' ? { width: 12, height: 4, borderRadius: "0 0 10px 10px" } :
-                   state === 'dialogue_playing' && currentTimeSec > 10 ? { height: [2, 6, 2] } :
+                   state === 'dialogue_playing' && currentTimeSec > 2.0 ? { height: [2, 6, 2] } :
                    { width: 8, height: 2 }
                  }
-                 transition={{ repeat: state === 'dialogue_playing' && currentTimeSec > 10 ? Infinity : 0, duration: 0.3, type: "tween", ease: "easeInOut" }}
+                 transition={{ repeat: state === 'dialogue_playing' && currentTimeSec > 2.0 ? Infinity : 0, duration: 0.3, type: "tween", ease: "easeInOut" }}
                />
             </div>
             <div className="text-white text-xs font-bold mt-4">Barista</div>
@@ -106,10 +106,10 @@ export function CafeInteractiveVectorScene({
                  className="absolute bottom-3 w-6 h-1 bg-stone-800 rounded-full"
                  animate={
                    state === 'remediation_explanation' ? { width: 8, height: 6, borderRadius: "50%" } :
-                   state === 'dialogue_playing' && currentTimeSec < 10 ? { height: [2, 6, 2] } :
+                   state === 'dialogue_playing' && currentTimeSec < 2.0 ? { height: [2, 6, 2] } :
                    { width: 8, height: 2 }
                  }
-                 transition={{ repeat: state === 'dialogue_playing' && currentTimeSec < 10 ? Infinity : 0, duration: 0.3, type: "tween", ease: "easeInOut" }}
+                 transition={{ repeat: state === 'dialogue_playing' && currentTimeSec < 2.0 ? Infinity : 0, duration: 0.3, type: "tween", ease: "easeInOut" }}
                />
              </div>
              <div className="text-white text-xs font-bold mt-4">You</div>
@@ -119,7 +119,7 @@ export function CafeInteractiveVectorScene({
 
       {/* Overlays / Dialogue */}
       <AnimatePresence mode="wait">
-        {state === 'dialogue_playing' && currentTimeSec < 10 && (
+        {state === 'dialogue_playing' && currentTimeSec < 2.0 && (
           <motion.div
             key="bubble-learner"
             initial={{ opacity: 0, scale: 0.8, y: 10 }}
@@ -133,7 +133,7 @@ export function CafeInteractiveVectorScene({
           </motion.div>
         )}
 
-        {state === 'dialogue_playing' && currentTimeSec > 10 && (
+        {state === 'dialogue_playing' && currentTimeSec > 2.0 && (
           <motion.div
             key="bubble-barista"
             initial={{ opacity: 0, scale: 0.8, y: 10 }}
