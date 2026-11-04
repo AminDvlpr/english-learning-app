@@ -10,6 +10,7 @@ import { useGamificationStore } from "@/store/useGamificationStore"
 import { LearnerStateInspector } from "@/components/canvas/LearnerStateInspector"
 import { SmartLessonRenderer } from "@/components/canvas/SmartLessonRenderer"
 import { LessonCompletionModal } from "@/components/gamification"
+import { startSyncService, stopSyncService } from "@/lib/supabase/sync-service"
 
 export default function Home() {
   const [isClient, setIsClient] = React.useState(false)
@@ -25,6 +26,13 @@ export default function Home() {
   }, [blockStates])
 
   const [showCompletionModal, setShowCompletionModal] = React.useState(false)
+
+  React.useEffect(() => {
+    startSyncService()
+    return () => {
+      stopSyncService()
+    }
+  }, [])
 
   React.useEffect(() => {
     if (isLessonComplete) {
