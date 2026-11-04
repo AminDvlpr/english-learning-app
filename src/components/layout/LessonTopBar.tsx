@@ -7,8 +7,9 @@ import { X, Flame, Heart, Volume2, VolumeX } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { StreakPopover, HeartRecoveryModal } from "../gamification"
 import { useGamificationStore } from "@/store/useGamificationStore"
-import { Gem, Cloud, HardDrive } from "lucide-react"
+import { Gem, Cloud, HardDrive, PenTool } from "lucide-react"
 import { Progress } from "@/components/ui/progress"
+import Link from "next/link"
 import { audioFeedback } from "@/lib/audio-feedback"
 import { AuthModal } from "@/components/auth/AuthModal"
 import { isSupabaseConfigured } from "@/lib/supabase/client"
@@ -62,7 +63,13 @@ export function LessonTopBar({
           <Button variant="ghost" size="icon" onClick={onClose} aria-label="Close lesson">
             <X className="h-5 w-5 text-muted-foreground hover:text-foreground transition-colors" />
           </Button>
-          <h1 className="text-sm md:text-base font-semibold truncate hidden sm:block">
+          <Link href="/builder">
+            <Button variant="ghost" size="sm" className="hidden sm:flex text-muted-foreground">
+               <PenTool className="h-4 w-4 mr-2" />
+               Builder
+            </Button>
+          </Link>
+          <h1 className="text-sm md:text-base font-semibold truncate hidden md:block">
             {title}
           </h1>
         </div>
