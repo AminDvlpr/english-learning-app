@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { BlockRuntimeState, DifficultyLevel, RiveSignals, LessonBlock, InteractiveCheckpointBlock } from '@/types';
 import { evaluateCheckpointAttempt } from '@/lib/adaptive-engine';
+import { useGamificationStore } from '@/store/useGamificationStore';
 
 export interface LearnerState {
   currentLessonId: string | null;
@@ -104,6 +105,7 @@ export const useLearnerStore = create<LearnerStore>()(
             nextActiveBlockId = nextBlockId;
         }
 
+        useGamificationStore.getState().addXP(5);
         set((state) => ({
             blockStates: newBlockStates,
             xp: state.xp + 5,
@@ -112,17 +114,29 @@ export const useLearnerStore = create<LearnerStore>()(
       },
 
       triggerCheckpointVerification: (blockId) => {
-          const { blockStates } = get();
+          const { blockStates, lessonBlocks } = get();
           const blockState = blockStates[blockId];
 
-          if (!blockState || blockState.state === 'locked' || blockState.state === 'completed') return;
+          if (!blockState || blockState.state === 'completed') return;
+
+          const newBlockStates = { ...blockStates };
+          const blockIndex = lessonBlocks.findIndex(b => b.blockId === blockId);
+
+          if (blockIndex !== -1) {
+              for (let i = 0; i < blockIndex; i++) {
+                  const b = lessonBlocks[i];
+                  if (b.type !== 'interactive_checkpoint' && newBlockStates[b.blockId].state !== 'completed') {
+                      newBlockStates[b.blockId] = { ...newBlockStates[b.blockId], state: 'completed' };
+                  }
+              }
+          }
+
+          newBlockStates[blockId] = { ...blockState, state: 'verification-required' };
 
           set({
-              blockStates: {
-                  ...blockStates,
-                  [blockId]: { ...blockState, state: 'verification-required' }
-              }
-          })
+              blockStates: newBlockStates,
+              activeBlockId: blockId
+          });
       },
 
       submitCheckpointAnswer: (blockId, selectedOptionId) => {
@@ -136,12 +150,23 @@ export const useLearnerStore = create<LearnerStore>()(
 
         const attemptCount = blockState.attempts.length + 1;
 
+        const gamificationStore = useGamificationStore.getState();
         const result = evaluateCheckpointAttempt(
             block as InteractiveCheckpointBlock,
             selectedOptionId,
             attemptCount,
             currentDifficulty
         );
+
+        if (result.xpAwarded > 0) {
+            gamificationStore.addXP(result.xpAwarded);
+        }
+        if (result.gemsAwarded && result.gemsAwarded > 0) {
+            gamificationStore.addGems(result.gemsAwarded);
+        }
+        if (!result.isCorrect) {
+            gamificationStore.deductHeart();
+        }
 
         const newAttempts = [...blockState.attempts, {
             timestamp: Date.now(),

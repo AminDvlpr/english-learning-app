@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useLearnerStore } from '@/store/useLearnerStore';
+import { useGamificationStore } from '@/store/useGamificationStore';
 import { LessonBlock } from '@/types';
 
 export function useInteractiveLesson(lessonBlocks: LessonBlock[]) {
@@ -12,6 +13,7 @@ export function useInteractiveLesson(lessonBlocks: LessonBlock[]) {
   const lastTimeRef = useRef<number>(0);
 
   const { triggerCheckpointVerification, blockStates } = useLearnerStore();
+  const updateActiveTime = useGamificationStore(state => state.updateActiveTime);
 
   // Active Engagement Timer
   useEffect(() => {
@@ -21,6 +23,7 @@ export function useInteractiveLesson(lessonBlocks: LessonBlock[]) {
       interval = setInterval(() => {
         if (document.visibilityState === 'visible') {
           setActiveLearningTimeSec((prev) => prev + 1);
+          updateActiveTime(1);
         }
       }, 1000);
     };
@@ -40,7 +43,7 @@ export function useInteractiveLesson(lessonBlocks: LessonBlock[]) {
       clearInterval(interval);
       document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
-  }, []);
+  }, [updateActiveTime]);
 
   // Scroll-to-Timeline Sync using IntersectionObserver
   useEffect(() => {

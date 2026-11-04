@@ -6,11 +6,31 @@ import { AppShell } from "@/components/layout/AppShell"
 import { LessonTopBar } from "@/components/layout/LessonTopBar"
 import { sampleCafeLesson } from "@/data/sample-cafe-lesson"
 import { useLearnerStore } from "@/store/useLearnerStore"
+import { useGamificationStore } from "@/store/useGamificationStore"
 import { LearnerStateInspector } from "@/components/canvas/LearnerStateInspector"
 import { SmartLessonRenderer } from "@/components/canvas/SmartLessonRenderer"
+import { LessonCompletionModal } from "@/components/gamification"
 
 export default function Home() {
-  const xp = useLearnerStore(state => state.xp)
+  const [isClient, setIsClient] = React.useState(false)
+
+  React.useEffect(() => { setIsClient(true) }, [])
+
+  const xp = useGamificationStore(state => state.xp)
+  const blockStates = useLearnerStore(state => state.blockStates)
+
+  const isLessonComplete = React.useMemo(() => {
+    if (Object.keys(blockStates).length === 0) return false;
+    return Object.values(blockStates).every(b => b.state === "completed");
+  }, [blockStates])
+
+  const [showCompletionModal, setShowCompletionModal] = React.useState(false)
+
+  React.useEffect(() => {
+    if (isLessonComplete) {
+      setShowCompletionModal(true)
+    }
+  }, [isLessonComplete])
 
   React.useEffect(() => {
     useLearnerStore.persist.onFinishHydration(() => {
@@ -26,8 +46,6 @@ export default function Home() {
         <LessonTopBar
           title="Polite Ordering in an English Café"
           progress={Math.min(100, xp)} // Simple progress mapping
-          streak={12}
-          hearts={4}
         />
       }
     >
@@ -42,6 +60,7 @@ export default function Home() {
           <LearnerStateInspector />
         </div>
       </div>
+      {isClient && <LessonCompletionModal open={showCompletionModal} onOpenChange={setShowCompletionModal} />}
     </AppShell>
   )
 }

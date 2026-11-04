@@ -5,6 +5,9 @@ import { motion } from "framer-motion"
 import { X, Flame, Heart, Volume2, VolumeX } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
+import { StreakPopover, HeartRecoveryModal } from "../gamification"
+import { useGamificationStore } from "@/store/useGamificationStore"
+import { Gem } from "lucide-react"
 import { Progress } from "@/components/ui/progress"
 import { audioFeedback } from "@/lib/audio-feedback"
 
@@ -19,11 +22,17 @@ export interface LessonTopBarProps {
 export function LessonTopBar({
   title,
   progress,
-  streak = 0,
-  hearts = 5,
   onClose,
 }: LessonTopBarProps) {
   const [isMuted, setIsMuted] = React.useState(false)
+  const { streakDays, hearts, gems, checkHeartRegeneration } = useGamificationStore()
+  const [heartModalOpen, setHeartModalOpen] = React.useState(false)
+
+  React.useEffect(() => {
+    const interval = setInterval(checkHeartRegeneration, 60000);
+    checkHeartRegeneration();
+    return () => clearInterval(interval);
+  }, [checkHeartRegeneration])
 
   React.useEffect(() => {
     setIsMuted(audioFeedback.isMuted())
@@ -60,14 +69,39 @@ export function LessonTopBar({
 
         {/* Right: Stats (Streak, Hearts, Audio Toggle) */}
         <div className="flex items-center gap-4 flex-1 justify-end">
-          <div className="flex items-center gap-1.5 text-warning font-bold">
-            <Flame className="h-5 w-5 fill-warning text-warning" />
-            <span>{streak}</span>
-          </div>
-          <div className="flex items-center gap-1.5 text-destructive font-bold">
+          <StreakPopover>
+            <motion.div
+              key={streakDays}
+              initial={{ scale: 1.5, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              className="flex items-center gap-1.5 text-warning font-bold cursor-pointer hover:opacity-80"
+            >
+              <Flame className="h-5 w-5 fill-warning text-warning" />
+              <span>{streakDays}</span>
+            </motion.div>
+          </StreakPopover>
+          <motion.div
+            key={hearts}
+            initial={{ scale: 1.5, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            className="flex items-center gap-1.5 text-destructive font-bold cursor-pointer hover:opacity-80"
+            onClick={() => setHeartModalOpen(true)}
+          >
             <Heart className="h-5 w-5 fill-destructive text-destructive" />
             <span>{hearts}</span>
-          </div>
+          </motion.div>
+          <motion.div
+            key={gems}
+            initial={{ scale: 1.5, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            className="flex items-center gap-1.5 text-info font-bold"
+          >
+            <Gem className="h-5 w-5 fill-info text-info" />
+            <span>{gems}</span>
+          </motion.div>
           <Button variant="ghost" size="icon" onClick={handleToggleMute} aria-label={isMuted ? "Unmute" : "Mute"}>
             {isMuted ? (
                 <VolumeX className="h-5 w-5 text-muted-foreground" />
@@ -78,6 +112,7 @@ export function LessonTopBar({
         </div>
 
       </div>
+      <HeartRecoveryModal open={heartModalOpen} onOpenChange={setHeartModalOpen} />
     </motion.header>
   )
 }

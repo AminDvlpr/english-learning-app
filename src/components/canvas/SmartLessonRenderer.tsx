@@ -46,7 +46,7 @@ export function SmartLessonRenderer({ lesson }: SmartLessonRendererProps) {
   return (
     <div className="flex flex-col w-full relative">
       {/* Visual Sync Status Bar */}
-      <div className="sticky top-0 z-50 w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border shadow-sm mb-8 p-3 flex justify-between items-center text-sm">
+      <div className="sticky top-[64px] z-40 w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border shadow-sm mb-8 p-3 flex justify-between items-center text-sm">
         <div className="flex items-center gap-4">
           <Badge variant="secondary" className="font-mono">
              Synced: {syncedBlock ? syncedBlock.type : 'None'}
