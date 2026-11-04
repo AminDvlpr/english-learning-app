@@ -2,8 +2,10 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { BlockRuntimeState, DifficultyLevel, RiveSignals, LessonBlock, InteractiveCheckpointBlock } from '@/types';
 import { evaluateCheckpointAttempt } from '@/lib/adaptive-engine';
+import { useGamificationStore } from '@/store/useGamificationStore';
 
 export interface LearnerState {
+  isLessonComplete?: boolean;
   currentLessonId: string | null;
   blockStates: Record<string, BlockRuntimeState>;
   currentDifficulty: DifficultyLevel;
@@ -104,6 +106,7 @@ export const useLearnerStore = create<LearnerStore>()(
             nextActiveBlockId = nextBlockId;
         }
 
+        useGamificationStore.getState().addXP(5);
         set((state) => ({
             blockStates: newBlockStates,
             xp: state.xp + 5,
@@ -136,12 +139,23 @@ export const useLearnerStore = create<LearnerStore>()(
 
         const attemptCount = blockState.attempts.length + 1;
 
+        const gamificationStore = useGamificationStore.getState();
         const result = evaluateCheckpointAttempt(
             block as InteractiveCheckpointBlock,
             selectedOptionId,
             attemptCount,
             currentDifficulty
         );
+
+        if (result.xpAwarded > 0) {
+            gamificationStore.addXP(result.xpAwarded);
+        }
+        if (result.gemsAwarded && result.gemsAwarded > 0) {
+            gamificationStore.addGems(result.gemsAwarded);
+        }
+        if (!result.isCorrect) {
+            gamificationStore.deductHeart();
+        }
 
         const newAttempts = [...blockState.attempts, {
             timestamp: Date.now(),
@@ -172,6 +186,7 @@ export const useLearnerStore = create<LearnerStore>()(
             }
         }
 
+        useGamificationStore.getState().addXP(5);
         set((state) => ({
             blockStates: newBlockStates,
             xp: state.xp + result.xpAwarded,

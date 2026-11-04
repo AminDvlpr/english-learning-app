@@ -1,0 +1,5 @@
+sed -i 's/import { evaluateCheckpointAttempt } from '\''@\/lib\/adaptive-engine'\'';/import { evaluateCheckpointAttempt } from '\''@\/lib\/adaptive-engine'\'';\nimport { useGamificationStore } from '\''@\/store\/useGamificationStore'\'';/' src/store/useLearnerStore.ts
+sed -i 's/set((state) => ({/useGamificationStore.getState().addXP(5);\n        set((state) => ({/' src/store/useLearnerStore.ts
+sed -i 's/const result = evaluateCheckpointAttempt(/const gamificationStore = useGamificationStore.getState();\n        const result = evaluateCheckpointAttempt(/' src/store/useLearnerStore.ts
+sed -i 's/const newAttempts = \[...blockState.attempts,/if (result.xpAwarded > 0) {\n            gamificationStore.addXP(result.xpAwarded);\n        }\n        if (result.gemsAwarded \&\& result.gemsAwarded > 0) {\n            gamificationStore.addGems(result.gemsAwarded);\n        }\n        if (!result.isCorrect) {\n            gamificationStore.deductHeart();\n        }\n\n        const newAttempts = [...blockState.attempts,/' src/store/useLearnerStore.ts
+sed -i 's/import { evaluateCheckpointAttempt/import { evaluateCheckpointAttempt/' src/store/useLearnerStore.ts

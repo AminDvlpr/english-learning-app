@@ -1,0 +1,3 @@
+sed -i 's/import { useLearnerStore } from '\''@\/store\/useLearnerStore'\'';/import { useLearnerStore } from '\''@\/store\/useLearnerStore'\'';\nimport { useGamificationStore } from '\''@\/store\/useGamificationStore'\'';/' src/hooks/useInteractiveLesson.ts
+sed -i 's/const { triggerCheckpointVerification, blockStates } = useLearnerStore();/const { triggerCheckpointVerification, blockStates } = useLearnerStore();\n  const updateActiveTime = useGamificationStore(state => state.updateActiveTime);/' src/hooks/useInteractiveLesson.ts
+sed -i 's/setActiveLearningTimeSec((prev) => prev + 1);/setActiveLearningTimeSec((prev) => prev + 1);\n          updateActiveTime(1);/' src/hooks/useInteractiveLesson.ts

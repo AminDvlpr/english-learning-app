@@ -5,6 +5,9 @@ import { motion } from "framer-motion"
 import { X, Flame, Heart, Volume2, VolumeX } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
+import { StreakPopover } from "../gamification/StreakPopover"
+import { HeartRecoveryModal } from "../gamification/HeartRecoveryModal"
+import { useGamificationStore } from "@/store/useGamificationStore"
 import { Progress } from "@/components/ui/progress"
 import { audioFeedback } from "@/lib/audio-feedback"
 
@@ -19,11 +22,17 @@ export interface LessonTopBarProps {
 export function LessonTopBar({
   title,
   progress,
-  streak = 0,
-  hearts = 5,
   onClose,
 }: LessonTopBarProps) {
   const [isMuted, setIsMuted] = React.useState(false)
+  const { streakDays, hearts } = useGamificationStore()
+  const [heartModalOpen, setHeartModalOpen] = React.useState(false)
+  const checkHeartRegeneration = useGamificationStore(state => state.checkHeartRegeneration)
+  React.useEffect(() => {
+    const interval = setInterval(checkHeartRegeneration, 60000);
+    checkHeartRegeneration();
+    return () => clearInterval(interval);
+  }, [checkHeartRegeneration])
 
   React.useEffect(() => {
     setIsMuted(audioFeedback.isMuted())
@@ -60,11 +69,13 @@ export function LessonTopBar({
 
         {/* Right: Stats (Streak, Hearts, Audio Toggle) */}
         <div className="flex items-center gap-4 flex-1 justify-end">
-          <div className="flex items-center gap-1.5 text-warning font-bold">
-            <Flame className="h-5 w-5 fill-warning text-warning" />
-            <span>{streak}</span>
-          </div>
-          <div className="flex items-center gap-1.5 text-destructive font-bold">
+          <StreakPopover>
+            <div className="flex items-center gap-1.5 text-warning font-bold cursor-pointer hover:opacity-80">
+              <Flame className="h-5 w-5 fill-warning text-warning" />
+              <span>{streakDays}</span>
+            </div>
+          </StreakPopover>
+          <div className="flex items-center gap-1.5 text-destructive font-bold cursor-pointer hover:opacity-80" onClick={() => setHeartModalOpen(true)}>
             <Heart className="h-5 w-5 fill-destructive text-destructive" />
             <span>{hearts}</span>
           </div>
@@ -78,6 +89,7 @@ export function LessonTopBar({
         </div>
 
       </div>
+      <HeartRecoveryModal open={heartModalOpen} onOpenChange={setHeartModalOpen} />
     </motion.header>
   )
 }
