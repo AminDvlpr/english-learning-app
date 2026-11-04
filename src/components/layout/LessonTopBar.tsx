@@ -7,9 +7,11 @@ import { X, Flame, Heart, Volume2, VolumeX } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { StreakPopover, HeartRecoveryModal } from "../gamification"
 import { useGamificationStore } from "@/store/useGamificationStore"
-import { Gem } from "lucide-react"
+import { Gem, Cloud, HardDrive } from "lucide-react"
 import { Progress } from "@/components/ui/progress"
 import { audioFeedback } from "@/lib/audio-feedback"
+import { AuthModal } from "@/components/auth/AuthModal"
+import { isSupabaseConfigured } from "@/lib/supabase/client"
 
 export interface LessonTopBarProps {
   title: string
@@ -27,6 +29,9 @@ export function LessonTopBar({
   const [isMuted, setIsMuted] = React.useState(false)
   const { streakDays, hearts, gems, checkHeartRegeneration } = useGamificationStore()
   const [heartModalOpen, setHeartModalOpen] = React.useState(false)
+  const [authModalOpen, setAuthModalOpen] = React.useState(false)
+
+  const isCloud = isSupabaseConfigured()
 
   React.useEffect(() => {
     const interval = setInterval(checkHeartRegeneration, 60000);
@@ -69,6 +74,15 @@ export function LessonTopBar({
 
         {/* Right: Stats (Streak, Hearts, Audio Toggle) */}
         <div className="flex items-center gap-4 flex-1 justify-end">
+
+          <Button variant="ghost" size="icon" onClick={() => setAuthModalOpen(true)} aria-label="Account Sync">
+            {isCloud ? (
+               <Cloud className="h-5 w-5 text-success" />
+            ) : (
+               <HardDrive className="h-5 w-5 text-muted-foreground" />
+            )}
+          </Button>
+
           <StreakPopover>
             <motion.div
               key={streakDays}
@@ -113,6 +127,7 @@ export function LessonTopBar({
 
       </div>
       <HeartRecoveryModal open={heartModalOpen} onOpenChange={setHeartModalOpen} />
+      <AuthModal open={authModalOpen} onOpenChange={setAuthModalOpen} />
     </motion.header>
   )
 }
