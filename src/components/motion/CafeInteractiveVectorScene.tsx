@@ -2,7 +2,6 @@
 
 import React, { useMemo } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { UI_SPRING } from "@/lib/motion-tokens"
 
 interface CafeInteractiveVectorSceneProps {
   currentTimeSec: number
@@ -63,7 +62,8 @@ export function CafeInteractiveVectorScene({
           <motion.div
             className="w-24 h-32 bg-teal-600 dark:bg-teal-700 rounded-t-full rounded-b-md relative flex items-center justify-center"
             animate={state === 'success_celebration' ? { y: [0, -10, 0] } : { y: 0 }}
-            transition={UI_SPRING}
+            transition={{ type: "tween", duration: 0.4, ease: "easeInOut" }}
+
           >
             {/* Face */}
             <div className="w-16 h-16 bg-orange-200 dark:bg-orange-300 rounded-full absolute -top-8 flex items-center justify-center">
@@ -80,7 +80,7 @@ export function CafeInteractiveVectorScene({
                    state === 'dialogue_playing' && currentTimeSec > 10 ? { height: [2, 6, 2] } :
                    { width: 8, height: 2 }
                  }
-                 transition={{ repeat: state === 'dialogue_playing' && currentTimeSec > 10 ? Infinity : 0, duration: 0.3 }}
+                 transition={{ repeat: state === 'dialogue_playing' && currentTimeSec > 10 ? Infinity : 0, duration: 0.3, type: "tween", ease: "easeInOut" }}
                />
             </div>
             <div className="text-white text-xs font-bold mt-4">Barista</div>
@@ -92,7 +92,7 @@ export function CafeInteractiveVectorScene({
           <motion.div
             className="w-24 h-32 bg-indigo-600 dark:bg-indigo-700 rounded-t-full rounded-b-md relative flex items-center justify-center"
             animate={state === 'remediation_explanation' ? { x: [0, -5, 5, -5, 5, 0] } : { x: 0 }}
-            transition={{ duration: 0.4 }}
+            transition={{ type: "tween", duration: 0.4, ease: "easeInOut" }}
           >
              {/* Face */}
              <div className="w-16 h-16 bg-orange-100 dark:bg-orange-200 rounded-full absolute -top-8 flex items-center justify-center">
@@ -109,7 +109,7 @@ export function CafeInteractiveVectorScene({
                    state === 'dialogue_playing' && currentTimeSec < 10 ? { height: [2, 6, 2] } :
                    { width: 8, height: 2 }
                  }
-                 transition={{ repeat: state === 'dialogue_playing' && currentTimeSec < 10 ? Infinity : 0, duration: 0.3 }}
+                 transition={{ repeat: state === 'dialogue_playing' && currentTimeSec < 10 ? Infinity : 0, duration: 0.3, type: "tween", ease: "easeInOut" }}
                />
              </div>
              <div className="text-white text-xs font-bold mt-4">You</div>
@@ -125,7 +125,7 @@ export function CafeInteractiveVectorScene({
             initial={{ opacity: 0, scale: 0.8, y: 10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.8, y: -10 }}
-            transition={UI_SPRING}
+
             className="absolute right-1/4 top-1/4 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 px-4 py-2 rounded-2xl rounded-br-none shadow-lg border border-slate-200 dark:border-slate-700 text-sm font-medium"
             dir="ltr"
           >
@@ -139,7 +139,7 @@ export function CafeInteractiveVectorScene({
             initial={{ opacity: 0, scale: 0.8, y: 10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.8, y: -10 }}
-            transition={UI_SPRING}
+
             className="absolute left-1/4 top-1/4 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 px-4 py-2 rounded-2xl rounded-bl-none shadow-lg border border-slate-200 dark:border-slate-700 text-sm font-medium"
             dir="ltr"
           >
@@ -153,7 +153,7 @@ export function CafeInteractiveVectorScene({
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
-            transition={UI_SPRING}
+
             className="absolute inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-20"
           >
             <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 text-center max-w-sm">
@@ -172,7 +172,7 @@ export function CafeInteractiveVectorScene({
             initial={{ opacity: 0, scale: 0.8, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.8, y: -20 }}
-            transition={UI_SPRING}
+
             className="absolute inset-x-8 top-1/4 bg-emerald-500 text-white p-4 rounded-xl shadow-xl flex items-center justify-center gap-4 z-20"
           >
             <div className="text-3xl">✨</div>
@@ -187,7 +187,7 @@ export function CafeInteractiveVectorScene({
             initial={{ opacity: 0, scale: 0.8, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.8, y: -20 }}
-            transition={UI_SPRING}
+
             className="absolute inset-4 top-auto bottom-8 bg-white dark:bg-slate-900 p-4 rounded-xl shadow-2xl border-2 border-destructive/50 flex flex-col gap-2 z-20"
           >
             <div className="flex justify-between items-center border-b border-slate-100 dark:border-slate-800 pb-2">

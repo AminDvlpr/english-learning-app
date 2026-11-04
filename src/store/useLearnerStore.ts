@@ -5,7 +5,6 @@ import { evaluateCheckpointAttempt } from '@/lib/adaptive-engine';
 import { useGamificationStore } from '@/store/useGamificationStore';
 
 export interface LearnerState {
-  isLessonComplete?: boolean;
   currentLessonId: string | null;
   blockStates: Record<string, BlockRuntimeState>;
   currentDifficulty: DifficultyLevel;
@@ -115,17 +114,29 @@ export const useLearnerStore = create<LearnerStore>()(
       },
 
       triggerCheckpointVerification: (blockId) => {
-          const { blockStates } = get();
+          const { blockStates, lessonBlocks } = get();
           const blockState = blockStates[blockId];
 
-          if (!blockState || blockState.state === 'locked' || blockState.state === 'completed') return;
+          if (!blockState || blockState.state === 'completed') return;
+
+          const newBlockStates = { ...blockStates };
+          const blockIndex = lessonBlocks.findIndex(b => b.blockId === blockId);
+
+          if (blockIndex !== -1) {
+              for (let i = 0; i < blockIndex; i++) {
+                  const b = lessonBlocks[i];
+                  if (b.type !== 'interactive_checkpoint' && newBlockStates[b.blockId].state !== 'completed') {
+                      newBlockStates[b.blockId] = { ...newBlockStates[b.blockId], state: 'completed' };
+                  }
+              }
+          }
+
+          newBlockStates[blockId] = { ...blockState, state: 'verification-required' };
 
           set({
-              blockStates: {
-                  ...blockStates,
-                  [blockId]: { ...blockState, state: 'verification-required' }
-              }
-          })
+              blockStates: newBlockStates,
+              activeBlockId: blockId
+          });
       },
 
       submitCheckpointAnswer: (blockId, selectedOptionId) => {
@@ -186,7 +197,6 @@ export const useLearnerStore = create<LearnerStore>()(
             }
         }
 
-        useGamificationStore.getState().addXP(5);
         set((state) => ({
             blockStates: newBlockStates,
             xp: state.xp + result.xpAwarded,

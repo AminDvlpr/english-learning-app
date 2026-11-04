@@ -1,1 +1,0 @@
-node -e 'const fs = require("fs"); const pkg = JSON.parse(fs.readFileSync("package.json")); pkg.overrides = { "postcss": "^8.4.49", "glob": "^10.0.0", "minimatch": "^9.0.0" }; fs.writeFileSync("package.json", JSON.stringify(pkg, null, 2));'
