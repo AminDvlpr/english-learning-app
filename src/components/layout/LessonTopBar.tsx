@@ -7,7 +7,7 @@ import { X, Flame, Heart, Volume2, VolumeX } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { StreakPopover, HeartRecoveryModal } from "../gamification"
 import { useGamificationStore } from "@/store/useGamificationStore"
-import { Gem, Cloud, HardDrive, PenTool } from "lucide-react"
+import { Gem, Cloud, HardDrive, PenTool, LayoutDashboard } from "lucide-react"
 import { Progress } from "@/components/ui/progress"
 import Link from "next/link"
 import { audioFeedback } from "@/lib/audio-feedback"
@@ -63,6 +63,12 @@ export function LessonTopBar({
           <Button variant="ghost" size="icon" onClick={onClose} aria-label="Close lesson">
             <X className="h-5 w-5 text-muted-foreground hover:text-foreground transition-colors" />
           </Button>
+          <Link href="/dashboard">
+            <Button variant="ghost" size="sm" className="hidden sm:flex text-muted-foreground">
+               <LayoutDashboard className="h-4 w-4 mr-2" />
+               Dashboard
+            </Button>
+          </Link>
           <Link href="/builder">
             <Button variant="ghost" size="sm" className="hidden sm:flex text-muted-foreground">
                <PenTool className="h-4 w-4 mr-2" />
