@@ -18,13 +18,13 @@ export const sampleCafeLesson: LessonBlock[] = [
     order: 2,
     motionSceneId: 'scene_cafe_ordering',
     assetPath: '/assets/rive/cafe-scene.riv',
-    maxContinuousDurationSec: 45,
+    maxContinuousDurationSec: 15,
     caption: 'Watch and listen to a formal coffee ordering scenario.',
     scrollSyncMarkers: [
-      { timestamp: 5.0, markerName: 'greeting' },
-      { timestamp: 12.0, markerName: 'ordering' },
+      { timestamp: 2.0, markerName: 'greeting' },
+      { timestamp: 3.0, markerName: 'ordering' },
     ],
-    triggerTimestamp: 18.5,
+    triggerTimestamp: 4.0,
   },
   {
     type: 'callout',
@@ -44,7 +44,7 @@ export const sampleCafeLesson: LessonBlock[] = [
     order: 4,
     checkpointMode: 'branching_decision',
     motionSceneId: 'scene_cafe_ordering',
-    triggerTimestamp: 18.5,
+    triggerTimestamp: 4.0,
     difficultyLevel: 'intermediate',
     xpReward: 15,
     question: {
@@ -78,7 +78,7 @@ export const sampleCafeLesson: LessonBlock[] = [
     order: 5,
     checkpointMode: 'slot_matching',
     motionSceneId: 'scene_cafe_ordering',
-    triggerTimestamp: 25.0,
+    triggerTimestamp: 9.0,
     difficultyLevel: 'beginner',
     question: {
       prompt: 'جای خالی را با کلمه مناسب پر کنید.',
@@ -105,33 +105,38 @@ export const sampleCafeLesson: LessonBlock[] = [
   },
   {
     type: 'interactive_checkpoint',
-    blockId: 'blk_chk_006',
+    blockId: 'blk_chk_008',
     order: 6,
-    checkpointMode: 'micro_sprint_reflex',
+    checkpointMode: 'story_question_box',
     motionSceneId: 'scene_cafe_ordering',
-    triggerTimestamp: 35.0,
-    difficultyLevel: 'advanced',
+    triggerTimestamp: 14.0,
+    difficultyLevel: 'intermediate',
+    xpReward: 25,
     question: {
-      prompt: 'Quickly select the correct response to: "For here or to go?"',
-      timeLimitSec: 5,
+      prompt: 'What can I get started for you today?',
+      targetPhraseEn: 'I would like a coffee, please.',
       options: [
-        { id: 'opt_1', text: 'In a cup.', correct: false, feedback: 'Not a standard reply.' },
-        { id: 'opt_2', text: 'To go, please.', correct: true, feedback: 'Excellent speed!' },
-      ],
+        { id: 'h_1', text: 'Could I have', correct: false, feedback: '' },
+        { id: 'h_2', text: 'I would like', correct: false, feedback: '' },
+        { id: 'h_3', text: 'a coffee', correct: false, feedback: '' },
+        { id: 'h_4', text: 'please', correct: false, feedback: '' },
+        { id: 'ans_true', text: 'I would like a coffee, please.', correct: true, feedback: 'Perfect English!' }
+      ]
     },
     adaptiveRules: {
       onFirstTrySuccess: {
         xp: 30,
         gems: 10,
         masteryDelta: 'max',
-        nextDifficulty: 'harder',
+        nextDifficulty: 'harder'
       },
       onFailure: {
         triggerRemediationAnimation: true,
-        provideSmartHint: false,
+        provideSmartHint: true,
         adjustDifficulty: 'easier',
-      },
-    },
+        smartHintText: 'Use polite markers like "could", "would like", or "please".'
+      }
+    }
   },
   {
     type: 'toggle_table',

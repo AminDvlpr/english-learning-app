@@ -37,6 +37,21 @@ export function evaluateCheckpointAttempt(
     isCorrect = selectedOptionId === JSON.stringify(expected);
   } else if (block.checkpointMode === 'micro_sprint_reflex' && selectedOptionId === 'timeout') {
     isCorrect = false;
+  } else if (block.checkpointMode === 'story_question_box') {
+    const normalizedInput = String(selectedOptionId).toLowerCase();
+    const politeMarkers = ["could", "would like", "please", "may i", "can i have"];
+
+    // Find correct option to match against its text
+    const correctOption = block.question.options?.find(opt => opt.correct);
+
+    const hasPoliteMarker = politeMarkers.some(marker => normalizedInput.includes(marker));
+    const matchesCorrectText = correctOption && normalizedInput === correctOption.text.toLowerCase();
+
+    isCorrect = hasPoliteMarker || matchesCorrectText || false;
+
+    if (!isCorrect) {
+      feedback = "شما باید درخواست خود را مؤدبانه بیان کنید. می‌توانید از کلماتی مانند «Could I please have...» یا «I would like...» استفاده کنید.";
+    }
   } else {
     const option = block.question.options?.find(opt => opt.id === selectedOptionId);
     isCorrect = option?.correct || false;

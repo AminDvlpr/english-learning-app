@@ -13,6 +13,7 @@ import { AdaptiveFeedbackBanner } from './AdaptiveFeedbackBanner'
 import { SlotMatchingExercise } from './SlotMatchingExercise'
 import { BranchingDecisionExercise } from './BranchingDecisionExercise'
 import { MicroSprintReflexExercise } from './MicroSprintReflexExercise'
+import { StoryQuestionBoxExercise } from './StoryQuestionBoxExercise'
 
 interface Props {
   block: ICheckpointBlock
@@ -170,6 +171,10 @@ export function InteractiveCheckpointBlock({ block, state }: Props) {
 
                 {block.checkpointMode === 'micro_sprint_reflex' && (
                   <MicroSprintReflexExercise block={block} onSubmit={handleSubmit} state={state} />
+                )}
+
+                {block.checkpointMode === 'story_question_box' && (
+                  <StoryQuestionBoxExercise block={block} onSubmit={handleSubmit} />
                 )}
               </motion.div>
             )}
