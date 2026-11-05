@@ -56,7 +56,7 @@ export function GestureOnboardingOverlay({ onDismiss }: GestureOnboardingOverlay
             </div>
 
             {/* Center Zone (Hold to pause) */}
-            <div className="w-[40%] h-full flex flex-col items-center justify-center relative mt-32">
+            <div className="w-[40%] h-full flex flex-col items-center justify-center relative">
               <motion.div
                 initial={{ scale: 0.9, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}

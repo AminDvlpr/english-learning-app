@@ -114,7 +114,7 @@ function RiveRuntimeCanvas({
   }
 
   return (
-    <div className="relative w-full aspect-video bg-muted rounded-xl overflow-hidden shadow-inner">
+    <div className="w-full h-full flex-1 flex flex-col overflow-hidden">
       <div className={`absolute inset-0 transition-opacity duration-300 ${rive ? 'opacity-100 z-10' : 'opacity-0 -z-10'}`}>
          <RiveComponent className="w-full h-full" />
       </div>

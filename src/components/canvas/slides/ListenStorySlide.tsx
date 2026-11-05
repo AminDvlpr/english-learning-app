@@ -177,11 +177,11 @@ export function ListenStorySlide({
       </div>
 
       {/* Equalizer Waveform */}
-      <div className="h-16 flex items-end justify-center gap-1 shrink-0 mb-6 px-6">
+      <div className="h-14 w-full max-w-[280px] mx-auto flex items-end justify-center gap-1 shrink-0 mb-4 px-4 overflow-hidden">
         {[...Array(20)].map((_, i) => (
           <motion.div
             key={i}
-            className="w-1.5 bg-emerald-500 rounded-t-full origin-bottom"
+            className="flex-1 max-w-[5px] min-w-[3px] bg-emerald-500 rounded-t-full origin-bottom"
             animate={{
               height: isPlaying ? ['20%', '100%', '30%', '80%', '20%'] : '10%',
             }}
