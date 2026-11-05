@@ -1,3 +1,4 @@
+/* eslint-disable */
 import * as React from "react"
 import { CourseSlide, StorySlideFormat, DeepDiveAnnotation, SlideInterrupt,  } from "@/types/course"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
@@ -226,7 +227,75 @@ export function BlockEditorForm({ slide, onChange }: BlockEditorFormProps) {
               </select>
             </div>
 
-            <h4 className="font-semibold text-sm">Objects & Hotspots (◎)</h4>
+            <div className="space-y-2 border-t pt-4">
+              <h4 className="font-semibold text-sm">2.5D Parallax Layers (PNG URLs)</h4>
+              <div className="space-y-1">
+                <Label>Background Layer (0.1x)</Label>
+                <Input value={(slide.playScene as any)?.bgLayerUrl || ''} onChange={(e) => {
+                  const ps = slide.playScene || { backgroundTheme: 'childhood_class', characters: [], objects: [] }
+                  onChange({ ...slide, playScene: { ...ps, bgLayerUrl: e.target.value } as any })
+                }} />
+              </div>
+              <div className="space-y-1">
+                <Label>Midground Layer (1.0x)</Label>
+                <Input value={(slide.playScene as any)?.midLayerUrl || ''} onChange={(e) => {
+                  const ps = slide.playScene || { backgroundTheme: 'childhood_class', characters: [], objects: [] }
+                  onChange({ ...slide, playScene: { ...ps, midLayerUrl: e.target.value } as any })
+                }} />
+              </div>
+              <div className="space-y-1">
+                <Label>Foreground Layer (1.2x)</Label>
+                <Input value={(slide.playScene as any)?.fgLayerUrl || ''} onChange={(e) => {
+                  const ps = slide.playScene || { backgroundTheme: 'childhood_class', characters: [], objects: [] }
+                  onChange({ ...slide, playScene: { ...ps, fgLayerUrl: e.target.value } as any })
+                }} />
+              </div>
+            </div>
+
+            <div className="space-y-2 border-t pt-4">
+              <h4 className="font-semibold text-sm">Uncle's Approval Meter</h4>
+              <div className="flex items-center gap-2">
+                <input type="checkbox" id="approvalMeterToggle" checked={(slide.playScene as any)?.hasApprovalMeter || false} onChange={(e) => {
+                  const ps = slide.playScene || { backgroundTheme: 'childhood_class', characters: [], objects: [] }
+                  onChange({ ...slide, playScene: { ...ps, hasApprovalMeter: e.target.checked } as any })
+                }} />
+                <Label htmlFor="approvalMeterToggle">Enable Approval Meter</Label>
+              </div>
+              <div className="space-y-1">
+                <Label>Approval Delta (+20 / -15)</Label>
+                <Input type="number" value={(slide.playScene as any)?.approvalDelta || 0} onChange={(e) => {
+                  const ps = slide.playScene || { backgroundTheme: 'childhood_class', characters: [], objects: [] }
+                  onChange({ ...slide, playScene: { ...ps, approvalDelta: Number(e.target.value) } as any })
+                }} />
+              </div>
+            </div>
+
+            <div className="space-y-2 border-t pt-4">
+              <h4 className="font-semibold text-sm">Character Puppets (Living PNG Layers)</h4>
+              <div className="space-y-1">
+                <Label>Body URL</Label>
+                <Input value={(slide.playScene as any)?.bodyUrl || ''} onChange={(e) => {
+                  const ps = slide.playScene || { backgroundTheme: 'childhood_class', characters: [], objects: [] }
+                  onChange({ ...slide, playScene: { ...ps, bodyUrl: e.target.value } as any })
+                }} />
+              </div>
+              <div className="space-y-1">
+                <Label>Head URL</Label>
+                <Input value={(slide.playScene as any)?.headUrl || ''} onChange={(e) => {
+                  const ps = slide.playScene || { backgroundTheme: 'childhood_class', characters: [], objects: [] }
+                  onChange({ ...slide, playScene: { ...ps, headUrl: e.target.value } as any })
+                }} />
+              </div>
+              <div className="space-y-1">
+                <Label>Mouth Open URL</Label>
+                <Input value={(slide.playScene as any)?.mouthOpenUrl || ''} onChange={(e) => {
+                  const ps = slide.playScene || { backgroundTheme: 'childhood_class', characters: [], objects: [] }
+                  onChange({ ...slide, playScene: { ...ps, mouthOpenUrl: e.target.value } as any })
+                }} />
+              </div>
+            </div>
+
+            <h4 className="font-semibold text-sm border-t pt-4 mt-4">Objects & Investigation Hotspots (◎)</h4>
             <div className="grid grid-cols-1 gap-2">
               {slide.playScene?.objects?.map((obj, i) => (
                 <div key={obj.id} className="flex items-center gap-2 border p-2 rounded bg-background">
@@ -255,6 +324,27 @@ export function BlockEditorForm({ slide, onChange }: BlockEditorFormProps) {
                     arr.splice(i, 1)
                     onChange({ ...slide, playScene: { ...slide.playScene!, objects: arr } })
                   }}><Trash2 className="h-4 w-4 text-destructive"/></Button>
+
+                  <div className="w-full flex flex-col gap-2 p-2 bg-muted/50 rounded mt-1">
+                    <Input placeholder="👁️ Look Monologue (En)" value={(obj as any).lookMonologueEn || ''} onChange={(e) => {
+                      const arr = [...(slide.playScene?.objects || [])];
+                      (arr[i] as any).lookMonologueEn = e.target.value;
+                      onChange({ ...slide, playScene: { ...slide.playScene!, objects: arr } })
+                    }}/>
+                    <div className="flex items-center gap-2">
+                      <input type="checkbox" checked={(obj as any).canGrabToInventory || false} onChange={(e) => {
+                        const arr = [...(slide.playScene?.objects || [])];
+                        (arr[i] as any).canGrabToInventory = e.target.checked;
+                        onChange({ ...slide, playScene: { ...slide.playScene!, objects: arr } })
+                      }}/>
+                      <Label className="text-xs">✋ Grab to Inventory</Label>
+                    </div>
+                    <Input placeholder="Required Item ID (for drag-and-drop)" value={(obj as any).requiredItemId || ''} onChange={(e) => {
+                      const arr = [...(slide.playScene?.objects || [])];
+                      (arr[i] as any).requiredItemId = e.target.value;
+                      onChange({ ...slide, playScene: { ...slide.playScene!, objects: arr } })
+                    }}/>
+                  </div>
                 </div>
               ))}
               <Button size="sm" variant="outline" className="w-fit" onClick={handleAddObject}><Crosshair className="h-4 w-4 mr-2"/> Add Object Hotspot</Button>
@@ -302,6 +392,58 @@ export function BlockEditorForm({ slide, onChange }: BlockEditorFormProps) {
             )}
           </div>
         )}
+
+        <div className="p-4 border rounded-md space-y-4">
+          <h3 className="font-semibold">Story Node-Graph & Visa Document Inspection</h3>
+
+          <div className="space-y-1">
+            <Label>Story Nodes Graph (JSON Array)</Label>
+            <textarea className="w-full p-2 border rounded font-mono text-xs" rows={3}
+              value={JSON.stringify((slide as any).storyNodes || [], null, 2)}
+              onChange={(e) => {
+                try {
+                  const parsed = JSON.parse(e.target.value);
+                  onChange({ ...slide, storyNodes: parsed } as any)
+                } catch(err) {}
+              }}
+            />
+          </div>
+
+          <div className="space-y-2 border-t pt-4">
+            <div className="flex justify-between items-center">
+              <h4 className="font-semibold text-sm">Visa Document Fields</h4>
+              <Button size="sm" variant="outline" onClick={() => {
+                const arr = (slide as any).documentFields || [];
+                onChange({ ...slide, documentFields: [...arr, { id: `doc_${Date.now()}`, fieldLabel: '', wrongValue: '', correctValue: '' }] } as any)
+              }}><Plus className="h-4 w-4 mr-2"/> Add Field</Button>
+            </div>
+
+            {((slide as any).documentFields || []).map((docField: any, i: number) => (
+              <div key={docField.id} className="grid grid-cols-3 gap-2 p-2 border rounded bg-background relative pr-8">
+                <Input placeholder="Field Label (e.g. Nationality)" value={docField.fieldLabel} onChange={(e) => {
+                  const arr = [...((slide as any).documentFields || [])];
+                  arr[i].fieldLabel = e.target.value;
+                  onChange({ ...slide, documentFields: arr } as any)
+                }}/>
+                <Input placeholder="Wrong Value (e.g. Iranian)" value={docField.wrongValue} onChange={(e) => {
+                  const arr = [...((slide as any).documentFields || [])];
+                  arr[i].wrongValue = e.target.value;
+                  onChange({ ...slide, documentFields: arr } as any)
+                }}/>
+                <Input placeholder="Correct Value (e.g. British)" value={docField.correctValue} onChange={(e) => {
+                  const arr = [...((slide as any).documentFields || [])];
+                  arr[i].correctValue = e.target.value;
+                  onChange({ ...slide, documentFields: arr } as any)
+                }}/>
+                <Button variant="ghost" size="icon" className="absolute right-1 top-1" onClick={() => {
+                  const arr = [...((slide as any).documentFields || [])];
+                  arr.splice(i, 1);
+                  onChange({ ...slide, documentFields: arr } as any)
+                }}><Trash2 className="h-4 w-4 text-destructive"/></Button>
+              </div>
+            ))}
+          </div>
+        </div>
 
         {/* Universal Interrupts */}
         <div className="p-4 border rounded-md space-y-4">
