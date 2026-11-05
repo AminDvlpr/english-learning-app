@@ -47,6 +47,7 @@ export interface CourseSlide {
   format: StorySlideFormat;
   title: string;
   chapterBadge: string;
+  videoUrl?: string;
   notionHeader?: {
     coverGradient: string;
     iconEmoji: string;
@@ -100,6 +101,8 @@ export interface CourseLesson {
   coverGradient: string;
   formatTags: StorySlideFormat[];
   estimatedMinutes: number;
+  isFeatured?: boolean;
+  viewsCount?: string;
   slides: CourseSlide[];
   summaryStash: LessonSummaryStash;
 }
@@ -114,5 +117,7 @@ export interface CourseDocument {
   coverEmoji: string;
   coverGradient: string;
   isDefaultEnrolled?: boolean;
+  isFeatured?: boolean;
+  viewsCount?: string;
   lessons: CourseLesson[];
 }
