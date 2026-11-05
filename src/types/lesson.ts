@@ -48,7 +48,7 @@ export interface MotionCanvasBlock extends BaseBlock {
 
 export interface InteractiveCheckpointBlock extends BaseBlock {
   type: 'interactive_checkpoint';
-  checkpointMode: 'multiple_choice_motion' | 'slot_matching' | 'branching_decision' | 'micro_sprint_reflex';
+  checkpointMode: 'multiple_choice_motion' | 'slot_matching' | 'branching_decision' | 'micro_sprint_reflex' | 'story_question_box';
   motionSceneId: string;
   triggerTimestamp: number;
   question: {
