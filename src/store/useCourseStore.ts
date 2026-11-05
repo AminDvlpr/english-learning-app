@@ -12,6 +12,9 @@ export interface CourseState {
   masteredLessonIds: string[];
   savedStashes: (LessonSummaryStash & { savedAt: number; nextReviewAt: number; srsStage: number })[];
   hasSeenGestureGuide: boolean;
+  userName: string | null;
+  userLevel: number;
+  activeBottomTab: 'explore' | 'uncle' | 'ranking' | 'challenge' | 'profile';
 }
 
 export interface CourseActions {
@@ -21,6 +24,9 @@ export interface CourseActions {
   saveLessonStash: (stash: LessonSummaryStash) => void;
   completeStashReview: (lessonId: string, remembered: boolean) => void;
   dismissGestureGuide: () => void;
+  loginWithName: (name: string) => void;
+  logoutUser: () => void;
+  setActiveBottomTab: (tab: 'explore' | 'uncle' | 'ranking' | 'challenge' | 'profile') => void;
 }
 
 const initialState: CourseState = {
@@ -32,6 +38,9 @@ const initialState: CourseState = {
   masteredLessonIds: [],
   savedStashes: [],
   hasSeenGestureGuide: false,
+  userName: null,
+  userLevel: 1,
+  activeBottomTab: 'explore',
 };
 
 export const useCourseStore = create<CourseState & CourseActions>()(
@@ -134,6 +143,12 @@ export const useCourseStore = create<CourseState & CourseActions>()(
       },
 
       dismissGestureGuide: () => set({ hasSeenGestureGuide: true }),
+
+      loginWithName: (name: string) => set({ userName: name }),
+
+      logoutUser: () => set({ userName: null }),
+
+      setActiveBottomTab: (tab) => set({ activeBottomTab: tab }),
     }),
     {
       name: 'english-app-course-store',

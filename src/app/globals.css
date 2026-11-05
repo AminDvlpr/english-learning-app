@@ -75,7 +75,7 @@
     --warning: 38 92% 50%;
     --warning-foreground: 210 40% 98%;
 
-    --info: 199 89% 55%;
+    --info: 199 89% 48%;
     --info-foreground: 0 0% 100%;
 
     --border: 217.2 32.6% 17.5%;
@@ -108,14 +108,14 @@
   }
 
   .custom-scrollbar::-webkit-scrollbar {
-    width: 5px;
-    height: 5px;
+    width: 4px;
+    height: 4px;
   }
   .custom-scrollbar::-webkit-scrollbar-track {
     background: transparent;
   }
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: hsl(var(--muted-foreground) / 0.25);
+    background: hsl(var(--muted-foreground)/0.3);
     border-radius: 9999px;
   }
 
@@ -131,5 +131,9 @@
   }
   .rotate-y-180 {
     transform: rotateY(180deg);
+  }
+
+  .animate-spin-slow {
+    animation: spin 3s linear infinite;
   }
 }

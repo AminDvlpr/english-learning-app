@@ -8,6 +8,8 @@
   "coverEmoji": "🌍",
   "coverGradient": "from-blue-500 to-indigo-600",
   "isDefaultEnrolled": true,
+  "isFeatured": true,
+  "viewsCount": "4,999",
   "lessons": [
     {
       "id": "lesson-1",
@@ -15,11 +17,12 @@
       "order": 1,
       "chapterNumber": 1,
       "chapterTitleFa": "کودکی – رقابت و شیطنت",
-      "title": "Childhood Rivalry & Mischief",
-      "subtitleFa": "امین و سارا بر سر لوازم التحریر با هم رقابت می کنند.",
+      "title": "اپیزود ۱: تولد و دعوا",
+      "subtitleFa": "آشنایی با امین و سارا و شروع رقابت...",
       "level": "A1",
-      "coverEmoji": "👧👦",
+      "coverEmoji": "🎂",
       "coverGradient": "from-pink-400 to-rose-500",
+      "viewsCount": "4,999",
       "formatTags": ["read", "play", "listen", "watch"],
       "estimatedMinutes": 15,
       "summaryStash": {
@@ -44,8 +47,8 @@
           "chapterBadge": "Chapter 1",
           "notionHeader": {
             "coverGradient": "from-pink-400 to-rose-500",
-            "iconEmoji": "🏫",
-            "quoteBarText": "School days...",
+            "iconEmoji": "🎂",
+            "quoteBarText": "هر داستان بزرگی از یک رقابت کوچک شروع می‌شود...",
             "metadata": {
               "language": "English",
               "level": "A1",
@@ -59,8 +62,23 @@
               "textEn": "Amin and Sara are in the classroom.",
               "highlightWords": [
                 {
-                  "word": "classroom",
+                  "word": "Amin",
                   "color": "purple",
+                  "hasSparkle": true
+                },
+                {
+                  "word": "Sara",
+                  "color": "magenta",
+                  "hasSparkle": true
+                },
+                {
+                  "word": "are",
+                  "color": "emerald",
+                  "hasSparkle": true
+                },
+                {
+                  "word": "classroom",
+                  "color": "cyan",
                   "hasSparkle": true
                 }
               ],
@@ -227,9 +245,59 @@
           "format": "watch",
           "title": "Recess",
           "chapterBadge": "Chapter 1",
-          "videoDurationSec": 30,
+          "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+          "videoDurationSec": 15,
           "deepDives": [],
-          "interrupts": []
+          "interrupts": [
+            {
+              "id": "int-1-watch-1",
+              "triggerAtPercentOrSec": 4,
+              "actionType": "select",
+              "promptFa": "چه اتفاقی افتاد؟",
+              "promptEn": "What happened?",
+              "options": [
+                {
+                  "id": "opt-watch-1",
+                  "textEn": "Nothing",
+                  "textFa": "هیچی",
+                  "isCorrect": true,
+                  "feedbackFa": "درست است."
+                }
+              ]
+            },
+            {
+              "id": "int-1-watch-2",
+              "triggerAtPercentOrSec": 9,
+              "actionType": "select",
+              "promptFa": "چه دیدید؟",
+              "promptEn": "What did you see?",
+              "options": [
+                {
+                  "id": "opt-watch-2",
+                  "textEn": "Fire",
+                  "textFa": "آتش",
+                  "isCorrect": true,
+                  "feedbackFa": "درست است."
+                }
+              ]
+            },
+            {
+              "id": "int-1-watch-3",
+              "triggerAtPercentOrSec": 14,
+              "actionType": "select",
+              "promptFa": "ویدیو تمام شد؟",
+              "promptEn": "Did the video end?",
+              "options": [
+                {
+                  "id": "opt-watch-3",
+                  "textEn": "Yes",
+                  "textFa": "بله",
+                  "isCorrect": true,
+                  "feedbackFa": "درست است."
+                }
+              ]
+            }
+          ]
         }
       ]
     },
@@ -239,12 +307,13 @@
       "order": 2,
       "chapterNumber": 2,
       "chapterTitleFa": "جوانی – عشق، خواستگاری و رضایت دایی‌جان",
-      "title": "Youth Love & Uncle's Approval",
-      "subtitleFa": "امین از دایی سختگیر سارا اجازه می خواهد.",
+      "title": "اپیزود ۲: کلاس نقاشی و خواستگاری",
+      "subtitleFa": "چالش جلب رضایت دایی‌جان...",
       "level": "B1",
-      "coverEmoji": "💍",
+      "coverEmoji": "🎨",
       "coverGradient": "from-yellow-400 to-orange-500",
-      "formatTags": ["read", "play", "listen"],
+      "viewsCount": "1,840",
+      "formatTags": ["read", "watch", "play", "listen"],
       "estimatedMinutes": 20,
       "summaryStash": {
         "lessonId": "lesson-2",
@@ -388,6 +457,16 @@
           ],
           "deepDives": [],
           "interrupts": []
+        },
+        {
+          "id": "slide-2-watch",
+          "order": 4,
+          "format": "watch",
+          "title": "The Decision",
+          "chapterBadge": "Chapter 2",
+          "videoDurationSec": 20,
+          "deepDives": [],
+          "interrupts": []
         }
       ]
     },
@@ -397,11 +476,12 @@
       "order": 3,
       "chapterNumber": 3,
       "chapterTitleFa": "بزرگسالی – مهاجرت و بقا در لندن",
-      "title": "Adulthood Migration & Survival",
-      "subtitleFa": "اجاره آپارتمان در لندن و مصاحبه کاری.",
+      "title": "اپیزود ۳: مدرسه و مهاجرت",
+      "subtitleFa": "شروع زندگی جدید امین و سارا...",
       "level": "B2",
-      "coverEmoji": "🏙️",
+      "coverEmoji": "🏫",
       "coverGradient": "from-gray-500 to-slate-700",
+      "viewsCount": "920",
       "formatTags": ["read", "play", "watch"],
       "estimatedMinutes": 25,
       "summaryStash": {

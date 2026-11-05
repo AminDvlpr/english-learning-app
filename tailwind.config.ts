@@ -71,10 +71,10 @@ const config = {
         sm: "calc(var(--radius) - 4px)",
       },
       fontFamily: {
-        sans: ["var(--font-geist-sans)", "Vazirmatn", "Tahoma", "system-ui", "-apple-system", "sans-serif"],
+        sans: ["Vazirmatn", "var(--font-geist-sans)", "Tahoma", "system-ui", "sans-serif"],
         mono: ["var(--font-geist-mono)", "monospace"],
-        vazirmatn: ["Vazirmatn", "var(--font-geist-sans)", "Tahoma", "system-ui", "sans-serif"],
-        serif: ["var(--font-geist-sans)", "Georgia", "ui-serif", "serif"],
+        vazirmatn: ["Vazirmatn", "Tahoma", "system-ui", "sans-serif"],
+        serif: ["var(--font-geist-sans)", "Georgia", "serif"],
       },
     },
   },

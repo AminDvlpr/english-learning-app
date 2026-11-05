@@ -14,8 +14,8 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "سفر در زبان | Interactive Story English Learning",
-  description: "Microlearning English platform with interactive story decks, kinetic Notion typography, and episodic narrative games.",
+  title: "سفر در زبان | آموزش تعاملی زبان انگلیسی",
+  description: "اپلیکیشن میکرولرنینگ آموزش زبان انگلیسی با استوری‌های تعاملی و داستان امین و سارا",
 };
 
 export default function RootLayout({
