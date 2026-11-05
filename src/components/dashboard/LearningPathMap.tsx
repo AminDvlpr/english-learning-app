@@ -65,9 +65,9 @@ export function LearningPathMap() {
             <p className="text-sm text-muted-foreground">{path.description}</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 relative">
+          <div className="grid grid-cols-1 gap-3 relative">
             {/* Connecting line for visual structure */}
-            <div className="absolute left-6 top-8 bottom-8 w-0.5 bg-border hidden md:block" />
+            <div className="absolute left-6 top-6 bottom-6 w-0.5 bg-border block" />
 
             {path.lessons.map((lesson, lessonIndex) => {
               const isCurrentLesson = currentLessonId === lesson.id

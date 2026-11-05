@@ -86,7 +86,7 @@ export function MasteryAnalyticsCard() {
         <div className="space-y-2">
           <div className="flex justify-between items-end text-sm">
             <span className="flex items-center gap-2 font-medium text-muted-foreground">
-               <Clock className="w-4 h-4 text-info" /> Daily Active Time
+               <Clock className="w-4 h-4 text-sky-500" /> Daily Active Time
             </span>
             <span className="font-bold text-sm">
                 <span className={activeMinutes >= streakGoalMinutes ? "text-success" : ""}>{activeMinutes}</span> / {streakGoalMinutes} min
