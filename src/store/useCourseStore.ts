@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { CourseDocument, LessonSummaryStash } from '@/types/course';
+import { CourseDocument, LessonSummaryStash, LeitnerFlashcard } from '@/types/course';
 import { INITIAL_COURSES } from '@/data/courses';
 
 export interface CourseState {
@@ -15,6 +15,9 @@ export interface CourseState {
   userName: string | null;
   userLevel: number;
   activeBottomTab: 'explore' | 'uncle' | 'ranking' | 'challenge' | 'profile';
+  leitnerCards: LeitnerFlashcard[];
+  uncleApprovalMeter: number;
+  sessionFlags: Record<string, boolean | string>;
 }
 
 export interface CourseActions {
@@ -27,6 +30,10 @@ export interface CourseActions {
   loginWithName: (name: string) => void;
   logoutUser: () => void;
   setActiveBottomTab: (tab: 'explore' | 'uncle' | 'ranking' | 'challenge' | 'profile') => void;
+  addLeitnerCard: (card: Omit<LeitnerFlashcard, 'id' | 'boxNumber' | 'nextReviewAt'>) => void;
+  reviewLeitnerCard: (id: string, remembered: boolean) => void;
+  updateUncleApproval: (delta: number) => void;
+  setSessionFlag: (key: string, value: boolean | string) => void;
 }
 
 const initialState: CourseState = {
@@ -41,6 +48,46 @@ const initialState: CourseState = {
   userName: null,
   userLevel: 1,
   activeBottomTab: 'explore',
+  leitnerCards: [
+    {
+      id: 'card-1',
+      wordOrPhrase: 'Give me that pencil!',
+      translationFa: 'اون مداد رو به من بده!',
+      explanationFa: 'جمله امری با Give',
+      boxNumber: 1,
+      nextReviewAt: Date.now(),
+      sourceLessonTitle: 'Childhood Rivalry & Mischief'
+    },
+    {
+      id: 'card-2',
+      wordOrPhrase: 'May I have a word?',
+      translationFa: 'میشه یه صحبتی داشته باشیم؟',
+      explanationFa: 'کاربرد May برای درخواست محترمانه',
+      boxNumber: 2,
+      nextReviewAt: Date.now() + 86400000,
+      sourceLessonTitle: "Youth Love & Uncle's Approval"
+    },
+    {
+      id: 'card-3',
+      wordOrPhrase: 'I would like to sign the lease.',
+      translationFa: 'من می خواهم قرارداد اجاره را امضا کنم.',
+      explanationFa: 'استفاده از would like برای درخواست رسمی',
+      boxNumber: 3,
+      nextReviewAt: Date.now() + 86400000 * 3,
+      sourceLessonTitle: 'Adulthood Migration & Survival'
+    },
+    {
+      id: 'card-4',
+      wordOrPhrase: 'Would you care for some fresh tea?',
+      translationFa: 'میل دارید کمی چای تازه بنوشید؟',
+      explanationFa: 'پیشنهاد مودبانه',
+      boxNumber: 4,
+      nextReviewAt: Date.now() + 86400000 * 7,
+      sourceLessonTitle: 'The Tea Ceremony'
+    }
+  ],
+  uncleApprovalMeter: 60,
+  sessionFlags: {},
 };
 
 export const useCourseStore = create<CourseState & CourseActions>()(
@@ -149,10 +196,81 @@ export const useCourseStore = create<CourseState & CourseActions>()(
       logoutUser: () => set({ userName: null }),
 
       setActiveBottomTab: (tab) => set({ activeBottomTab: tab }),
+
+      addLeitnerCard: (card) => {
+        const { leitnerCards } = get();
+        if (leitnerCards.some(c => c.wordOrPhrase === card.wordOrPhrase)) return;
+
+        const newCard: LeitnerFlashcard = {
+          ...card,
+          id: `card-${Date.now()}`,
+          boxNumber: 1,
+          nextReviewAt: Date.now()
+        };
+
+        const newCards = [...leitnerCards, newCard];
+        set({ leitnerCards: newCards });
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('english-app-leitner-cards', JSON.stringify(newCards));
+        }
+      },
+
+      reviewLeitnerCard: (id, remembered) => {
+        const { leitnerCards } = get();
+        const cardIndex = leitnerCards.findIndex(c => c.id === id);
+        if (cardIndex === -1) return;
+
+        const card = leitnerCards[cardIndex];
+        let newBox = card.boxNumber;
+
+        if (remembered) {
+          newBox = Math.min(5, newBox + 1) as 1 | 2 | 3 | 4 | 5;
+        } else {
+          newBox = 1;
+        }
+
+        const intervals = [1, 3, 7, 14, 30];
+        const days = intervals[newBox - 1];
+
+        const newCard: LeitnerFlashcard = {
+          ...card,
+          boxNumber: newBox,
+          nextReviewAt: Date.now() + days * 24 * 60 * 60 * 1000
+        };
+
+        const newCards = [...leitnerCards];
+        newCards[cardIndex] = newCard;
+        set({ leitnerCards: newCards });
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('english-app-leitner-cards', JSON.stringify(newCards));
+        }
+      },
+
+      updateUncleApproval: (delta) => {
+        const { uncleApprovalMeter } = get();
+        set({ uncleApprovalMeter: Math.max(0, Math.min(100, uncleApprovalMeter + delta)) });
+      },
+
+      setSessionFlag: (key, value) => {
+        const { sessionFlags } = get();
+        set({ sessionFlags: { ...sessionFlags, [key]: value } });
+      }
     }),
     {
       name: 'english-app-course-store',
       skipHydration: true,
+      onRehydrateStorage: () => (state) => {
+        if (state && typeof window !== 'undefined') {
+          const localCards = localStorage.getItem('english-app-leitner-cards');
+          if (localCards) {
+            try {
+              state.leitnerCards = JSON.parse(localCards);
+            } catch (e) {
+              console.error('Failed to parse leitner cards from local storage', e);
+            }
+          }
+        }
+      }
     }
   )
 );
