@@ -24,8 +24,8 @@ export function BranchingDecisionExercise({ block, onSubmit }: Props) {
           whileTap={{ scale: 0.98 }}
         >
           <Button
-            variant="outline"
-            className="w-full justify-start font-mono h-auto py-4 px-6 text-left whitespace-normal text-base shadow-sm hover:shadow-md transition-shadow"
+            variant="ghost"
+            className="w-full justify-start font-mono h-auto py-4 px-6 text-left whitespace-normal text-base bg-black/40 hover:bg-black/60 text-white border border-white/20 backdrop-blur-md rounded-2xl transition-all shadow-lg"
             onClick={() => onSubmit(opt.id)}
           >
             {opt.text}
