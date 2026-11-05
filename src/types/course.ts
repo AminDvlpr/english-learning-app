@@ -1,5 +1,102 @@
 export type StorySlideFormat = 'read' | 'watch' | 'listen' | 'play';
 
+export type PuppetExpression = 'neutral' | 'happy' | 'mocking' | 'strict_frown' | 'nervous' | 'proud';
+
+export interface PuppetCharacterConfig {
+  id: string;
+  name: 'Amin' | 'Sara' | 'Uncle' | 'Teacher' | 'Officer';
+  labelFa: string;
+  xPercent: number;
+  expression: PuppetExpression;
+  isSpeaking?: boolean;
+  isWalking?: boolean;
+  customPngLayers?: {
+    bodyUrl?: string;
+    headUrl?: string;
+    mouthOpenUrl?: string;
+    eyesBlinkUrl?: string;
+  };
+}
+
+export interface ParallaxLayerConfig {
+  backgroundUrl?: string;
+  midgroundUrl?: string;
+  foregroundUrl?: string;
+  theme: 'childhood_class' | 'painting_studio' | 'uncle_tea_room' | 'immigration_office' | 'london_apartment';
+}
+
+export interface InvestigableHotspot {
+  id: string;
+  labelEn: string;
+  labelFa: string;
+  emoji: string;
+  xPercent: number;
+  yPercent: number;
+  lookMonologueEn: string;
+  lookMonologueFa: string;
+  canGrabToInventory?: boolean;
+  isDropTarget?: boolean;
+  requiredItemId?: string;
+  successNodeId?: string;
+  wrongItemNodeId?: string;
+}
+
+export interface DocumentFieldError {
+  id: string;
+  fieldLabel: string;
+  wrongValue: string;
+  correctOptions: string[];
+  correctValue: string;
+  hintFa: string;
+}
+
+export interface StoryGraphNode {
+  id: string;
+  type: 'narrative' | 'pressure_choice' | 'investigation' | 'document_inspection';
+  cameraFocus?: 'speaker_zoom' | 'pressure_closeup' | 'wide_explore';
+  speaker?: 'Amin' | 'Sara' | 'Uncle' | 'Teacher' | 'Officer';
+  dialogueEn?: string;
+  dialogueFa?: string;
+  puppets?: PuppetCharacterConfig[];
+  nextNodeId?: string;
+  timerSec?: number;
+  silenceConsequence?: {
+    feedbackFa: string;
+    approvalDelta?: number;
+    targetExpression?: PuppetExpression;
+    nextNodeId: string;
+  };
+  choices?: {
+    id: string;
+    textEn: string;
+    textFa: string;
+    isCorrect: boolean;
+    approvalDelta?: number;
+    flagKey?: string;
+    feedbackFa: string;
+    targetExpression?: PuppetExpression;
+    nextNodeId: string;
+  }[];
+  hotspots?: InvestigableHotspot[];
+  documentInspection?: {
+    documentTitle: string;
+    instructionsFa: string;
+    fields: DocumentFieldError[];
+    successNextNodeId: string;
+  };
+}
+
+export interface LeitnerFlashcard {
+  id: string;
+  wordOrPhrase: string;
+  translationFa: string;
+  explanationFa: string;
+  exampleEn?: string;
+  boxNumber: 1 | 2 | 3 | 4 | 5;
+  nextReviewAt: number;
+  sourceLessonTitle?: string;
+}
+
 export interface DeepDiveAnnotation {
   id: string;
   triggerText: string;
@@ -76,6 +173,10 @@ export interface CourseSlide {
     durationSec: number;
   }[];
   videoDurationSec?: number;
+  parallaxScene?: ParallaxLayerConfig;
+  hasApprovalMeter?: boolean;
+  initialApproval?: number;
+  storyNodes?: StoryGraphNode[];
   deepDives: DeepDiveAnnotation[];
   interrupts: SlideInterrupt[];
 }

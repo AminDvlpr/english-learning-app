@@ -23,7 +23,12 @@
       "coverEmoji": "🎂",
       "coverGradient": "from-pink-400 to-rose-500",
       "viewsCount": "4,999",
-      "formatTags": ["read", "play", "listen", "watch"],
+      "formatTags": [
+        "read",
+        "play",
+        "listen",
+        "watch"
+      ],
       "estimatedMinutes": 15,
       "summaryStash": {
         "lessonId": "lesson-1",
@@ -306,14 +311,19 @@
       "courseId": "amin-sara-journey",
       "order": 2,
       "chapterNumber": 2,
-      "chapterTitleFa": "جوانی – عشق، خواستگاری و رضایت دایی‌جان",
-      "title": "اپیزود ۲: کلاس نقاشی و خواستگاری",
-      "subtitleFa": "چالش جلب رضایت دایی‌جان...",
-      "level": "B1",
+      "chapterTitleFa": "اپیزود ۲: کلاس نقاشی (The Painting Class)",
+      "title": "اپیزود ۲: کلاس نقاشی (The Painting Class)",
+      "subtitleFa": "گوش دادن به دستورات معلم...",
+      "level": "A1",
       "coverEmoji": "🎨",
       "coverGradient": "from-yellow-400 to-orange-500",
       "viewsCount": "1,840",
-      "formatTags": ["read", "watch", "play", "listen"],
+      "formatTags": [
+        "read",
+        "watch",
+        "play",
+        "listen"
+      ],
       "estimatedMinutes": 20,
       "summaryStash": {
         "lessonId": "lesson-2",
@@ -333,31 +343,31 @@
           "id": "slide-2-read",
           "order": 1,
           "format": "read",
-          "title": "The Big Day",
+          "title": "The Painting Class",
           "chapterBadge": "Chapter 2",
           "notionHeader": {
             "coverGradient": "from-yellow-400 to-orange-500",
-            "iconEmoji": "🏠",
-            "quoteBarText": "Nervous moments...",
+            "iconEmoji": "🎨",
+            "quoteBarText": "Colors and commands...",
             "metadata": {
               "language": "English",
-              "level": "B1",
+              "level": "A1",
               "chapter": "2",
-              "characters": "Amin, Sara, Uncle"
+              "characters": "Amin, Sara, Teacher"
             }
           },
           "kineticParagraphs": [
             {
               "id": "kp-2",
-              "textEn": "Amin is very nervous to speak with Uncle.",
+              "textEn": "Please pick up the crimson red brush and paint the roof!",
               "highlightWords": [
                 {
-                  "word": "nervous",
+                  "word": "crimson",
                   "color": "magenta",
-                  "hasSparkle": false
+                  "hasSparkle": true
                 }
               ],
-              "translationFa": "امین خیلی عصبی است تا با دایی صحبت کند."
+              "translationFa": "لطفا قلم موی قرمز زرشکی را بردارید و سقف را رنگ کنید!"
             }
           ],
           "deepDives": [],
@@ -367,92 +377,120 @@
           "id": "slide-2-play",
           "order": 2,
           "format": "play",
-          "title": "Serving Tea",
+          "title": "Painting Studio",
           "chapterBadge": "Chapter 2",
-          "playScene": {
-            "backgroundTheme": "uncle_living_room",
-            "characters": [
-              {
-                "name": "Uncle",
-                "mood": "serious",
-                "dialogueEn": "What do you want, boy?",
-                "dialogueFa": "چی میخوای پسر؟"
-              }
-            ],
-            "objects": [
-              {
-                "id": "obj-tea",
-                "label": "Tea",
-                "emoji": "☕",
-                "xPercent": 30,
-                "yPercent": 60,
-                "isDraggable": true
-              },
-              {
-                "id": "obj-uncle",
-                "label": "Uncle",
-                "emoji": "🧔",
-                "xPercent": 70,
-                "yPercent": 60,
-                "isDropTarget": true
-              }
-            ]
+          "parallaxScene": {
+            "theme": "painting_studio"
           },
-          "deepDives": [
+          "storyNodes": [
             {
-              "id": "dd-polite",
-              "triggerText": "May I",
-              "title": "Polite Requests",
-              "category": "grammar",
-              "explanationFa": "درخواست های مودبانه با May و Could",
-              "examples": [
+              "id": "node-2-1",
+              "type": "investigation",
+              "cameraFocus": "wide_explore",
+              "speaker": "Teacher",
+              "dialogueEn": "Please pick up the crimson red brush and paint the roof!",
+              "dialogueFa": "لطفا قلم موی قرمز زرشکی را بردارید و سقف را رنگ کنید!",
+              "puppets": [
                 {
-                  "en": "May I offer you some tea?",
-                  "fa": "میشه بهتون چای تعارف کنم؟"
+                  "id": "teacher",
+                  "name": "Teacher",
+                  "labelFa": "معلم",
+                  "xPercent": 50,
+                  "expression": "neutral"
+                },
+                {
+                  "id": "sara",
+                  "name": "Sara",
+                  "labelFa": "سارا",
+                  "xPercent": 20,
+                  "expression": "neutral"
+                }
+              ],
+              "hotspots": [
+                {
+                  "id": "blue-brush",
+                  "labelEn": "Blue Brush",
+                  "labelFa": "قلم موی آبی",
+                  "emoji": "🖌️",
+                  "xPercent": 30,
+                  "yPercent": 70,
+                  "lookMonologueEn": "A blue brush.",
+                  "lookMonologueFa": "یک قلم موی آبی.",
+                  "canGrabToInventory": true
+                },
+                {
+                  "id": "red-brush",
+                  "labelEn": "Red Brush",
+                  "labelFa": "قلم موی قرمز",
+                  "emoji": "🖌️",
+                  "xPercent": 70,
+                  "yPercent": 70,
+                  "lookMonologueEn": "A crimson red brush.",
+                  "lookMonologueFa": "یک قلم موی قرمز زرشکی.",
+                  "canGrabToInventory": true
+                },
+                {
+                  "id": "canvas",
+                  "labelEn": "Canvas",
+                  "labelFa": "بوم نقاشی",
+                  "emoji": "🖼️",
+                  "xPercent": 50,
+                  "yPercent": 40,
+                  "isDropTarget": true,
+                  "requiredItemId": "red-brush",
+                  "successNodeId": "node-2-success",
+                  "wrongItemNodeId": "node-2-fail"
+                }
+              ]
+            },
+            {
+              "id": "node-2-success",
+              "type": "narrative",
+              "speaker": "Teacher",
+              "dialogueEn": "Excellent work!",
+              "dialogueFa": "کارت عالی بود!",
+              "puppets": [
+                {
+                  "id": "teacher",
+                  "name": "Teacher",
+                  "labelFa": "معلم",
+                  "xPercent": 50,
+                  "expression": "proud"
+                }
+              ]
+            },
+            {
+              "id": "node-2-fail",
+              "type": "narrative",
+              "speaker": "Sara",
+              "dialogueEn": "Haha, you picked the wrong color!",
+              "dialogueFa": "هاها، رنگ اشتباه رو برداشتی!",
+              "puppets": [
+                {
+                  "id": "sara",
+                  "name": "Sara",
+                  "labelFa": "سارا",
+                  "xPercent": 20,
+                  "expression": "mocking"
                 }
               ]
             }
           ],
-          "interrupts": [
-            {
-              "id": "int-2-play-1",
-              "triggerAtPercentOrSec": 5,
-              "actionType": "drag_and_drop",
-              "promptFa": "چای را به دایی بدهید.",
-              "promptEn": "Give the tea to the uncle.",
-              "sourceObjectId": "obj-tea",
-              "targetObjectId": "obj-uncle"
-            },
-            {
-              "id": "int-2-play-2",
-              "triggerAtPercentOrSec": 10,
-              "actionType": "select",
-              "promptFa": "چگونه محترمانه صحبت کنیم؟",
-              "promptEn": "How to speak politely?",
-              "options": [
-                {
-                  "id": "opt-polite",
-                  "textEn": "May I have your blessing?",
-                  "textFa": "می توانم اجازه شما را داشته باشم؟",
-                  "isCorrect": true,
-                  "feedbackFa": "بسیار مودبانه."
-                }
-              ]
-            }
-          ]
+          "deepDives": [],
+          "interrupts": []
         },
         {
           "id": "slide-2-listen",
           "order": 3,
           "format": "listen",
-          "title": "The Conversation",
+          "title": "Teacher's Command",
           "chapterBadge": "Chapter 2",
           "audioScript": [
             {
-              "speaker": "Uncle",
-              "textEn": "Are you ready for this?",
-              "textFa": "برای این آماده ای؟",
-              "durationSec": 2
+              "speaker": "Teacher",
+              "textEn": "Please pick up the crimson red brush.",
+              "textFa": "لطفا قلم موی قرمز زرشکی را بردارید.",
+              "durationSec": 3
             }
           ],
           "deepDives": [],
@@ -462,9 +500,9 @@
           "id": "slide-2-watch",
           "order": 4,
           "format": "watch",
-          "title": "The Decision",
+          "title": "Painting Class Video",
           "chapterBadge": "Chapter 2",
-          "videoDurationSec": 20,
+          "videoDurationSec": 15,
           "deepDives": [],
           "interrupts": []
         }
@@ -475,14 +513,19 @@
       "courseId": "amin-sara-journey",
       "order": 3,
       "chapterNumber": 3,
-      "chapterTitleFa": "بزرگسالی – مهاجرت و بقا در لندن",
-      "title": "اپیزود ۳: مدرسه و مهاجرت",
-      "subtitleFa": "شروع زندگی جدید امین و سارا...",
-      "level": "B2",
+      "chapterTitleFa": "اپیزود ۳: مدرسه و قرار مخفیانه",
+      "title": "اپیزود ۳: مدرسه و قرار مخفیانه",
+      "subtitleFa": "حیاط مدرسه و اولین اعترافات",
+      "level": "A2",
       "coverEmoji": "🏫",
       "coverGradient": "from-gray-500 to-slate-700",
       "viewsCount": "920",
-      "formatTags": ["read", "play", "watch"],
+      "formatTags": [
+        "read",
+        "watch",
+        "play",
+        "listen"
+      ],
       "estimatedMinutes": 25,
       "summaryStash": {
         "lessonId": "lesson-3",
@@ -502,31 +545,25 @@
           "id": "slide-3-read",
           "order": 1,
           "format": "read",
-          "title": "Welcome to London",
+          "title": "School Yard Secrets",
           "chapterBadge": "Chapter 3",
           "notionHeader": {
             "coverGradient": "from-gray-500 to-slate-700",
-            "iconEmoji": "🇬🇧",
-            "quoteBarText": "A new beginning...",
+            "iconEmoji": "🏫",
+            "quoteBarText": "First confessions...",
             "metadata": {
               "language": "English",
-              "level": "B2",
+              "level": "A2",
               "chapter": "3",
-              "characters": "Amin, Sara, Landlord"
+              "characters": "Amin, Sara"
             }
           },
           "kineticParagraphs": [
             {
               "id": "kp-3",
-              "textEn": "The weather in London is gloomy, but they are hopeful.",
-              "highlightWords": [
-                {
-                  "word": "gloomy",
-                  "color": "cyan",
-                  "hasSparkle": false
-                }
-              ],
-              "translationFa": "آب و هوای لندن دلگیر است اما آنها امیدوارند."
+              "textEn": "They met in secret at the school yard.",
+              "highlightWords": [],
+              "translationFa": "آنها مخفیانه در حیاط مدرسه همدیگر را ملاقات کردند."
             }
           ],
           "deepDives": [],
@@ -536,82 +573,373 @@
           "id": "slide-3-play",
           "order": 2,
           "format": "play",
-          "title": "Signing the Lease",
+          "title": "The Meeting",
           "chapterBadge": "Chapter 3",
-          "playScene": {
-            "backgroundTheme": "london_apartment",
-            "characters": [
-              {
-                "name": "Landlord",
-                "mood": "neutral",
-                "dialogueEn": "Please sign here.",
-                "dialogueFa": "لطفاً اینجا امضا کنید."
-              }
-            ],
-            "objects": [
-              {
-                "id": "obj-pen",
-                "label": "Pen",
-                "emoji": "🖊️",
-                "xPercent": 40,
-                "yPercent": 60,
-                "isDraggable": true
-              },
-              {
-                "id": "obj-contract",
-                "label": "Contract",
-                "emoji": "📄",
-                "xPercent": 60,
-                "yPercent": 60,
-                "isDropTarget": true
-              }
-            ]
-          },
+          "storyNodes": [],
           "deepDives": [],
-          "interrupts": [
+          "interrupts": []
+        },
+        {
+          "id": "slide-3-listen",
+          "order": 3,
+          "format": "listen",
+          "title": "Confessions",
+          "chapterBadge": "Chapter 3",
+          "audioScript": [
             {
-              "id": "int-3-play-1",
-              "triggerAtPercentOrSec": 5,
-              "actionType": "drag_and_drop",
-              "promptFa": "خودکار را روی قرارداد بکشید تا امضا کنید.",
-              "promptEn": "Drag the pen onto the contract to sign.",
-              "sourceObjectId": "obj-pen",
-              "targetObjectId": "obj-contract"
-            },
+              "speaker": "Amin",
+              "textEn": "I have something to tell you.",
+              "textFa": "باید چیزی به تو بگویم.",
+              "durationSec": 2
+            }
+          ],
+          "deepDives": [],
+          "interrupts": []
+        },
+        {
+          "id": "slide-3-watch",
+          "order": 4,
+          "format": "watch",
+          "title": "School Memories",
+          "chapterBadge": "Chapter 3",
+          "videoDurationSec": 20,
+          "deepDives": [],
+          "interrupts": []
+        }
+      ]
+    },
+    {
+      "id": "lesson-4",
+      "courseId": "amin-sara-journey",
+      "order": 4,
+      "chapterNumber": 4,
+      "chapterTitleFa": "اپیزود ۴: مراسم چای با دایی‌جان",
+      "title": "اپیزود ۴: مراسم چای با دایی‌جان",
+      "subtitleFa": "جلب رضایت دایی‌جان",
+      "level": "B1",
+      "coverEmoji": "☕",
+      "coverGradient": "from-amber-600 to-orange-700",
+      "viewsCount": "1,200",
+      "formatTags": [
+        "read",
+        "watch",
+        "play",
+        "listen"
+      ],
+      "estimatedMinutes": 20,
+      "summaryStash": {
+        "lessonId": "lesson-4",
+        "courseId": "amin-sara-journey",
+        "lessonTitle": "The Tea Ceremony",
+        "keyPhrases": [
+          {
+            "en": "Would you care for some fresh tea, Uncle?",
+            "fa": "میل دارید کمی چای تازه بنوشید، دایی جان؟",
+            "grammarNoteFa": "پیشنهاد مودبانه"
+          }
+        ],
+        "takeawayFa": "یادگیری جملات مودبانه برای احترام"
+      },
+      "slides": [
+        {
+          "id": "slide-4-read",
+          "order": 1,
+          "format": "read",
+          "title": "The Tea Ceremony",
+          "chapterBadge": "Chapter 4",
+          "notionHeader": {
+            "coverGradient": "from-amber-600 to-orange-700",
+            "iconEmoji": "☕",
+            "quoteBarText": "Respect is everything...",
+            "metadata": {
+              "language": "English",
+              "level": "B1",
+              "chapter": "4",
+              "characters": "Amin, Sara, Uncle"
+            }
+          },
+          "kineticParagraphs": [],
+          "deepDives": [],
+          "interrupts": []
+        },
+        {
+          "id": "slide-4-play",
+          "order": 2,
+          "format": "play",
+          "title": "Serving Tea",
+          "chapterBadge": "Chapter 4",
+          "hasApprovalMeter": true,
+          "initialApproval": 60,
+          "parallaxScene": {
+            "theme": "uncle_tea_room"
+          },
+          "storyNodes": [
             {
-              "id": "int-3-play-2",
-              "triggerAtPercentOrSec": 10,
-              "actionType": "select",
-              "promptFa": "چگونه به صاحبخانه پاسخ دهیم؟",
-              "promptEn": "How to answer the landlord?",
-              "options": [
+              "id": "node-4-1",
+              "type": "investigation",
+              "cameraFocus": "wide_explore",
+              "speaker": "Uncle",
+              "dialogueEn": "Show me some respect, boy.",
+              "dialogueFa": "به من احترام بگذار، پسر.",
+              "puppets": [
                 {
-                  "id": "opt-sign",
-                  "textEn": "Of course.",
-                  "textFa": "البته.",
-                  "isCorrect": true,
-                  "feedbackFa": "عالی."
+                  "id": "uncle",
+                  "name": "Uncle",
+                  "labelFa": "دایی جان",
+                  "xPercent": 50,
+                  "expression": "neutral"
+                }
+              ],
+              "hotspots": [
+                {
+                  "id": "fresh-tea",
+                  "labelEn": "Fresh Persian Tea",
+                  "labelFa": "چای تازه ایرانی",
+                  "emoji": "☕",
+                  "xPercent": 30,
+                  "yPercent": 70,
+                  "lookMonologueEn": "A hot cup of Persian tea.",
+                  "lookMonologueFa": "یک فنجان چای داغ ایرانی.",
+                  "canGrabToInventory": true
+                },
+                {
+                  "id": "uncle-target",
+                  "labelEn": "Uncle",
+                  "labelFa": "دایی",
+                  "emoji": "🧔",
+                  "xPercent": 50,
+                  "yPercent": 40,
+                  "isDropTarget": true,
+                  "requiredItemId": "fresh-tea",
+                  "successNodeId": "node-4-pressure"
                 }
               ]
             },
             {
-              "id": "int-3-play-3",
-              "triggerAtPercentOrSec": 15,
-              "actionType": "walk_away",
-              "promptFa": "آیا می خواهید آپارتمان را بررسی کنید؟",
-              "promptEn": "Do you want to inspect the apartment?",
-              "walkAwayLabelEn": "Explore rooms",
-              "walkAwayDestination": "bedroom"
+              "id": "node-4-pressure",
+              "type": "pressure_choice",
+              "timerSec": 5,
+              "speaker": "Amin",
+              "dialogueEn": "...",
+              "dialogueFa": "...",
+              "silenceConsequence": {
+                "feedbackFa": "سکوت باعث ناراحتی دایی شد.",
+                "approvalDelta": -15,
+                "targetExpression": "strict_frown",
+                "nextNodeId": "node-4-end"
+              },
+              "choices": [
+                {
+                  "id": "choice-polite",
+                  "textEn": "Would you care for some fresh tea, Uncle?",
+                  "textFa": "میل دارید کمی چای تازه بنوشید، دایی جان؟",
+                  "isCorrect": true,
+                  "approvalDelta": 20,
+                  "feedbackFa": "عالی، دایی خوشحال شد.",
+                  "targetExpression": "happy",
+                  "nextNodeId": "node-4-end"
+                },
+                {
+                  "id": "choice-slang",
+                  "textEn": "Yo Uncle, grab a cup!",
+                  "textFa": "هی دایی، یه فنجون بردار!",
+                  "isCorrect": false,
+                  "approvalDelta": -25,
+                  "feedbackFa": "خیلی بی ادبانه بود!",
+                  "targetExpression": "strict_frown",
+                  "nextNodeId": "node-4-end"
+                }
+              ]
+            },
+            {
+              "id": "node-4-end",
+              "type": "narrative",
+              "speaker": "Uncle",
+              "dialogueEn": "Hmm.",
+              "dialogueFa": "همم."
             }
-          ]
+          ],
+          "deepDives": [],
+          "interrupts": []
         },
         {
-          "id": "slide-3-watch",
+          "id": "slide-4-listen",
           "order": 3,
+          "format": "listen",
+          "title": "Tea Chat",
+          "chapterBadge": "Chapter 4",
+          "audioScript": [],
+          "deepDives": [],
+          "interrupts": []
+        },
+        {
+          "id": "slide-4-watch",
+          "order": 4,
           "format": "watch",
-          "title": "First Night in London",
-          "chapterBadge": "Chapter 3",
-          "videoDurationSec": 45,
+          "title": "Tea Video",
+          "chapterBadge": "Chapter 4",
+          "videoDurationSec": 15,
+          "deepDives": [],
+          "interrupts": []
+        }
+      ]
+    },
+    {
+      "id": "lesson-5",
+      "courseId": "amin-sara-journey",
+      "order": 5,
+      "chapterNumber": 5,
+      "chapterTitleFa": "اپیزود ۵: اداره مهاجرت",
+      "title": "اپیزود ۵: اداره مهاجرت (The Immigration Office)",
+      "subtitleFa": "بازرسی ویزا...",
+      "level": "B2",
+      "coverEmoji": "🛂",
+      "coverGradient": "from-blue-600 to-indigo-800",
+      "viewsCount": "800",
+      "formatTags": [
+        "read",
+        "watch",
+        "play",
+        "listen"
+      ],
+      "estimatedMinutes": 25,
+      "summaryStash": {
+        "lessonId": "lesson-5",
+        "courseId": "amin-sara-journey",
+        "lessonTitle": "The Immigration Office",
+        "keyPhrases": [
+          {
+            "en": "Here are our documents.",
+            "fa": "این مدارک ماست.",
+            "grammarNoteFa": "معرفی مدارک"
+          }
+        ],
+        "takeawayFa": "کلمات مربوط به اداره مهاجرت"
+      },
+      "slides": [
+        {
+          "id": "slide-5-read",
+          "order": 1,
+          "format": "read",
+          "title": "The Immigration Office",
+          "chapterBadge": "Chapter 5",
+          "notionHeader": {
+            "coverGradient": "from-blue-600 to-indigo-800",
+            "iconEmoji": "🛂",
+            "quoteBarText": "The final step...",
+            "metadata": {
+              "language": "English",
+              "level": "B2",
+              "chapter": "5",
+              "characters": "Amin, Sara, Officer"
+            }
+          },
+          "kineticParagraphs": [],
+          "deepDives": [],
+          "interrupts": []
+        },
+        {
+          "id": "slide-5-play",
+          "order": 2,
+          "format": "play",
+          "title": "Visa Inspection",
+          "chapterBadge": "Chapter 5",
+          "parallaxScene": {
+            "theme": "immigration_office"
+          },
+          "storyNodes": [
+            {
+              "id": "node-5-1",
+              "type": "document_inspection",
+              "cameraFocus": "pressure_closeup",
+              "speaker": "Officer",
+              "dialogueEn": "Let me see your visa form.",
+              "dialogueFa": "بگذارید فرم ویزای شما را ببینم.",
+              "puppets": [
+                {
+                  "id": "officer",
+                  "name": "Officer",
+                  "labelFa": "افسر",
+                  "xPercent": 50,
+                  "expression": "neutral"
+                }
+              ],
+              "documentInspection": {
+                "documentTitle": "UK Visa Application",
+                "instructionsFa": "اشتباهات فرم را اصلاح کنید.",
+                "fields": [
+                  {
+                    "id": "field-birth",
+                    "fieldLabel": "Birth Date",
+                    "wrongValue": "32th Octobber",
+                    "correctOptions": [
+                      "31st October",
+                      "12th October"
+                    ],
+                    "correctValue": "31st October",
+                    "hintFa": "تاریخ تولد نمی تواند 32 باشد."
+                  },
+                  {
+                    "id": "field-job",
+                    "fieldLabel": "Occupation",
+                    "wrongValue": "Enginer",
+                    "correctOptions": [
+                      "Engineer"
+                    ],
+                    "correctValue": "Engineer",
+                    "hintFa": "املای کلمه مهندس اشتباه است."
+                  },
+                  {
+                    "id": "field-purpose",
+                    "fieldLabel": "Purpose",
+                    "wrongValue": "Permenent Residenecy",
+                    "correctOptions": [
+                      "Permanent Residency"
+                    ],
+                    "correctValue": "Permanent Residency",
+                    "hintFa": "املای کلمات اقامت دائم اشتباه است."
+                  }
+                ],
+                "successNextNodeId": "node-5-end"
+              }
+            },
+            {
+              "id": "node-5-end",
+              "type": "narrative",
+              "speaker": "Officer",
+              "dialogueEn": "Everything seems correct. Welcome to the UK.",
+              "dialogueFa": "همه چیز درست به نظر می رسد. به انگلستان خوش آمدید.",
+              "puppets": [
+                {
+                  "id": "officer",
+                  "name": "Officer",
+                  "labelFa": "افسر",
+                  "xPercent": 50,
+                  "expression": "happy"
+                }
+              ]
+            }
+          ],
+          "deepDives": [],
+          "interrupts": []
+        },
+        {
+          "id": "slide-5-listen",
+          "order": 3,
+          "format": "listen",
+          "title": "Officer's Questions",
+          "chapterBadge": "Chapter 5",
+          "audioScript": [],
+          "deepDives": [],
+          "interrupts": []
+        },
+        {
+          "id": "slide-5-watch",
+          "order": 4,
+          "format": "watch",
+          "title": "Welcome to UK",
+          "chapterBadge": "Chapter 5",
+          "videoDurationSec": 20,
           "deepDives": [],
           "interrupts": []
         }
