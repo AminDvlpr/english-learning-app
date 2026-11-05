@@ -116,7 +116,7 @@ function RiveRuntimeCanvas({
   return (
     <div className="w-full h-full flex-1 flex flex-col overflow-hidden">
       <div className={`absolute inset-0 transition-opacity duration-300 ${rive ? 'opacity-100 z-10' : 'opacity-0 -z-10'}`}>
-         <RiveComponent className="w-full h-full" />
+         <RiveComponent className="w-full h-full flex-1" />
       </div>
       {!rive && !hasError && (
         <div className="absolute inset-0">

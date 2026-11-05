@@ -57,7 +57,7 @@ export function ToggleTableBlock({ block }: ToggleTableBlockProps) {
                   onClick={() => toggleItem(index)}
                   className="w-full flex items-center justify-between p-4 text-left hover:bg-slate-50/50 dark:hover:bg-slate-900/50 transition-colors"
                 >
-                  <span className="font-semibold font-sans text-foreground">{item.title}</span>
+                  <span className="font-bold tracking-tight font-sans text-foreground" dir="rtl">{item.title}</span>
                   <motion.div
                     animate={{ rotate: isOpen ? 180 : 0 }}
                     transition={{ duration: 0.2, ease: "easeInOut" }}
@@ -75,7 +75,7 @@ export function ToggleTableBlock({ block }: ToggleTableBlockProps) {
                       className="overflow-hidden"
                     >
                       <div className="p-4 pt-0 border-t border-slate-100 dark:border-slate-800">
-                        <p className="text-muted-foreground mt-2 mb-4 leading-relaxed">{item.body}</p>
+                        <p className="text-muted-foreground mt-2 mb-4 leading-relaxed font-sans" dir="rtl">{item.body}</p>
 
                         {item.examples && item.examples.length > 0 && (
                           <div className="flex flex-col gap-3">
@@ -108,12 +108,12 @@ export function ToggleTableBlock({ block }: ToggleTableBlockProps) {
       )}
 
       {block.table && block.table.headers.length > 0 && (
-        <div className="overflow-x-auto rounded-lg border border-slate-200 dark:border-slate-800">
-          <table className="w-full text-sm text-left">
+        <div className="overflow-x-auto rounded-lg border border-slate-200 dark:border-slate-800" dir="rtl">
+          <table className="w-full text-sm text-right">
             <thead className="text-xs uppercase bg-slate-50 dark:bg-slate-900/50 text-slate-500 dark:text-slate-400">
               <tr>
                 {block.table.headers.map((header, i) => (
-                  <th key={i} className="px-6 py-3 font-medium tracking-wider">
+                  <th key={i} className="px-6 py-3 font-bold tracking-tight font-sans">
                     {header}
                   </th>
                 ))}

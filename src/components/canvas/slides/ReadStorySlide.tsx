@@ -129,13 +129,13 @@ export function ReadStorySlide({
       <div className="shrink-0 pb-6">
         {/* Cover */}
         <div
-          className="h-24 w-full relative shrink-0"
+          className="h-28 w-full bg-cover bg-center relative shrink-0"
           style={{ background: coverImage }}
         />
 
         <div className="px-6 relative">
           {/* Floating Icon */}
-          <div className="-mt-7 ml-5 text-4xl drop-shadow-md bg-white dark:bg-neutral-900 rounded-lg inline-flex p-1">
+          <div className="-mt-8 ml-5 text-4xl drop-shadow-md bg-white dark:bg-neutral-900 rounded-lg inline-flex p-1">
             {icon}
           </div>
 
@@ -146,35 +146,35 @@ export function ReadStorySlide({
 
           {/* Quote Bar */}
           {quote && (
-            <div className="border-l-[3px] border-neutral-800 dark:border-neutral-200 pl-3 py-1 mb-6 text-sm text-neutral-600 dark:text-neutral-400 italic" dir="ltr">
+            <div className="border-l-[3px] border-current pl-3 py-1 my-2 text-xs opacity-85 text-neutral-600 dark:text-neutral-400 italic" dir="ltr">
               {quote}
             </div>
           )}
 
-          {/* 4-column Property Table */}
+          {/* Compact 4-column Property Table */}
           {metadata && (
-            <div className="grid grid-cols-2 gap-y-3 gap-x-4 py-4 border-y border-neutral-100 dark:border-neutral-800 mb-6 text-sm" dir="ltr">
+            <div className="flex flex-row flex-wrap gap-x-6 gap-y-2 py-4 border-y border-neutral-100 dark:border-neutral-800 mb-6 text-sm" dir="ltr">
               {metadata.language && (
-                <div className="flex gap-2">
-                  <span className="text-neutral-400 min-w-[80px]">Language</span>
+                <div className="flex items-center gap-2">
+                  <span className="text-neutral-400">Language</span>
                   <span className="text-neutral-700 dark:text-neutral-300 font-medium">{metadata.language}</span>
                 </div>
               )}
               {metadata.level && (
-                <div className="flex gap-2">
-                  <span className="text-neutral-400 min-w-[80px]">Level</span>
+                <div className="flex items-center gap-2">
+                  <span className="text-neutral-400">Level</span>
                   <span className="text-neutral-700 dark:text-neutral-300 font-medium">{metadata.level}</span>
                 </div>
               )}
               {metadata.chapter && (
-                <div className="flex gap-2">
-                  <span className="text-neutral-400 min-w-[80px]">Chapter</span>
+                <div className="flex items-center gap-2">
+                  <span className="text-neutral-400">Episode</span>
                   <span className="text-neutral-700 dark:text-neutral-300 font-medium">{metadata.chapter}</span>
                 </div>
               )}
               {metadata.characters && (
-                <div className="flex gap-2">
-                  <span className="text-neutral-400 min-w-[80px]">Characters</span>
+                <div className="flex items-center gap-2">
+                  <span className="text-neutral-400">Characters</span>
                   <span className="text-neutral-700 dark:text-neutral-300 font-medium">{metadata.characters}</span>
                 </div>
               )}
@@ -189,6 +189,7 @@ export function ReadStorySlide({
           text={streamedText}
           deepDives={deepDives}
           highlightWords={highlightWords}
+          showLeadingStar={!streamFinished && !activeInterrupt && !isDeepDiveOpen && !isPausedByHold}
           onOpenChange={setIsDeepDiveOpen}
         />
 
