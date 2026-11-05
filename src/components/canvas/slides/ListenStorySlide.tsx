@@ -177,7 +177,7 @@ export function ListenStorySlide({
       </div>
 
       {/* Equalizer Waveform */}
-      <div className="h-14 w-full max-w-[280px] mx-auto flex items-end justify-center gap-1 shrink-0 mb-4 px-4 overflow-hidden">
+      <div className="h-14 w-full max-w-[260px] mx-auto flex items-end justify-center gap-1 shrink-0 mb-4 px-4 overflow-hidden">
         {[...Array(20)].map((_, i) => (
           <motion.div
             key={i}

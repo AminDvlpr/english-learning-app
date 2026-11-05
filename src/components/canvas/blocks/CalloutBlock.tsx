@@ -86,10 +86,10 @@ export function CalloutBlock({ block }: CalloutBlockProps) {
         </motion.div>
 
         <div className="flex-1 flex flex-col gap-1.5">
-          <h3 className={cn("text-base font-semibold font-sans", styles.iconColor)}>
+          <h3 className={cn("text-base font-bold tracking-tight font-sans", styles.iconColor)} dir="rtl">
             {block.title}
           </h3>
-          <p className="text-foreground text-sm font-sans leading-relaxed">
+          <p className="text-foreground text-sm font-sans leading-relaxed" dir="rtl">
             {block.content}
           </p>
         </div>

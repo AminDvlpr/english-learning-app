@@ -24,15 +24,16 @@ export interface DeepDiveInlineTextProps {
   text: string;
   deepDives?: DeepDiveData[];
   highlightWords?: HighlightWord[];
+  showLeadingStar?: boolean;
   onOpenChange?: (isOpen: boolean) => void;
   className?: string;
 }
 
 const COLOR_MAP = {
-  purple: 'text-purple-400 drop-shadow-[0_0_12px_rgba(168,85,247,0.75)]',
-  magenta: 'text-fuchsia-400 drop-shadow-[0_0_14px_rgba(232,121,249,0.8)]',
-  emerald: 'text-emerald-400 drop-shadow-[0_0_12px_rgba(52,211,153,0.75)]',
-  cyan: 'text-cyan-400 drop-shadow-[0_0_12px_rgba(34,211,238,0.75)]',
+  purple: 'text-purple-400 drop-shadow-[0_0_14px_rgba(192,132,252,0.85)]',
+  magenta: 'text-fuchsia-400 drop-shadow-[0_0_14px_rgba(232,121,249,0.85)]',
+  emerald: 'text-emerald-400 drop-shadow-[0_0_14px_rgba(52,211,153,0.85)]',
+  cyan: 'text-cyan-400 drop-shadow-[0_0_14px_rgba(34,211,238,0.85)]',
 };
 
 const SparkleIcon = () => (
@@ -57,6 +58,7 @@ export function DeepDiveInlineText({
   text,
   deepDives = [],
   highlightWords = [],
+  showLeadingStar = false,
   onOpenChange,
   className,
 }: DeepDiveInlineTextProps) {
@@ -210,6 +212,23 @@ export function DeepDiveInlineText({
           }
           return <span key={i}>{seg.content}</span>;
         })}
+        {showLeadingStar && (
+          <motion.svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            className="inline-block mx-1 -mt-1 text-cyan-400 drop-shadow-[0_0_12px_rgba(34,211,238,0.95)]"
+            animate={{ rotate: 360, scale: [0.95, 1.15, 0.95] }}
+            transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
+          >
+            <path
+              d="M12 0L13.5 8.5L22 10L13.5 11.5L12 20L10.5 11.5L2 10L10.5 8.5L12 0Z"
+              fill="currentColor"
+            />
+          </motion.svg>
+        )}
       </div>
 
       {/* Notion-Style Deep Dive Drawer */}

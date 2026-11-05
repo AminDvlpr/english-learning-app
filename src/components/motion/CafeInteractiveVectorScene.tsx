@@ -30,8 +30,8 @@ export function CafeInteractiveVectorScene({
   }, [currentTimeSec, isCorrect, triggerName])
 
   return (
-    <div className="relative w-full h-full flex flex-col justify-start pt-8 bg-gradient-to-b from-amber-50 to-orange-50/40 dark:from-stone-900 dark:to-stone-950 overflow-hidden">
-      <div className="w-full h-[52%] shrink-0 flex flex-col justify-between px-4 pb-4 relative">
+    <div className="relative w-full h-full flex flex-col justify-start pt-10 bg-gradient-to-b from-amber-50 to-orange-50/40 dark:from-stone-900 dark:to-stone-950 overflow-hidden">
+      <div className="w-full h-[50%] shrink-0 flex flex-col justify-between px-4 pb-4 relative">
       {/* Background Elements */}
       <div className="absolute top-0 inset-x-0 h-full opacity-50 flex items-end justify-center pointer-events-none">
         <svg className="w-full h-full max-h-[300px]" viewBox="0 0 800 450" preserveAspectRatio="xMidYMax meet" fill="none" xmlns="http://www.w3.org/2000/svg">

@@ -111,7 +111,7 @@ export function PlayNarrativeSlide({
             >
               {/* Target */}
               <div
-                className="absolute left-[70%] top-[40%] pointer-events-auto"
+                className="absolute left-[70%] top-[30%] pointer-events-auto"
                 onClick={handleTapTarget}
               >
                 <div className="w-16 h-16 rounded-full border-2 border-white/50 animate-ping absolute -inset-2" />
@@ -122,7 +122,7 @@ export function PlayNarrativeSlide({
 
               {/* Source (Draggable) */}
               <motion.div
-                className="absolute left-[30%] top-[60%] pointer-events-auto cursor-grab active:cursor-grabbing z-50"
+                className="absolute left-[30%] top-[40%] pointer-events-auto cursor-grab active:cursor-grabbing z-50"
                 drag
                 dragConstraints={{ left: -100, right: 300, top: -200, bottom: 100 }}
                 dragElastic={0.2}
@@ -184,7 +184,7 @@ export function PlayNarrativeSlide({
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="absolute left-[50%] top-[50%] -translate-x-1/2 pointer-events-auto z-50"
+              className="absolute left-[50%] top-[25%] -translate-x-1/2 pointer-events-auto z-50"
             >
               <button
                 type="button"
@@ -198,8 +198,8 @@ export function PlayNarrativeSlide({
                 <div className="w-16 h-16 rounded-full border-4 border-white bg-white/10 flex items-center justify-center backdrop-blur-md shadow-[0_0_20px_rgba(255,255,255,0.3)] transition-all group-hover:bg-white/20 group-hover:scale-110">
                   <span className="text-white font-bold text-2xl drop-shadow-md">◎</span>
                 </div>
-                <span className="text-white text-sm font-medium mt-4 px-3 py-1 bg-black/50 rounded-full backdrop-blur-sm opacity-80 group-hover:opacity-100 transition-opacity">
-                  Walk away
+                <span className="text-white text-sm font-medium mt-4 px-3 py-1 bg-black/50 rounded-full backdrop-blur-sm opacity-80 group-hover:opacity-100 transition-opacity" dir="rtl">
+                  ترک کردن
                 </span>
               </button>
             </motion.div>
