@@ -16,13 +16,14 @@ interface MotionCanvasBlockProps {
   state: BlockLearnerState
   currentTimeSec?: number
   isPlaying: boolean
+  isPausedByHold?: boolean
   onPlayPause: () => void
 }
 
-export function MotionCanvasBlock({ block, state, checkpoints = [], onProgress }: MotionCanvasBlockProps) {
+export function MotionCanvasBlock({ block, state, checkpoints = [], onProgress, isPausedByHold }: MotionCanvasBlockProps) {
     const [localIsPlaying, setLocalIsPlaying] = useState(true)
 
-  const { riveSignals, completeContentBlock } = useLearnerStore()
+  const { riveSignals, completeContentBlock, triggerCheckpointVerification } = useLearnerStore()
 
   // Independent timeline for 15s sequence
   const TOTAL_DURATION = 15.0
@@ -50,7 +51,7 @@ export function MotionCanvasBlock({ block, state, checkpoints = [], onProgress }
   }, [activeCheckpointState, nextCheckpoint])
 
   React.useEffect(() => {
-    if (!localIsPlaying) return
+    if (!localIsPlaying || isPausedByHold) return
     const interval = setInterval(() => {
       setLocalTime(prev => {
         let next = prev + 0.1
@@ -58,12 +59,7 @@ export function MotionCanvasBlock({ block, state, checkpoints = [], onProgress }
         if (nextCheckpoint && next >= nextCheckpoint.triggerTimestamp && activeCheckpointState !== 'completed') {
            next = nextCheckpoint.triggerTimestamp
            if (activeCheckpointState !== 'verification-required' && activeCheckpointState !== 'adaptive-remediation') {
-              useLearnerStore.getState().blockStates[nextCheckpoint.blockId] = {
-                  ...useLearnerStore.getState().blockStates[nextCheckpoint.blockId],
-                  state: 'verification-required'
-              }
-              // Force state update
-              useLearnerStore.setState({ blockStates: { ...useLearnerStore.getState().blockStates }})
+              triggerCheckpointVerification(nextCheckpoint.blockId)
            }
            setLocalIsPlaying(false)
            return next
@@ -82,7 +78,7 @@ export function MotionCanvasBlock({ block, state, checkpoints = [], onProgress }
       })
     }, 100)
     return () => clearInterval(interval)
-  }, [localIsPlaying, state, block.blockId, completeContentBlock, nextCheckpoint, activeCheckpointState])
+  }, [localIsPlaying, state, block.blockId, completeContentBlock, nextCheckpoint, activeCheckpointState, isPausedByHold, triggerCheckpointVerification])
 
   // Helper for timeline progress
   const progressPercent = (localTime / TOTAL_DURATION) * 100
@@ -97,11 +93,7 @@ export function MotionCanvasBlock({ block, state, checkpoints = [], onProgress }
         initial="initial"
         whileInView="whileInView"
         viewport={{ once: true, margin: "-50px" }}
-        className="w-full h-full flex-1 flex flex-col relative"
-        onPointerDown={() => setLocalIsPlaying(false)}
-        onPointerUp={() => !nextCheckpoint || localTime < nextCheckpoint.triggerTimestamp ? setLocalIsPlaying(true) : null}
-        onPointerCancel={() => !nextCheckpoint || localTime < nextCheckpoint.triggerTimestamp ? setLocalIsPlaying(true) : null}
-        onPointerLeave={() => !nextCheckpoint || localTime < nextCheckpoint.triggerTimestamp ? setLocalIsPlaying(true) : null}
+        className="w-full h-full flex-1 flex flex-col relative overflow-hidden"
       >
 
 
@@ -121,7 +113,11 @@ export function MotionCanvasBlock({ block, state, checkpoints = [], onProgress }
 
         {/* Checkpoint Overlay */}
           {nextCheckpoint && localTime >= nextCheckpoint.triggerTimestamp && (
-             <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/85 via-black/60 to-transparent pt-12 pb-6 px-4 z-50">
+             <div
+                className="absolute inset-x-0 bottom-0 z-30 pointer-events-auto bg-gradient-to-t from-black/85 via-black/60 to-transparent pt-12 pb-14 px-4"
+                data-interactive="true"
+                onPointerDown={(e) => e.stopPropagation()}
+             >
                <InteractiveCheckpointBlock
                  block={nextCheckpoint}
                  state={activeCheckpointState || 'locked'}

@@ -45,7 +45,7 @@ export function ToggleTableBlock({ block }: ToggleTableBlockProps) {
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, margin: "-50px" }}
-      className="flex flex-col gap-6"
+      className="w-full h-full flex flex-col justify-center px-6 py-12 bg-transparent gap-6"
     >
       {block.items && block.items.length > 0 && (
         <div className="flex flex-col gap-px bg-slate-200 dark:bg-slate-800 rounded-lg overflow-hidden">
