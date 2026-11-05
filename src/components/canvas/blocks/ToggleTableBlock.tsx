@@ -82,7 +82,7 @@ export function ToggleTableBlock({ block }: ToggleTableBlockProps) {
                             {item.examples.map((ex, i) => (
                               <div key={i} className="flex flex-col sm:flex-row gap-2 sm:gap-4 p-3 rounded-md bg-slate-50 dark:bg-slate-900">
                                 <div className="flex-1 flex items-start justify-between gap-2">
-                                  <span dir="ltr" className="font-serif text-slate-800 dark:text-slate-200 text-left">&quot;{ex.en}&quot;</span>
+                                  <span dir="ltr" className="font-sans font-bold tracking-tight text-slate-800 dark:text-slate-200 text-left">&quot;{ex.en}&quot;</span>
                                   <button
                                     onClick={() => handleSpeak(ex.en)}
                                     className="shrink-0 p-1 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors text-slate-500"
@@ -90,7 +90,7 @@ export function ToggleTableBlock({ block }: ToggleTableBlockProps) {
                                     <Volume2 className="w-4 h-4" />
                                   </button>
                                 </div>
-                                <div dir="rtl" className="flex-1 text-right text-slate-600 dark:text-slate-400 font-vazirmatn text-sm sm:pt-1">
+                                <div dir="rtl" className="flex-1 text-right text-slate-600 dark:text-slate-400 font-sans text-sm sm:pt-1">
                                   {ex.fa}
                                 </div>
                               </div>
@@ -133,7 +133,7 @@ export function ToggleTableBlock({ block }: ToggleTableBlockProps) {
                         key={cellIndex}
                         className={cn(
                           "px-6 py-4 whitespace-nowrap text-foreground",
-                          cellIndex === 1 && "font-serif text-slate-800 dark:text-slate-200" // Highlight english phrase slightly
+                          cellIndex === 1 && "font-sans font-bold tracking-tight text-slate-800 dark:text-slate-200" // Highlight english phrase slightly
                         )}
                         dir={cellIndex === 1 ? 'ltr' : 'auto'} // Keep English LTR
                       >

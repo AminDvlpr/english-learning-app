@@ -56,7 +56,7 @@ export function HeadingIntroBlock({ block }: HeadingIntroBlockProps) {
           </Badge>
 
           <motion.h1
-            className="text-4xl font-serif font-bold tracking-tight text-foreground flex flex-wrap gap-x-2"
+            className="text-4xl font-sans tracking-tight font-bold text-foreground flex flex-wrap gap-x-2"
             variants={containerVariants}
             initial="initial"
             whileInView="animate"

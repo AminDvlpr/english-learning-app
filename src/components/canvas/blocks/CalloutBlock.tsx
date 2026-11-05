@@ -98,7 +98,7 @@ export function CalloutBlock({ block }: CalloutBlockProps) {
       {block.bilingualExample && (
         <div className="mt-3 bg-white/40 dark:bg-slate-900/40 rounded-md p-4 border border-slate-200/30 dark:border-slate-800/30">
           <div className="flex justify-between items-start gap-4 mb-2">
-            <div dir="ltr" className="text-left font-serif text-lg text-slate-800 dark:text-slate-200 flex-1">
+            <div dir="ltr" className="text-left font-sans tracking-tight font-bold text-lg text-slate-800 dark:text-slate-200 flex-1">
               &quot;{block.bilingualExample.en}&quot;
             </div>
             <button
@@ -109,7 +109,7 @@ export function CalloutBlock({ block }: CalloutBlockProps) {
               <Volume2 className="w-4 h-4 text-slate-500" />
             </button>
           </div>
-          <div dir="rtl" className="text-right text-slate-600 dark:text-slate-400 font-vazirmatn text-sm">
+          <div dir="rtl" className="text-right text-slate-600 dark:text-slate-400 font-sans text-sm">
             {block.bilingualExample.fa}
           </div>
         </div>
