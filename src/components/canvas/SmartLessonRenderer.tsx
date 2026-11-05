@@ -1,12 +1,10 @@
 "use client"
 
-import React, { useEffect } from "react"
-import { motion } from "framer-motion"
+import React, { useEffect, useState } from "react"
+import { motion, AnimatePresence } from "framer-motion"
 import { LessonBlock } from "@/types"
-import { staggerContainerVariant } from "@/lib/motion-tokens"
 import { useLearnerStore } from "@/store/useLearnerStore"
 import { MotionBlockWrapper } from "@/components/motion/MotionBlockWrapper"
-import { useInteractiveLesson } from "@/hooks/useInteractiveLesson"
 import { HeadingIntroBlock, CalloutBlock, ToggleTableBlock, MotionCanvasBlock } from "@/components/canvas/blocks"
 import { InteractiveCheckpointBlock } from "@/components/checkpoints/InteractiveCheckpointBlock"
 import {
@@ -16,7 +14,8 @@ import {
   MotionCanvasBlock as MotionCanvasBlockType,
   InteractiveCheckpointBlock as InteractiveCheckpointBlockType
 } from "@/types"
-import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { ChevronLeft, ChevronRight } from "lucide-react"
 
 interface SmartLessonRendererProps {
   lesson: LessonBlock[]
@@ -32,86 +31,146 @@ export function SmartLessonRenderer({ lesson }: SmartLessonRendererProps) {
     }
   }, [blockStates, initializeLesson, lesson])
 
-  const {
-    currentTimeSec,
-    isPlaying,
-    setIsPlaying,
-    syncedBlockId,
-    activeLearningTimeSec,
-  } = useInteractiveLesson(lesson)
+  const completeContentBlock = useLearnerStore(state => state.completeContentBlock)
 
-  // Status bar logic
-  const syncedBlock = lesson.find(b => b.blockId === syncedBlockId)
+  const [currentSlideIndex, setCurrentSlideIndex] = useState(0)
+  const currentBlock = lesson[currentSlideIndex]
+  const currentState = currentBlock ? (blockStates[currentBlock.blockId]?.state || 'locked') : 'locked'
+
+  // Independent 2.0s Reading Timer
+  const READING_TIME_MS = 2000
+  const [readProgress, setReadProgress] = useState(0)
+
+  useEffect(() => {
+    if (!currentBlock) return
+    const isReadingBlock = ['heading_intro', 'callout', 'toggle_table'].includes(currentBlock.type)
+
+    if (isReadingBlock && currentState === 'active') {
+      setReadProgress(0)
+      const interval = setInterval(() => {
+        setReadProgress(prev => {
+          const next = prev + 50
+          if (next >= READING_TIME_MS) {
+            clearInterval(interval)
+            completeContentBlock(currentBlock.blockId)
+            return READING_TIME_MS
+          }
+          return next
+        })
+      }, 50)
+      return () => clearInterval(interval)
+    } else {
+      setReadProgress(currentState === 'completed' ? READING_TIME_MS : 0)
+    }
+  }, [currentSlideIndex, currentBlock, currentBlock?.blockId, currentState, completeContentBlock])
+
+
+  const goNext = () => {
+    if (currentState === 'completed' && currentSlideIndex < lesson.length - 1) {
+      setCurrentSlideIndex(prev => prev + 1)
+    }
+  }
+
+  const goPrev = () => {
+    if (currentSlideIndex > 0) {
+      setCurrentSlideIndex(prev => prev - 1)
+    }
+  }
+
+  if (!currentBlock) return null
 
   return (
-    <div className="flex flex-col w-full relative">
-      {/* Visual Sync Status Bar */}
-      <div className="sticky top-[64px] z-40 w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border shadow-sm mb-8 p-3 flex justify-between items-center text-sm">
-        <div className="flex items-center gap-4">
-          <Badge variant="secondary" className="font-mono">
-             Synced: {syncedBlock ? syncedBlock.type : 'None'}
-          </Badge>
-          <Badge variant="outline" className="font-mono">
-            Focus: {syncedBlockId || '...'}
-          </Badge>
+    <div className="flex flex-col w-full min-h-screen bg-stone-50 dark:bg-stone-950 relative sm:p-4 pb-24">
+      {/* Deepstash / Story Card Container */}
+      <div className="max-w-xl mx-auto w-full bg-white dark:bg-stone-900 sm:rounded-[32px] sm:shadow-2xl overflow-hidden min-h-[100dvh] sm:min-h-[800px] flex flex-col relative border-x sm:border border-stone-200 dark:border-stone-800">
+
+        {/* Segmented Top Progress Bars */}
+        <div className="flex gap-1 p-4 w-full z-10 bg-gradient-to-b from-black/5 to-transparent dark:from-black/20">
+          {lesson.map((b, idx) => {
+            const bState = blockStates[b.blockId]?.state || 'locked'
+            const isCompleted = bState === 'completed'
+            const isCurrent = idx === currentSlideIndex
+            const isReadingSlide = ['heading_intro', 'callout', 'toggle_table'].includes(b.type)
+
+            let fillPercent = 0
+            if (isCompleted || idx < currentSlideIndex) fillPercent = 100
+            else if (isCurrent && isReadingSlide) fillPercent = (readProgress / READING_TIME_MS) * 100
+
+            return (
+              <div key={b.blockId} className="h-1.5 flex-1 bg-stone-200 dark:bg-stone-700 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-stone-800 dark:bg-stone-200 transition-all duration-75 ease-linear"
+                  style={{ width: `${fillPercent}%` }}
+                />
+              </div>
+            )
+          })}
         </div>
-        <div className="flex items-center gap-4">
-          <span className="text-muted-foreground font-mono">
-             Time: {activeLearningTimeSec}s
-          </span>
-          <span className="text-muted-foreground font-mono">
-             Motion: {currentTimeSec.toFixed(1)}s
-          </span>
-        </div>
-      </div>
 
-      {/* Lesson Canvas */}
-      <motion.div
-        variants={staggerContainerVariant}
-        initial="initial"
-        whileInView="whileInView"
-        viewport={{ once: true, margin: "-100px" }}
-        className="flex flex-col gap-8 pb-24 w-full"
-      >
-        {lesson.map((block) => {
-          const bState = blockStates[block.blockId]?.state || 'locked';
-
-          return (
-            <div key={block.blockId} data-block-id={block.blockId}>
-              <MotionBlockWrapper block={block} state={bState}>
-                {block.type === 'heading_intro' && (
-                  <HeadingIntroBlock block={block as HeadingIntroBlockType} state={bState} />
+        {/* Slide Content */}
+        <div className="flex-1 overflow-y-auto px-6 pb-24 relative">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentBlock.blockId}
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
+              className="py-4"
+            >
+              <MotionBlockWrapper block={currentBlock} state={currentState}>
+                {currentBlock.type === 'heading_intro' && (
+                  <HeadingIntroBlock block={currentBlock as HeadingIntroBlockType} state={currentState} />
                 )}
-
-                {block.type === 'callout' && (
-                  <CalloutBlock block={block as CalloutBlockType} state={bState} />
+                {currentBlock.type === 'callout' && (
+                  <CalloutBlock block={currentBlock as CalloutBlockType} state={currentState} />
                 )}
-
-                {block.type === 'toggle_table' && (
-                  <ToggleTableBlock block={block as ToggleTableBlockType} state={bState} />
+                {currentBlock.type === 'toggle_table' && (
+                  <ToggleTableBlock block={currentBlock as ToggleTableBlockType} state={currentState} />
                 )}
-
-                {block.type === 'motion_canvas' && (
+                {currentBlock.type === 'motion_canvas' && (
                   <MotionCanvasBlock
-                    block={block as MotionCanvasBlockType}
-                    state={bState}
-                    currentTimeSec={currentTimeSec}
-                    isPlaying={isPlaying}
-                    onPlayPause={() => setIsPlaying(!isPlaying)}
+                    block={currentBlock as MotionCanvasBlockType}
+                    state={currentState}
+                    currentTimeSec={0} // Managed internally now
+                    isPlaying={true}
+                    onPlayPause={() => {}}
                   />
                 )}
-
-                {block.type === 'interactive_checkpoint' && (
+                {currentBlock.type === 'interactive_checkpoint' && (
                   <InteractiveCheckpointBlock
-                    block={block as InteractiveCheckpointBlockType}
-                    state={bState}
+                    block={currentBlock as InteractiveCheckpointBlockType}
+                    state={currentState}
                   />
                 )}
               </MotionBlockWrapper>
-            </div>
-          )
-        })}
-      </motion.div>
+            </motion.div>
+          </AnimatePresence>
+        </div>
+
+        {/* Fixed Bottom Navigation */}
+        <div className="absolute bottom-0 inset-x-0 p-4 bg-white/90 dark:bg-stone-900/90 backdrop-blur-md border-t border-stone-200 dark:border-stone-800 flex justify-between items-center z-20">
+          <Button
+            variant="ghost"
+            onClick={goPrev}
+            disabled={currentSlideIndex === 0}
+            className="rounded-full text-stone-600 dark:text-stone-400"
+          >
+            <ChevronLeft className="w-5 h-5 mr-1" />
+            Prev
+          </Button>
+
+          <Button
+            onClick={goNext}
+            disabled={currentState !== 'completed' || currentSlideIndex === lesson.length - 1}
+            className="rounded-full px-8 bg-stone-900 text-white hover:bg-stone-800 dark:bg-stone-100 dark:text-stone-900 dark:hover:bg-white transition-all shadow-md"
+          >
+            Next Slide
+            <ChevronRight className="w-5 h-5 ml-1" />
+          </Button>
+        </div>
+
+      </div>
     </div>
   )
 }
