@@ -15,13 +15,9 @@ export interface LessonTopBarProps {
   streak?: number
   hearts?: number
   onClose?: () => void
-  children?: React.ReactNode
 }
 
-export function LessonTopBar({
-  // title is kept in type but not used in UI to save space
-  children,
-}: LessonTopBarProps) {
+export function LessonTopBar({}: LessonTopBarProps) {
   const { streakDays, checkHeartRegeneration, gems } = useGamificationStore()
   const [heartModalOpen, setHeartModalOpen] = React.useState(false)
   const [authModalOpen, setAuthModalOpen] = React.useState(false)
@@ -88,12 +84,11 @@ export function LessonTopBar({
           </motion.div>
         </div>
 
-        {/* Left: Level Pill & Children/Controls */}
+        {/* Left: Level Pill */}
         <div className="flex items-center gap-2 justify-end w-1/3">
           <div className="bg-indigo-600 text-white font-black px-3.5 py-1 rounded-xl border-2 border-neutral-900 shadow-[2px_2px_0px_#171717] text-xs tracking-wider" dir="ltr">
              LEVEL 1
           </div>
-          {children}
         </div>
 
       </div>

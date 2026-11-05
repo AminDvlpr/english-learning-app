@@ -6,8 +6,6 @@ import { TieredLeaguesBoard } from "@/components/dashboard/TieredLeaguesBoard"
 import { SavedStashesReviewHub } from "@/components/dashboard/SavedStashesReviewHub"
 import { AppShell } from "@/components/layout/AppShell"
 import { LessonTopBar } from "@/components/layout/LessonTopBar"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
 
 export default function DashboardPage() {
   const [activeTab, setActiveTab] = React.useState("دایی‌جان")
@@ -28,13 +26,7 @@ export default function DashboardPage() {
   return (
     <AppShell
       topBar={
-        <LessonTopBar title="داشبورد" progress={100}>
-           <Link href="/">
-             <Button variant="ghost" size="sm" className="text-muted-foreground gap-1 ml-2">
-               <span className="text-xs">&larr; بازگشت</span>
-             </Button>
-           </Link>
-        </LessonTopBar>
+        <LessonTopBar title="داشبورد" progress={100} />
       }
     >
       <div className="flex-1 w-full overflow-y-auto no-scrollbar p-4 animate-in fade-in slide-in-from-bottom-4 duration-500 pb-24 bg-background" dir="rtl">
