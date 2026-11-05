@@ -5,6 +5,7 @@ import { AppShell } from "@/components/layout/AppShell"
 import { LessonTopBar } from "@/components/layout/LessonTopBar"
 import { lessonFeed } from "@/data/lesson-feed"
 import { useLearnerStore } from "@/store/useLearnerStore"
+import { useCourseStore } from "@/store/useCourseStore"
 import { useGamificationStore } from "@/store/useGamificationStore"
 import { LessonCompletionModal } from "@/components/gamification"
 import { startSyncService, stopSyncService } from "@/lib/supabase/sync-service"
@@ -19,13 +20,15 @@ export default function Home() {
   React.useEffect(() => { setIsClient(true) }, [])
 
   const xp = useGamificationStore(state => state.xp)
+  const { courses, syncCoursesFromApi, enrolledCourseIds } = useCourseStore()
 
   const [showCompletionModal, setShowCompletionModal] = React.useState(false)
 
   React.useEffect(() => {
     startSyncService()
+    syncCoursesFromApi()
     return () => stopSyncService()
-  }, [])
+  }, [syncCoursesFromApi])
 
   // Initialize ALL blocks from the feed into the learner store
   React.useEffect(() => {
@@ -38,6 +41,14 @@ export default function Home() {
       }
     })
   }, [])
+
+  // Aggregate all enrolled courses lessons to feed them to the vertical feed as well
+  // For now, we still mostly rely on lessonFeed for legacy display, but we'll merge them.
+  const enrolledCourseLessons = React.useMemo(() => {
+    return courses
+      .filter(course => enrolledCourseIds.includes(course.id))
+      .flatMap(course => course.lessons)
+  }, [courses, enrolledCourseIds])
 
   return (
     <AppShell
@@ -71,10 +82,14 @@ export default function Home() {
         {/* Main Content */}
         <div className="flex-1 w-full relative flex flex-col">
           {viewMode === 'feed' ? (
-             <VerticalLessonFeed lessonFeed={lessonFeed} />
+             <VerticalLessonFeed
+                lessonFeed={lessonFeed}
+                lessons={enrolledCourseLessons.length > 0 ? enrolledCourseLessons : undefined}
+             />
           ) : (
              <ExplorerGridView
                 lessonFeed={lessonFeed}
+                courses={courses}
                 onExploreLesson={(lessonId) => {
                     setViewMode('feed')
                     setTimeout(() => {
