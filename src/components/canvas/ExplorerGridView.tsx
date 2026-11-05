@@ -40,20 +40,16 @@ export function ExplorerGridView({ lessonFeed, onExploreLesson }: ExplorerGridVi
 
 
   return (
-    <div className="min-h-[calc(100vh-64px)] w-full bg-background p-4 md:p-8 flex flex-col items-center">
-      <div className="w-full max-w-5xl">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+    <div className="flex-1 w-full bg-background p-3 flex flex-col overflow-y-auto">
+      <div className="w-full flex flex-col gap-4 pb-20">
+        <div className="flex flex-col gap-2 mb-2">
             <div>
-                <h1 className="text-3xl font-bold tracking-tight">Explore Path</h1>
-                <p className="text-muted-foreground mt-1">Discover interactive stories and puzzles.</p>
+                <h1 className="text-2xl font-bold tracking-tight">Explore Path</h1>
+                <p className="text-muted-foreground text-sm mt-1">Discover interactive stories and puzzles.</p>
             </div>
-            <Button size="lg" onClick={() => onExploreLesson(activeLessonId)} className="gap-2 shrink-0">
-                <PlaySquare className="w-5 h-5" />
-                Unlock Exploring More
-            </Button>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-2 gap-2.5 flex-1">
           {lessonFeed.map((lesson, index) => {
             const isMastered = masteredMap[lesson.id];
 
@@ -99,11 +95,11 @@ export function ExplorerGridView({ lessonFeed, onExploreLesson }: ExplorerGridVi
                   </div>
 
                   <div>
-                    <h3 className="text-xl font-bold text-white mb-2 leading-tight">
+                    <h3 className="text-sm font-bold text-white mb-1 leading-tight">
                         {lesson.title}
                     </h3>
-                    <p className="text-white/80 text-sm font-medium">
-                        {lesson.blocks.length} interactive blocks
+                    <p className="text-white/80 text-xs font-medium">
+                        {lesson.blocks.length} blocks
                     </p>
                   </div>
                 </div>
@@ -111,6 +107,14 @@ export function ExplorerGridView({ lessonFeed, onExploreLesson }: ExplorerGridVi
             )
           })}
         </div>
+      </div>
+
+      {/* Sticky Bottom CTA */}
+      <div className="absolute bottom-4 left-0 right-0 px-4 z-10 flex justify-center">
+        <Button size="lg" onClick={() => onExploreLesson(activeLessonId)} className="w-full max-w-sm gap-2 shadow-xl rounded-full h-14 text-base font-semibold">
+            <PlaySquare className="w-5 h-5" />
+            Unlock Exploring More
+        </Button>
       </div>
     </div>
   )

@@ -53,7 +53,7 @@ export function VerticalLessonFeed({ lessonFeed }: VerticalLessonFeedProps) {
   return (
     <div
       ref={feedRef}
-      className="h-[calc(100dvh-3.5rem)] w-full overflow-y-auto snap-y snap-mandatory bg-background relative hide-scrollbar"
+      className="flex-1 w-full h-full overflow-y-auto snap-y snap-mandatory bg-stone-950 relative no-scrollbar"
     >
       {visibleLessons.map((lesson, index) => {
         const isMastered = masteredLessonsMap[lesson.id];
@@ -64,13 +64,11 @@ export function VerticalLessonFeed({ lessonFeed }: VerticalLessonFeedProps) {
           <div
             key={lesson.id}
             id={`lesson-container-${lesson.id}`}
-            className="snap-start min-h-[calc(100dvh-3.5rem)] w-full flex flex-col relative"
+            className="snap-start min-h-full w-full flex flex-col relative"
           >
             {/* Lesson Content Wrapper */}
-            <div className="flex-1 w-full relative flex items-center justify-center bg-stone-950">
-              <div className="w-full h-full max-w-[420px] mx-auto bg-stone-950">
-                <SmartLessonRenderer lesson={lesson.blocks} />
-              </div>
+            <div className="flex-1 w-full h-full relative flex items-center justify-center bg-stone-950">
+              <SmartLessonRenderer lesson={lesson.blocks} />
             </div>
 
             {/* Bottom Gate Indicator */}
@@ -125,18 +123,6 @@ export function VerticalLessonFeed({ lessonFeed }: VerticalLessonFeedProps) {
           </div>
         )
       })}
-      {/* Hide Scrollbar styling */}
-      <style dangerouslySetInnerHTML={{
-          __html: `
-            .hide-scrollbar::-webkit-scrollbar {
-              display: none;
-            }
-            .hide-scrollbar {
-              -ms-overflow-style: none;
-              scrollbar-width: none;
-            }
-          `
-      }} />
     </div>
   )
 }

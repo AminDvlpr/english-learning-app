@@ -1,5 +1,8 @@
+"use client"
+
 import * as React from "react"
 import { cn } from "@/lib/utils"
+import { usePathname } from "next/navigation"
 
 interface AppShellProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode
@@ -7,18 +10,25 @@ interface AppShellProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export function AppShell({ children, topBar, className, ...props }: AppShellProps) {
+  const pathname = usePathname()
+  const isBuilder = pathname?.startsWith('/builder')
+
+  const containerClass = isBuilder
+    ? "w-full max-w-none h-[100dvh] bg-background flex flex-col overflow-hidden relative"
+    : "w-full max-w-[430px] h-[100dvh] sm:h-[94dvh] sm:max-h-[880px] sm:rounded-[36px] sm:border-[6px] sm:border-neutral-800 bg-background flex flex-col overflow-hidden relative shadow-2xl mx-auto"
+
   return (
-    <div className={cn("min-h-screen bg-background flex flex-col font-sans", className)} {...props}>
-      {topBar && (
-        <div className="flex-none">
-          {topBar}
-        </div>
-      )}
-      <main className="flex-1 flex flex-col items-center w-full px-4 py-8 md:py-12">
-        <div className="w-full max-w-3xl lg:max-w-4xl flex flex-col gap-8">
+    <div className="bg-neutral-950 min-h-[100dvh] flex justify-center items-center">
+      <div className={cn(containerClass, className, "font-sans")} {...props}>
+        {topBar && (
+          <div className="flex-none">
+            {topBar}
+          </div>
+        )}
+        <main className="flex-1 flex flex-col w-full h-full relative overflow-hidden">
           {children}
-        </div>
-      </main>
+        </main>
+      </div>
     </div>
   )
 }
