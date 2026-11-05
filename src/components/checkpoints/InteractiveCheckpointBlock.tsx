@@ -4,8 +4,8 @@ import React from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { InteractiveCheckpointBlock as ICheckpointBlock, BlockLearnerState } from '@/types'
 import { CHECKPOINT_ELASTIC_SPRING } from '@/lib/motion-tokens'
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
+
+
 import { useLearnerStore } from '@/store/useLearnerStore'
 import { audioFeedback } from '@/lib/audio-feedback'
 import { AdaptiveFeedbackBanner } from './AdaptiveFeedbackBanner'
@@ -102,48 +102,28 @@ export function InteractiveCheckpointBlock({ block, state }: Props) {
         <div className="absolute -inset-1 rounded-xl bg-primary/20 animate-pulse blur-md z-0" />
       )}
 
-      <Card className={`
-        relative z-10 w-full overflow-hidden border-2
-        ${isActiveChallenge ? 'border-primary/50 shadow-xl shadow-primary/10' : 'border-border/50'}
-        ${isActiveChallenge ? 'backdrop-blur-sm' : ''}
-      `}>
-        <CardHeader className="bg-muted/30 border-b">
-          <div className="flex justify-between items-center mb-2">
-            <Badge variant="outline" className="font-mono text-xs">
-              Paused @ {block.triggerTimestamp}s
-            </Badge>
+      <div className="w-full text-white pb-6 px-4 z-50">
+        <div className="flex justify-between items-center mb-4">
             <div className="flex gap-2">
               {block.difficultyLevel && (
-                <Badge variant="secondary" className="capitalize">
+                <span className="text-xs bg-white/20 px-2 py-1 rounded-full capitalize">
                   {block.difficultyLevel}
-                </Badge>
+                </span>
               )}
               {block.xpReward && (
-                <Badge variant="default" className="bg-primary/20 text-primary hover:bg-primary/30 font-mono">
+                <span className="text-xs bg-primary/40 text-white font-mono px-2 py-1 rounded-full">
                   +{block.xpReward} XP
-                </Badge>
+                </span>
               )}
             </div>
           </div>
-
-          <CardTitle className="text-xl pt-2 leading-relaxed" dir="rtl">
+          <h3 className="text-xl font-bold mb-4 leading-relaxed drop-shadow-md" dir="rtl">
             {block.question.prompt}
-          </CardTitle>
-        </CardHeader>
+          </h3>
 
-        <CardContent className="p-6 bg-background">
+        <div>
           <AnimatePresence mode="wait">
-            {!isActiveChallenge && !isCompleted ? (
-              <motion.div
-                key="locked"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="py-12 flex justify-center items-center text-muted-foreground"
-              >
-                Waiting for video to reach {block.triggerTimestamp}s...
-              </motion.div>
-            ) : isCompleted ? (
+            {isCompleted ? (
               <motion.div
                 key="completed"
                 initial={{ opacity: 0, scale: 0.9 }}
@@ -202,8 +182,8 @@ export function InteractiveCheckpointBlock({ block, state }: Props) {
                 />
              </div>
           )}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </motion.div>
   )
 }

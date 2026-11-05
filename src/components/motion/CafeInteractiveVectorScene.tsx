@@ -30,7 +30,7 @@ export function CafeInteractiveVectorScene({
   }, [currentTimeSec, isCorrect, triggerName])
 
   return (
-    <div className="relative w-full aspect-video bg-amber-50 dark:bg-amber-950/20 rounded-xl overflow-hidden shadow-inner flex items-center justify-center p-4">
+    <div className="relative w-full h-full flex-1 bg-amber-50 dark:bg-amber-950/20 overflow-hidden shadow-inner flex items-center justify-center p-4 object-cover">
       {/* Background Elements */}
       <div className="absolute inset-0 opacity-50 flex items-center justify-center pointer-events-none">
         <svg className="w-full h-full" viewBox="0 0 800 450" preserveAspectRatio="xMidYMid slice" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -147,24 +147,7 @@ export function CafeInteractiveVectorScene({
           </motion.div>
         )}
 
-        {state === 'checkpoint_paused' && (
-          <motion.div
-            key="checkpoint"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.8 }}
 
-            className="absolute inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-20"
-          >
-            <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 text-center max-w-sm">
-               <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                 <div className="w-4 h-4 bg-primary rounded-full animate-pulse" />
-               </div>
-               <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Checkpoint Reached</h3>
-               <p className="text-sm text-slate-600 dark:text-slate-400">Answer the question to continue the scene.</p>
-            </div>
-          </motion.div>
-        )}
 
         {state === 'success_celebration' && (
           <motion.div

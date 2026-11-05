@@ -53,7 +53,7 @@ export function VerticalLessonFeed({ lessonFeed }: VerticalLessonFeedProps) {
   return (
     <div
       ref={feedRef}
-      className="h-[calc(100vh-64px)] w-full overflow-y-auto snap-y snap-mandatory bg-background relative hide-scrollbar"
+      className="h-[calc(100dvh-3.5rem)] w-full overflow-y-auto snap-y snap-mandatory bg-background relative hide-scrollbar"
     >
       {visibleLessons.map((lesson, index) => {
         const isMastered = masteredLessonsMap[lesson.id];
@@ -64,16 +64,18 @@ export function VerticalLessonFeed({ lessonFeed }: VerticalLessonFeedProps) {
           <div
             key={lesson.id}
             id={`lesson-container-${lesson.id}`}
-            className="snap-start min-h-[calc(100vh-64px)] w-full max-w-5xl mx-auto flex flex-col relative pb-32"
+            className="snap-start min-h-[calc(100dvh-3.5rem)] w-full flex flex-col relative"
           >
             {/* Lesson Content Wrapper */}
-            <div className="flex-1 w-full relative">
-              <SmartLessonRenderer lesson={lesson.blocks} />
+            <div className="flex-1 w-full relative flex items-center justify-center bg-stone-950">
+              <div className="w-full h-full max-w-[420px] mx-auto bg-stone-950">
+                <SmartLessonRenderer lesson={lesson.blocks} />
+              </div>
             </div>
 
             {/* Bottom Gate Indicator */}
             {hasMoreLessons && (
-              <div className="absolute bottom-12 left-0 right-0 flex justify-center z-50 pointer-events-none px-4">
+              <div className="absolute bottom-6 left-0 right-0 flex justify-center z-50 pointer-events-none px-4">
                 <AnimatePresence mode="wait">
                   {!isMastered ? (
                     <motion.div
@@ -108,7 +110,7 @@ export function VerticalLessonFeed({ lessonFeed }: VerticalLessonFeedProps) {
 
             {/* If it's the very last lesson in the entire feed and it's mastered */}
             {isLastVisible && !hasMoreLessons && isMastered && (
-                <div className="absolute bottom-12 left-0 right-0 flex justify-center z-50 pointer-events-none px-4">
+                <div className="absolute bottom-6 left-0 right-0 flex justify-center z-50 pointer-events-none px-4">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}

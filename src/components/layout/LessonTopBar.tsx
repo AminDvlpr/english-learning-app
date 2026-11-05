@@ -56,7 +56,7 @@ export function LessonTopBar({
       transition={{ type: "spring", stiffness: 100, damping: 20 }}
       className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
     >
-      <div className="container flex h-16 items-center justify-between max-w-4xl mx-auto px-4 md:px-8">
+      <div className="container flex h-14 md:h-16 items-center justify-between max-w-4xl mx-auto px-2 md:px-4">
 
         {/* Left: Close and Title */}
         <div className="flex items-center gap-4 flex-1">
@@ -75,7 +75,7 @@ export function LessonTopBar({
                Builder
             </Button>
           </Link>
-          <h1 className="text-sm md:text-base font-semibold truncate hidden md:block">
+          <h1 className="text-sm md:text-base font-semibold truncate hidden md:block max-w-[150px]">
             {title}
           </h1>
         </div>

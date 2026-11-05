@@ -23,10 +23,10 @@ export function StoryQuestionBoxExercise({ block, onSubmit }: Props) {
   }
 
   return (
-    <div className="w-full flex flex-col items-center gap-4 bg-gradient-to-tr from-pink-500 via-red-500 to-yellow-500 p-6 rounded-2xl shadow-lg relative">
+    <div className="bg-transparent w-full flex flex-col items-center gap-4 relative">
       {/* Story Sticker Box */}
       <div className="bg-white rounded-xl shadow-md w-full max-w-sm overflow-hidden text-center">
-        <div className="bg-gray-100 py-3 px-4 font-semibold text-gray-800 text-sm border-b">
+        <div className="bg-white py-3 px-4 font-semibold text-gray-800 text-sm border-b">
           Barista asks:
         </div>
         <div className="py-6 px-4 text-gray-900 font-bold text-lg">

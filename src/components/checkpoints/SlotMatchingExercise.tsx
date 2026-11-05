@@ -129,7 +129,7 @@ export function SlotMatchingExercise({ block, onSubmit }: Props) {
 
   return (
     <div className="flex flex-col gap-6" dir="ltr">
-      <div className="flex flex-wrap gap-2 min-h-16 p-4 rounded-xl bg-muted/50 border border-border">
+      <div className="flex flex-wrap gap-2 min-h-16 p-4 rounded-xl bg-black/40 border border-white/20 text-white">
         {slots.map((word, i) => (
           <div
             key={`slot-${i}`}
@@ -138,7 +138,7 @@ export function SlotMatchingExercise({ block, onSubmit }: Props) {
             onDrop={(e) => handleDropToSlot(e, i)}
             className={`
               h-10 min-w-16 rounded-md flex items-center justify-center cursor-pointer transition-colors px-4 font-mono text-sm
-              ${word ? 'bg-primary text-primary-foreground shadow-sm' : 'bg-background border-2 border-dashed border-muted-foreground/30'}
+              ${word ? 'bg-primary text-primary-foreground shadow-sm' : 'bg-white/10 border-2 border-dashed border-white/30'}
             `}
           >
             {word && (
@@ -178,7 +178,7 @@ export function SlotMatchingExercise({ block, onSubmit }: Props) {
                 draggable
                 onDragStart={(e) => handleDragStart(e, word, null)}
                 onClick={() => handleWordTap(word)}
-                className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 font-mono cursor-pointer"
+                className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors border border-white/30 bg-white/20 hover:bg-white/30 text-white h-10 px-4 py-2 font-mono cursor-pointer backdrop-blur-md"
               >
                 {word}
               </div>
@@ -190,7 +190,7 @@ export function SlotMatchingExercise({ block, onSubmit }: Props) {
       <Button
         onClick={handleSubmit}
         disabled={!isComplete}
-        className="w-full mt-4 transition-all"
+        className="w-full mt-4 transition-all bg-white text-black hover:bg-gray-200"
         size="lg"
       >
         Submit Answer
