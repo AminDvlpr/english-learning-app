@@ -8,7 +8,7 @@ import { useLearnerStore } from "@/store/useLearnerStore"
 import { useCourseStore } from "@/store/useCourseStore"
 import { CourseLesson } from "@/types/course"
 
-import { Unlock } from "lucide-react"
+import { Unlock, Loader2 } from "lucide-react"
 
 interface VerticalLessonFeedProps {
   lessonFeed?: FeedLesson[]
@@ -82,7 +82,7 @@ export function VerticalLessonFeed({ lessonFeed, lessons }: VerticalLessonFeedPr
           >
             {/* Lesson Content Wrapper */}
             <div className="flex-1 w-full h-full relative flex items-center justify-center bg-background">
-              <SmartLessonRenderer lesson={isCourseFormat ? (lesson as CourseLesson) : (lesson as FeedLesson).blocks} />
+              <SmartLessonRenderer lesson={lesson as CourseLesson} />
             </div>
 
             {/* Bottom Gate Indicator */}
@@ -92,14 +92,14 @@ export function VerticalLessonFeed({ lessonFeed, lessons }: VerticalLessonFeedPr
                   {!isMastered ? (
                     <motion.div
                       key="locked"
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 20 }}
-                      className="mx-auto max-w-[92%] w-fit rounded-2xl px-4 py-2.5 bg-background/95 backdrop-blur-md border border-border shadow-lg flex items-center justify-center gap-2 text-center"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      className="absolute bottom-2 inset-x-0 z-30 flex items-center justify-center gap-1.5 py-1 text-[11px] font-medium text-white/55 drop-shadow pointer-events-none"
+                      dir="rtl"
                     >
-                      <span className="text-xs sm:text-sm font-medium text-foreground leading-relaxed" dir="rtl">
-                        🔒 استوری‌های این درس را تا آخر ببینید تا قفل اسکرول به درس بعدی باز شود
-                      </span>
+                      <Loader2 className="h-3 w-3 animate-spin text-white/50"/>
+                      <span>قفل است</span>
                     </motion.div>
                   ) : (
                     <motion.div

@@ -174,35 +174,36 @@ export function ExplorerGridView({ lessonFeed, courses = [], onExploreLesson }: 
         {/* TAB CONTENT: Explore */}
         {activeTab === 'Explore' && (
           <div className="flex flex-col gap-4">
-             <div>
-                <h1 className="text-2xl font-bold tracking-tight">Courses</h1>
-                <p className="text-muted-foreground text-sm mt-1">Discover new topics and journeys.</p>
+            <div>
+              <h1 className="text-2xl font-bold tracking-tight">Instagram Explore</h1>
+              <p className="text-muted-foreground text-sm mt-1">Explore all episodes and courses.</p>
             </div>
-            {courses.map(course => {
-              const isEnrolled = enrolledCourseIds.includes(course.id)
-              return (
-                <div key={course.id} onClick={() => !isEnrolled && setSelectedCourseGate(course)} className="bg-card border border-border rounded-2xl p-4 flex flex-col gap-3 cursor-pointer">
-                  <div className="flex items-center gap-3">
-                    <div {...getGradientProps(course.coverGradient)} className={`w-12 h-12 rounded-xl flex items-center justify-center text-2xl ${getGradientProps(course.coverGradient).className}`}>
-                      {course.coverEmoji}
+            <div className="grid grid-cols-3 gap-1 mt-2">
+              {allCourseLessons.map((lesson, idx) => {
+                const isFeatured = lesson.course.titleFa === 'سفر در زبان: داستان امین و سارا' && idx === 0
+                return (
+                  <motion.div
+                    key={lesson.id}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => handleLessonTap(lesson.id, lesson.courseId, true)}
+                    className={`relative overflow-hidden cursor-pointer flex flex-col bg-card ${isFeatured ? 'col-span-2 row-span-2 aspect-square' : 'col-span-1 row-span-1 aspect-square'}`}
+                  >
+                    <div {...getGradientProps(lesson.coverGradient)} className={`flex-1 flex items-center justify-center text-4xl ${getGradientProps(lesson.coverGradient).className}`}>
+                      {lesson.coverEmoji}
                     </div>
-                    <div className="flex-1">
-                      <h3 className="font-bold text-base leading-tight" dir="rtl">{course.titleFa}</h3>
-                      <p className="text-xs text-muted-foreground mt-0.5">{course.titleEn}</p>
-                    </div>
-                    {isEnrolled ? (
-                      <Badge variant="secondary" className="bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400">Enrolled</Badge>
-                    ) : (
-                      <Badge variant="outline">Enroll Now</Badge>
+                    {isFeatured && (
+                      <div className="absolute top-2 right-2 flex items-center gap-1 bg-black/50 text-white px-2 py-1 rounded-full text-xs font-bold backdrop-blur">
+                        <Play className="w-3 h-3 fill-white" /> 4,999
+                      </div>
                     )}
-                  </div>
-                  <div className="flex gap-2 text-xs text-muted-foreground">
-                    <span className="bg-muted px-2 py-1 rounded-md">{course.levelRange}</span>
-                    <span className="bg-muted px-2 py-1 rounded-md">{course.lessons.length} Lessons</span>
-                  </div>
-                </div>
-              )
-            })}
+                    <div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/80 to-transparent flex flex-col gap-1">
+                      <h3 className="text-xs font-bold text-white leading-tight line-clamp-2" dir="rtl">{lesson.title}</h3>
+                    </div>
+                  </motion.div>
+                )
+              })}
+            </div>
           </div>
         )}
 
@@ -305,9 +306,10 @@ export function ExplorerGridView({ lessonFeed, courses = [], onExploreLesson }: 
               <Button
                 size="lg"
                 onClick={handleEnrollAndStart}
-                className="w-full rounded-2xl h-14 text-lg font-bold bg-primary text-primary-foreground shadow-lg"
+                className="w-full rounded-2xl h-14 text-lg font-bold bg-amber-500 text-black shadow-lg"
               >
-                ثبت‌نام رایگان در این دوره و شروع
+                <Play className="w-5 h-5 mr-2 fill-current" />
+                شروع (+۱ سطح)
               </Button>
             </motion.div>
           </motion.div>

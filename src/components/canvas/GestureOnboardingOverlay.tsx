@@ -7,7 +7,14 @@ export interface GestureOnboardingOverlayProps {
   onDismiss: () => void;
 }
 
-export function GestureOnboardingOverlay({ onDismiss }: GestureOnboardingOverlayProps) {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function GestureOnboardingOverlay(_props: GestureOnboardingOverlayProps) {
+  return null;
+}
+
+// Keeping the rest just in case but it's not rendered
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function GestureOnboardingOverlayLegacy({ onDismiss }: GestureOnboardingOverlayProps) {
   const [isVisible, setIsVisible] = useState(true);
 
   // Auto-dismiss after 5 seconds if the user doesn't interact

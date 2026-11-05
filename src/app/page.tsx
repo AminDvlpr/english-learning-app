@@ -11,11 +11,10 @@ import { LessonCompletionModal } from "@/components/gamification"
 import { startSyncService, stopSyncService } from "@/lib/supabase/sync-service"
 import { VerticalLessonFeed } from "@/components/canvas/VerticalLessonFeed"
 import { ExplorerGridView } from "@/components/canvas/ExplorerGridView"
-import { LayoutGrid, ScrollText } from "lucide-react"
 
 export default function Home() {
   const [isClient, setIsClient] = React.useState(false)
-  const [viewMode, setViewMode] = React.useState<'feed' | 'explorer'>('feed')
+  const [viewMode, setViewMode] = React.useState<'feed' | 'explorer'>('explorer')
 
   React.useEffect(() => { setIsClient(true) }, [])
 
@@ -53,29 +52,12 @@ export default function Home() {
   return (
     <AppShell
       topBar={
-        <LessonTopBar
-          title="English Learning Feed"
-          progress={Math.min(100, xp)}
-        >
-          {isClient && (
-            <div className="flex bg-background/80 backdrop-blur border border-border rounded-full p-0.5 ml-1">
-               <button
-                  onClick={() => setViewMode('feed')}
-                  className={`p-1.5 rounded-full transition-colors ${viewMode === 'feed' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:text-foreground'}`}
-                  title="Story Feed View"
-               >
-                  <ScrollText className="w-4 h-4" />
-               </button>
-               <button
-                  onClick={() => setViewMode('explorer')}
-                  className={`p-1.5 rounded-full transition-colors ${viewMode === 'explorer' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:text-foreground'}`}
-                  title="Explorer Grid View"
-               >
-                  <LayoutGrid className="w-4 h-4" />
-               </button>
-            </div>
-          )}
-        </LessonTopBar>
+        viewMode === 'explorer' ? (
+          <LessonTopBar
+            title="English Learning Feed"
+            progress={Math.min(100, xp)}
+          />
+        ) : null
       }
     >
       <div className="relative w-full h-full flex flex-col flex-1">
@@ -83,8 +65,7 @@ export default function Home() {
         <div className="flex-1 w-full relative flex flex-col">
           {viewMode === 'feed' ? (
              <VerticalLessonFeed
-                lessonFeed={lessonFeed}
-                lessons={enrolledCourseLessons.length > 0 ? enrolledCourseLessons : undefined}
+                lessons={enrolledCourseLessons}
              />
           ) : (
              <ExplorerGridView

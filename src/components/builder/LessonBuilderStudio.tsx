@@ -294,7 +294,7 @@ export function LessonBuilderStudio() {
         <div className="flex-1 overflow-y-auto p-6 bg-slate-50 dark:bg-slate-900/50 relative">
            {/* Fallback mock renderer for track 4 components */}
            {previewBlocks.length > 0 ? (
-             <SmartLessonRenderer lesson={previewBlocks} />
+             <SmartLessonRenderer lesson={localCourse?.lessons?.find(l => l.id === activeLessonId) as CourseLesson || {} as CourseLesson} />
            ) : (
              <div className="h-full flex items-center justify-center text-muted-foreground">Select a slide to preview</div>
            )}
