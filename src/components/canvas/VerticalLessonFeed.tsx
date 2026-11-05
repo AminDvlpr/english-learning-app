@@ -5,50 +5,64 @@ import { motion, AnimatePresence } from "framer-motion"
 import { FeedLesson } from "@/data/lesson-feed"
 import { SmartLessonRenderer } from "@/components/canvas/SmartLessonRenderer"
 import { useLearnerStore } from "@/store/useLearnerStore"
+import { useCourseStore } from "@/store/useCourseStore"
+import { CourseLesson } from "@/types/course"
 
 import { Lock, Unlock } from "lucide-react"
 
 interface VerticalLessonFeedProps {
-  lessonFeed: FeedLesson[]
+  lessonFeed?: FeedLesson[]
+  lessons?: CourseLesson[] // For CourseLesson format
 }
 
-export function VerticalLessonFeed({ lessonFeed }: VerticalLessonFeedProps) {
+export function VerticalLessonFeed({ lessonFeed, lessons }: VerticalLessonFeedProps) {
   const blockStates = useLearnerStore(state => state.blockStates)
+  const masteredLessonIds = useCourseStore(state => state.masteredLessonIds)
   const feedRef = useRef<HTMLDivElement>(null)
 
-  // Map lesson IDs to their mastered status based on blockStates
+  const isCourseFormat = !!lessons && lessons.length > 0
+  const feed = isCourseFormat ? lessons! : lessonFeed!
+
+  // Map lesson IDs to their mastered status
   const masteredLessonsMap = useMemo(() => {
     const map: Record<string, boolean> = {}
-    lessonFeed.forEach(lesson => {
-      const lessonBlocks = lesson.blocks;
-      if (lessonBlocks.length === 0) {
-        map[lesson.id] = false;
-        return;
-      }
 
-      const allMastered = lessonBlocks.every(block => {
-        const state = blockStates[block.blockId]?.state;
-        return state === "completed";
-      });
-      map[lesson.id] = allMastered;
-    })
+    if (isCourseFormat) {
+      feed.forEach(lesson => {
+        map[lesson.id] = masteredLessonIds.includes(lesson.id)
+      })
+    } else {
+      (feed as FeedLesson[]).forEach(lesson => {
+        const lessonBlocks = lesson.blocks;
+        if (lessonBlocks.length === 0) {
+          map[lesson.id] = false;
+          return;
+        }
+
+        const allMastered = lessonBlocks.every(block => {
+          const state = blockStates[block.blockId]?.state;
+          return state === "completed";
+        });
+        map[lesson.id] = allMastered;
+      })
+    }
     return map;
-  }, [lessonFeed, blockStates])
+  }, [feed, blockStates, masteredLessonIds, isCourseFormat])
 
   // Determine how many lessons to show.
   // We show all mastered lessons, plus the FIRST unmastered lesson.
   const visibleLessonsCount = useMemo(() => {
     let count = 0;
-    for (let i = 0; i < lessonFeed.length; i++) {
+    for (let i = 0; i < feed.length; i++) {
       count++;
-      if (!masteredLessonsMap[lessonFeed[i].id]) {
+      if (!masteredLessonsMap[feed[i].id]) {
         break; // Stop at the first unmastered lesson
       }
     }
     return count;
-  }, [lessonFeed, masteredLessonsMap])
+  }, [feed, masteredLessonsMap])
 
-  const visibleLessons = lessonFeed.slice(0, visibleLessonsCount)
+  const visibleLessons = feed.slice(0, visibleLessonsCount)
 
   return (
     <div
@@ -58,7 +72,7 @@ export function VerticalLessonFeed({ lessonFeed }: VerticalLessonFeedProps) {
       {visibleLessons.map((lesson, index) => {
         const isMastered = masteredLessonsMap[lesson.id];
         const isLastVisible = index === visibleLessonsCount - 1;
-        const hasMoreLessons = index < lessonFeed.length - 1;
+        const hasMoreLessons = index < feed.length - 1;
 
         return (
           <div
@@ -68,7 +82,7 @@ export function VerticalLessonFeed({ lessonFeed }: VerticalLessonFeedProps) {
           >
             {/* Lesson Content Wrapper */}
             <div className="flex-1 w-full h-full relative flex items-center justify-center bg-stone-950">
-              <SmartLessonRenderer lesson={lesson.blocks} />
+              <SmartLessonRenderer lesson={isCourseFormat ? (lesson as CourseLesson) : (lesson as FeedLesson).blocks} />
             </div>
 
             {/* Bottom Gate Indicator */}
@@ -84,8 +98,8 @@ export function VerticalLessonFeed({ lessonFeed }: VerticalLessonFeedProps) {
                       className="bg-card/90 backdrop-blur border border-border shadow-lg rounded-full px-6 py-3 flex items-center gap-3"
                     >
                       <Lock className="w-5 h-5 text-muted-foreground" />
-                      <span className="text-sm font-medium text-foreground">
-                        🔒 Complete all story slides in this card to unlock scrolling down to the next lesson
+                      <span className="text-sm font-medium text-foreground" dir="rtl">
+                        🔒 استوری‌های این درس را تا آخر ببینید تا قفل اسکرول به درس بعدی باز شود
                       </span>
                     </motion.div>
                   ) : (
@@ -94,11 +108,18 @@ export function VerticalLessonFeed({ lessonFeed }: VerticalLessonFeedProps) {
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -20 }}
-                      className="bg-primary text-primary-foreground shadow-lg rounded-full px-6 py-3 flex items-center gap-3 pointer-events-auto"
+                      className="bg-primary text-primary-foreground shadow-lg rounded-full px-6 py-3 flex items-center gap-3 pointer-events-auto cursor-pointer"
+                      onClick={() => {
+                        const nextId = feed[index + 1]?.id
+                        if (nextId) {
+                          const el = document.getElementById(`lesson-container-${nextId}`)
+                          if (el) el.scrollIntoView({ behavior: 'smooth' })
+                        }
+                      }}
                     >
                       <Unlock className="w-5 h-5" />
-                      <span className="text-sm font-medium">
-                        ✨ Lesson Mastered! Scroll down for Next Lesson ↓
+                      <span className="text-sm font-medium" dir="rtl">
+                        ✨ آفرین! حالا صفحه را به پایین اسکرول کنید تا وارد درس بعدی شوید ↓
                       </span>
                     </motion.div>
                   )}

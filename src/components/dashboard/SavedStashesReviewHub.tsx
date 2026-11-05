@@ -1,0 +1,169 @@
+"use client"
+
+import React, { useState } from "react"
+import { motion } from "framer-motion"
+import { useCourseStore } from "@/store/useCourseStore"
+import { Volume2, CheckCircle2, RotateCcw, BrainCircuit } from "lucide-react"
+
+export function SavedStashesReviewHub() {
+  const { savedStashes, completeStashReview } = useCourseStore()
+  const [flippedCards, setFlippedCards] = useState<Record<string, boolean>>({})
+
+  // Separate stashes into "Due Now" and "Remembered" based on SRS
+  const now = Date.now()
+  const dueStashes = savedStashes.filter(s => s.nextReviewAt <= now)
+  const rememberedStashes = savedStashes.filter(s => s.nextReviewAt > now)
+
+  const playTTS = (text: string) => {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel() // Stop any current audio
+      const utterance = new SpeechSynthesisUtterance(text)
+      utterance.lang = 'en-US'
+      utterance.rate = 0.9
+      window.speechSynthesis.speak(utterance)
+    }
+  }
+
+  const handleReview = (lessonId: string, remembered: boolean) => {
+    completeStashReview(lessonId, remembered)
+  }
+
+  const toggleFlip = (lessonId: string) => {
+    setFlippedCards(prev => ({
+      ...prev,
+      [lessonId]: !prev[lessonId]
+    }))
+  }
+
+  const renderStashCard = (stash: typeof savedStashes[0], isDue: boolean) => {
+    const isFlipped = flippedCards[stash.lessonId]
+
+    return (
+      <div key={stash.lessonId} className="relative w-full perspective-1000 h-[300px]">
+        <motion.div
+          className="w-full h-full relative preserve-3d"
+          animate={{ rotateY: isFlipped ? 180 : 0 }}
+          transition={{ duration: 0.6, type: "spring", stiffness: 260, damping: 20 }}
+          style={{ transformStyle: 'preserve-3d' }}
+        >
+          {/* Front of Card */}
+          <div
+            className="absolute inset-0 backface-hidden bg-card border border-border shadow-sm rounded-2xl p-5 flex flex-col justify-between cursor-pointer"
+            onClick={() => toggleFlip(stash.lessonId)}
+            style={{ backfaceVisibility: 'hidden' }}
+          >
+            <div>
+              <div className="flex justify-between items-start mb-2">
+                <Badge variant={isDue ? "destructive" : "secondary"}>
+                  {isDue ? 'Due for Review' : `Stage ${stash.srsStage}`}
+                </Badge>
+                <BrainCircuit className="w-5 h-5 text-muted-foreground" />
+              </div>
+              <h3 className="font-bold text-lg leading-tight mt-2">{stash.lessonTitle}</h3>
+              <p className="text-muted-foreground text-sm mt-1" dir="rtl">{stash.takeawayFa}</p>
+            </div>
+            <div className="text-center text-xs font-medium text-muted-foreground flex items-center justify-center gap-1">
+              <RotateCcw className="w-3 h-3" /> Tap to Flip
+            </div>
+          </div>
+
+          {/* Back of Card */}
+          <div
+            className="absolute inset-0 backface-hidden bg-primary/5 border border-primary/20 shadow-sm rounded-2xl p-5 flex flex-col justify-between overflow-y-auto"
+            style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
+          >
+            <div className="flex-1 space-y-4">
+              {stash.keyPhrases.map((phrase, idx) => (
+                <div key={idx} className="bg-background rounded-lg p-3 shadow-sm border border-border">
+                  <div className="flex justify-between items-start gap-2">
+                    <span className="font-medium text-sm text-foreground" dir="ltr">{phrase.en}</span>
+                    <button
+                      onClick={(e) => { e.stopPropagation(); playTTS(phrase.en); }}
+                      className="text-primary hover:text-primary/80 shrink-0 p-1"
+                    >
+                      <Volume2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-1" dir="rtl">{phrase.fa}</p>
+                </div>
+              ))}
+            </div>
+
+            {isDue && (
+              <div className="flex gap-2 mt-4">
+                <button
+                  onClick={(e) => { e.stopPropagation(); handleReview(stash.lessonId, false); }}
+                  className="flex-1 bg-destructive/10 text-destructive text-sm font-bold py-2 rounded-xl"
+                >
+                  Need Practice
+                </button>
+                <button
+                  onClick={(e) => { e.stopPropagation(); handleReview(stash.lessonId, true); toggleFlip(stash.lessonId); }}
+                  className="flex-1 bg-primary text-primary-foreground text-sm font-bold py-2 rounded-xl flex items-center justify-center gap-1"
+                >
+                  <CheckCircle2 className="w-4 h-4" /> Remembered
+                </button>
+              </div>
+            )}
+            {!isDue && (
+              <button
+                onClick={(e) => { e.stopPropagation(); toggleFlip(stash.lessonId); }}
+                className="w-full text-center text-xs font-medium text-muted-foreground mt-4"
+              >
+                Tap to close
+              </button>
+            )}
+          </div>
+        </motion.div>
+      </div>
+    )
+  }
+
+  if (savedStashes.length === 0) {
+    return (
+      <div className="w-full text-center py-10 bg-card rounded-2xl border border-border">
+        <BrainCircuit className="w-12 h-12 mx-auto text-muted-foreground/30 mb-3" />
+        <h3 className="font-medium text-foreground">Review Stash Empty</h3>
+        <p className="text-sm text-muted-foreground mt-1">Complete lessons and save them to your stash to review them here.</p>
+      </div>
+    )
+  }
+
+  return (
+    <div className="w-full flex flex-col gap-6">
+
+      {dueStashes.length > 0 && (
+        <div className="space-y-3">
+          <h2 className="text-lg font-bold flex items-center gap-2">
+            <span className="bg-destructive w-2 h-2 rounded-full animate-pulse" />
+            Due Now ({dueStashes.length})
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {dueStashes.map(stash => renderStashCard(stash, true))}
+          </div>
+        </div>
+      )}
+
+      {rememberedStashes.length > 0 && (
+        <div className="space-y-3">
+          <h2 className="text-lg font-bold text-muted-foreground">
+            Remembered / Need Practice ({rememberedStashes.length})
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {rememberedStashes.map(stash => renderStashCard(stash, false))}
+          </div>
+        </div>
+      )}
+
+    </div>
+  )
+}
+
+function Badge({ children, variant = 'secondary' }: { children: React.ReactNode, variant?: 'secondary' | 'destructive' }) {
+  const base = "px-2 py-0.5 rounded-full text-xs font-medium"
+  const variants = {
+    secondary: "bg-secondary text-secondary-foreground",
+    destructive: "bg-destructive text-destructive-foreground"
+  }
+  return <span className={`${base} ${variants[variant]}`}>{children}</span>
+}

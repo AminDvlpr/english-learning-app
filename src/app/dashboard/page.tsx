@@ -2,16 +2,23 @@ import React from "react"
 import { LearningPathMap } from "@/components/dashboard/LearningPathMap"
 import { MasteryAnalyticsCard } from "@/components/dashboard/MasteryAnalyticsCard"
 import { TieredLeaguesBoard } from "@/components/dashboard/TieredLeaguesBoard"
+import { SavedStashesReviewHub } from "@/components/dashboard/SavedStashesReviewHub"
 
 export default function DashboardPage() {
   return (
-    <div className="flex-1 overflow-y-auto p-4 space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500 pb-20 bg-background">
+    <div className="flex-1 w-full max-w-[430px] mx-auto overflow-y-auto p-4 space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500 pb-24 bg-background">
       <div className="space-y-1">
         <h1 className="text-2xl font-extrabold tracking-tight">Your Learning Zone</h1>
         <p className="text-muted-foreground text-sm">Continue your journey and track your mastery.</p>
       </div>
 
       <div className="flex flex-col gap-6">
+
+        {/* SRS Review Hub */}
+        <div className="w-full">
+           <SavedStashesReviewHub />
+        </div>
+
         {/* Learning Paths */}
         <div className="w-full">
            <div className="bg-card border border-border/50 rounded-xl p-4 shadow-sm">
