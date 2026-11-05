@@ -1,35 +1,33 @@
 import * as React from "react"
-import { LessonBlock } from "@/types"
-import { validateLesson } from "@/lib/lesson-validator"
+import { CourseDocument } from "@/types/course"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { AlertCircle, CheckCircle2, Download, Upload } from "lucide-react"
 
 interface JsonSchemaInspectorProps {
-  blocks: LessonBlock[]
-  setBlocks: (blocks: LessonBlock[]) => void
+  course: CourseDocument | null
+  setCourse: (course: CourseDocument) => void
 }
 
-export function JsonSchemaInspector({ blocks, setBlocks }: JsonSchemaInspectorProps) {
-  const validation = validateLesson(blocks)
+export function JsonSchemaInspector({ course, setCourse }: JsonSchemaInspectorProps) {
   const [showJson, setShowJson] = React.useState(false)
   const [jsonText, setJsonText] = React.useState("")
 
   const handleExport = () => {
-    setJsonText(JSON.stringify(blocks, null, 2))
+    setJsonText(JSON.stringify(course, null, 2))
     setShowJson(true)
   }
 
   const handleImport = () => {
     try {
       const parsed = JSON.parse(jsonText)
-      // basic runtime check
-      if (Array.isArray(parsed)) {
-        setBlocks(parsed)
+      // basic runtime check for course document
+      if (parsed && typeof parsed === 'object' && parsed.id && Array.isArray(parsed.lessons)) {
+        setCourse(parsed)
         setShowJson(false)
       } else {
-        alert("JSON must be an array of blocks.")
+        alert("JSON must be a valid CourseDocument with an id and lessons array.")
       }
     } catch {
       alert("Invalid JSON format.")
@@ -40,29 +38,21 @@ export function JsonSchemaInspector({ blocks, setBlocks }: JsonSchemaInspectorPr
     <Card>
       <CardHeader className="py-3">
         <CardTitle className="text-sm font-semibold flex items-center justify-between">
-          <span>Architecture Validator</span>
-          {validation.valid ? (
+          <span>Course Document Architecture Schema</span>
+          {course ? (
              <Badge className="bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20 border-emerald-500/20">
                <CheckCircle2 className="w-3 h-3 mr-1" />
-               Valid Smart Canvas Schema
+               Valid Schema
              </Badge>
           ) : (
              <Badge variant="destructive" className="bg-amber-500/10 text-amber-600 hover:bg-amber-500/20 border-amber-500/20">
                <AlertCircle className="w-3 h-3 mr-1" />
-               Validation Warnings
+               No Course
              </Badge>
           )}
         </CardTitle>
       </CardHeader>
       <CardContent className="py-3">
-
-        {!validation.valid && (
-          <div className="bg-amber-500/10 text-amber-700 text-xs p-3 rounded-md mb-4 flex flex-col gap-1">
-            {validation.errors.map((err, i) => (
-              <span key={i}>• {err}</span>
-            ))}
-          </div>
-        )}
 
         {showJson ? (
           <div className="flex flex-col gap-2 mt-2">
@@ -79,9 +69,9 @@ export function JsonSchemaInspector({ blocks, setBlocks }: JsonSchemaInspectorPr
         ) : (
           <div className="flex justify-between items-center mt-2">
              <div className="text-xs text-muted-foreground">
-                {blocks.length} blocks total
+                {course?.lessons?.length || 0} lessons total
              </div>
-             <Button variant="outline" size="sm" onClick={handleExport}>
+             <Button variant="outline" size="sm" onClick={handleExport} disabled={!course}>
                 <Download className="w-4 h-4 mr-2" />
                 Export / Import JSON
              </Button>
