@@ -44,6 +44,10 @@ const config = {
           DEFAULT: "hsl(var(--warning))",
           foreground: "hsl(var(--warning-foreground))",
         },
+        info: {
+          DEFAULT: "hsl(var(--info))",
+          foreground: "hsl(var(--info-foreground))",
+        },
         muted: {
           DEFAULT: "hsl(var(--muted))",
           foreground: "hsl(var(--muted-foreground))",
@@ -65,6 +69,12 @@ const config = {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+      },
+      fontFamily: {
+        sans: ["var(--font-geist-sans)", "Vazirmatn", "Tahoma", "system-ui", "-apple-system", "sans-serif"],
+        mono: ["var(--font-geist-mono)", "monospace"],
+        vazirmatn: ["Vazirmatn", "var(--font-geist-sans)", "Tahoma", "system-ui", "sans-serif"],
+        serif: ["var(--font-geist-sans)", "Georgia", "ui-serif", "serif"],
       },
     },
   },
