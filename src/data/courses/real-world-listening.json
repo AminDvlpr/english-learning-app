@@ -1,7 +1,7 @@
 {
   "id": "real-world-listening",
   "slug": "real-world-listening",
-  "titleFa": "شنیدار در دنیای واقعی",
+  "titleFa": "پادکست و مکالمه روزمره",
   "titleEn": "Real World Listening",
   "descriptionFa": "دوره ای برای تقویت مهارت شنیداری با ویدیوها و پادکست های واقعی.",
   "levelRange": "B1-C1",
@@ -15,17 +15,20 @@
       "order": 1,
       "chapterNumber": 1,
       "chapterTitleFa": "پادکست های روزمره",
-      "title": "Everyday Podcasts",
+      "title": "مکالمه ۱: سفارش قهوه در کافه لندن",
       "subtitleFa": "تمرین با مکالمات سریع و طبیعی.",
       "level": "B1",
       "coverEmoji": "🎙️",
       "coverGradient": "from-purple-400 to-indigo-500",
-      "formatTags": ["listen", "play"],
+      "formatTags": [
+        "listen",
+        "play"
+      ],
       "estimatedMinutes": 10,
       "summaryStash": {
         "lessonId": "lesson-listen-1",
         "courseId": "real-world-listening",
-        "lessonTitle": "Everyday Podcasts",
+        "lessonTitle": "پادکست های روزمره",
         "keyPhrases": [
           {
             "en": "Catch you later.",
@@ -119,17 +122,19 @@
       "order": 2,
       "chapterNumber": 1,
       "chapterTitleFa": "پادکست های روزمره",
-      "title": "Street Interviews",
+      "title": "مکالمه ۲: خرید و چانه‌زنی در فروشگاه",
       "subtitleFa": "گوش دادن به لهجه های مختلف در خیابان.",
       "level": "B2",
       "coverEmoji": "🎤",
       "coverGradient": "from-red-400 to-pink-500",
-      "formatTags": ["watch"],
+      "formatTags": [
+        "watch"
+      ],
       "estimatedMinutes": 15,
       "summaryStash": {
         "lessonId": "lesson-listen-2",
         "courseId": "real-world-listening",
-        "lessonTitle": "Street Interviews",
+        "lessonTitle": "مصاحبه های خیابانی",
         "keyPhrases": [
           {
             "en": "To be honest...",
@@ -168,6 +173,66 @@
           ]
         }
       ]
+    },
+    {
+      "id": "lesson-listen-3",
+      "courseId": "real-world-listening",
+      "order": 3,
+      "chapterNumber": 1,
+      "chapterTitleFa": "پادکست های روزمره",
+      "title": "مکالمه ۳: گپ دوستانه در ایستگاه مترو",
+      "subtitleFa": "گوش دادن به لهجه های مختلف در خیابان.",
+      "level": "B2",
+      "coverEmoji": "🎤",
+      "coverGradient": "from-red-400 to-pink-500",
+      "formatTags": [
+        "watch"
+      ],
+      "estimatedMinutes": 15,
+      "summaryStash": {
+        "lessonId": "lesson-listen-3",
+        "courseId": "real-world-listening",
+        "lessonTitle": "گپ مترو",
+        "keyPhrases": [
+          {
+            "en": "To be honest...",
+            "fa": "صادقانه بگویم...",
+            "grammarNoteFa": "شروع جمله برای بیان نظر واقعی"
+          }
+        ],
+        "takeawayFa": "درک لهجه های بریتیش و آمریکایی"
+      },
+      "slides": []
+    },
+    {
+      "id": "lesson-listen-4",
+      "courseId": "real-world-listening",
+      "order": 4,
+      "chapterNumber": 1,
+      "chapterTitleFa": "پادکست های روزمره",
+      "title": "مکالمه ۴: رزرو اتاق در هتل",
+      "subtitleFa": "گوش دادن به لهجه های مختلف در خیابان.",
+      "level": "B2",
+      "coverEmoji": "🎤",
+      "coverGradient": "from-red-400 to-pink-500",
+      "formatTags": [
+        "watch"
+      ],
+      "estimatedMinutes": 15,
+      "summaryStash": {
+        "lessonId": "lesson-listen-4",
+        "courseId": "real-world-listening",
+        "lessonTitle": "هتل",
+        "keyPhrases": [
+          {
+            "en": "To be honest...",
+            "fa": "صادقانه بگویم...",
+            "grammarNoteFa": "شروع جمله برای بیان نظر واقعی"
+          }
+        ],
+        "takeawayFa": "درک لهجه های بریتیش و آمریکایی"
+      },
+      "slides": []
     }
   ]
 }

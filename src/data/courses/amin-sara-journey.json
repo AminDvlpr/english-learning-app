@@ -17,8 +17,8 @@
       "order": 1,
       "chapterNumber": 1,
       "chapterTitleFa": "کودکی – رقابت و شیطنت",
-      "title": "اپیزود ۱: تولد و دعوا",
-      "subtitleFa": "آشنایی با امین و سارا و شروع رقابت...",
+      "title": "اپیزود ۱: تولد، مدرسه و کلاس نقاشی",
+      "subtitleFa": "رقابت کودکانه امین و سارا و چالش مدادهای مشکی انگلیسی",
       "level": "A1",
       "coverEmoji": "🎂",
       "coverGradient": "from-pink-400 to-rose-500",
@@ -202,6 +202,119 @@
               "walkAwayLabelEn": "Leave the class",
               "walkAwayDestination": "hallway"
             }
+          ],
+          "storyNodes": [
+            {
+              "id": "node-1-1",
+              "type": "narrative",
+              "speaker": "Teacher",
+              "dialogueEn": "Welcome to the painting class!",
+              "dialogueFa": "به کلاس نقاشی خوش آمدید!"
+            },
+            {
+              "id": "node-1-2",
+              "type": "narrative",
+              "speaker": "Amin",
+              "dialogueEn": "I want the black pencil.",
+              "dialogueFa": "من مداد مشکی رو می‌خوام."
+            },
+            {
+              "id": "node-1-3",
+              "type": "narrative",
+              "speaker": "Sara",
+              "dialogueEn": "No, I had it first!",
+              "dialogueFa": "نه، اول من برداشتمش!"
+            },
+            {
+              "id": "node-1-4",
+              "type": "investigation",
+              "cameraFocus": "wide_explore",
+              "speaker": "Amin",
+              "dialogueEn": "Where did it go?",
+              "dialogueFa": "کجا رفت؟",
+              "hotspots": [
+                {
+                  "id": "black-pencil",
+                  "labelEn": "Black Pencil",
+                  "labelFa": "مداد مشکی",
+                  "emoji": "✏️",
+                  "xPercent": 50,
+                  "yPercent": 50,
+                  "lookMonologueEn": "A black pencil.",
+                  "lookMonologueFa": "یک مداد مشکی.",
+                  "canGrabToInventory": true
+                },
+                {
+                  "id": "amin-target",
+                  "labelEn": "Amin",
+                  "labelFa": "امین",
+                  "emoji": "👦",
+                  "xPercent": 70,
+                  "yPercent": 40,
+                  "isDropTarget": true,
+                  "requiredItemId": "black-pencil",
+                  "successNodeId": "node-1-5"
+                }
+              ]
+            },
+            {
+              "id": "node-1-5",
+              "type": "pressure_choice",
+              "timerSec": 5,
+              "speaker": "Teacher",
+              "dialogueEn": "Who took the black pencil?",
+              "dialogueFa": "کی مداد مشکی رو برداشت؟",
+              "silenceConsequence": {
+                "feedbackFa": "معلم عصبانی شد.",
+                "nextNodeId": "node-1-7"
+              },
+              "choices": [
+                {
+                  "id": "c1",
+                  "textEn": "I did.",
+                  "textFa": "من برداشتم.",
+                  "isCorrect": true,
+                  "feedbackFa": "معلم قدردانی کرد.",
+                  "nextNodeId": "node-1-6"
+                },
+                {
+                  "id": "c2",
+                  "textEn": "Sara did.",
+                  "textFa": "سارا برداشت.",
+                  "isCorrect": false,
+                  "feedbackFa": "دروغگویی کار بدی است.",
+                  "nextNodeId": "node-1-7"
+                }
+              ]
+            },
+            {
+              "id": "node-1-6",
+              "type": "narrative",
+              "speaker": "Teacher",
+              "dialogueEn": "Thank you for being honest.",
+              "dialogueFa": "ممنون که صادق بودی."
+            },
+            {
+              "id": "node-1-7",
+              "type": "narrative",
+              "speaker": "Sara",
+              "dialogueEn": "You are mean!",
+              "dialogueFa": "تو خیلی بدی!"
+            },
+            {
+              "id": "node-1-8",
+              "type": "narrative",
+              "speaker": "Amin",
+              "dialogueEn": "Sorry...",
+              "dialogueFa": "ببخشید..."
+            },
+            {
+              "id": "node-1-9",
+              "type": "narrative",
+              "speaker": "Teacher",
+              "dialogueEn": "Now color your books.",
+              "dialogueFa": "حالا کتاب‌هاتون رو رنگ کنید."
+            }
           ]
         },
         {
@@ -311,9 +424,9 @@
       "courseId": "amin-sara-journey",
       "order": 2,
       "chapterNumber": 2,
-      "chapterTitleFa": "اپیزود ۲: کلاس نقاشی (The Painting Class)",
-      "title": "اپیزود ۲: کلاس نقاشی (The Painting Class)",
-      "subtitleFa": "گوش دادن به دستورات معلم...",
+      "chapterTitleFa": "اپیزود ۲: کلاس نقاشی",
+      "title": "اپیزود ۲: کل‌کل در حیاط مدرسه",
+      "subtitleFa": "سنگین‌ترین رقابت امتحانات و شرط‌بندی جدید",
       "level": "A1",
       "coverEmoji": "🎨",
       "coverGradient": "from-yellow-400 to-orange-500",
@@ -514,8 +627,8 @@
       "order": 3,
       "chapterNumber": 3,
       "chapterTitleFa": "اپیزود ۳: مدرسه و قرار مخفیانه",
-      "title": "اپیزود ۳: مدرسه و قرار مخفیانه",
-      "subtitleFa": "حیاط مدرسه و اولین اعترافات",
+      "title": "اپیزود ۳: راز علاقه‌مندی امین",
+      "subtitleFa": "وقتی دعواهای بچگی جای خودش را به یک حس تازه می‌دهد",
       "level": "A2",
       "coverEmoji": "🏫",
       "coverGradient": "from-gray-500 to-slate-700",
@@ -615,7 +728,7 @@
       "chapterNumber": 4,
       "chapterTitleFa": "اپیزود ۴: مراسم چای با دایی‌جان",
       "title": "اپیزود ۴: مراسم چای با دایی‌جان",
-      "subtitleFa": "جلب رضایت دایی‌جان",
+      "subtitleFa": "چالش جلب رضایت دایی‌جان سر سینی چای",
       "level": "B1",
       "coverEmoji": "☕",
       "coverGradient": "from-amber-600 to-orange-700",
@@ -658,7 +771,20 @@
               "characters": "Amin, Sara, Uncle"
             }
           },
-          "kineticParagraphs": [],
+          "kineticParagraphs": [
+            {
+              "id": "kp-auto",
+              "textEn": "This is a placeholder text.",
+              "highlightWords": [
+                {
+                  "word": "placeholder",
+                  "color": "purple",
+                  "hasSparkle": true
+                }
+              ],
+              "translationFa": "این یک متن نمونه است."
+            }
+          ],
           "deepDives": [],
           "interrupts": []
         },
@@ -790,8 +916,8 @@
       "order": 5,
       "chapterNumber": 5,
       "chapterTitleFa": "اپیزود ۵: اداره مهاجرت",
-      "title": "اپیزود ۵: اداره مهاجرت (The Immigration Office)",
-      "subtitleFa": "بازرسی ویزا...",
+      "title": "اپیزود ۵: سفارت و اداره مهاجرت",
+      "subtitleFa": "بررسی فرم ویزا و شروع سفر بزرگ امین و سارا",
       "level": "B2",
       "coverEmoji": "🛂",
       "coverGradient": "from-blue-600 to-indigo-800",
@@ -834,7 +960,20 @@
               "characters": "Amin, Sara, Officer"
             }
           },
-          "kineticParagraphs": [],
+          "kineticParagraphs": [
+            {
+              "id": "kp-auto",
+              "textEn": "This is a placeholder text.",
+              "highlightWords": [
+                {
+                  "word": "placeholder",
+                  "color": "purple",
+                  "hasSparkle": true
+                }
+              ],
+              "translationFa": "این یک متن نمونه است."
+            }
+          ],
           "deepDives": [],
           "interrupts": []
         },

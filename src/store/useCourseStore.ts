@@ -259,6 +259,15 @@ export const useCourseStore = create<CourseState & CourseActions>()(
     {
       name: 'english-app-course-store',
       skipHydration: true,
+      merge: (persistedState: unknown, currentState: CourseState & CourseActions) => {
+        const merged = { ...currentState, ...(persistedState as Partial<CourseState & CourseActions>) };
+
+        // Ensure we always use the latest INITIAL_COURSES for titles and slides,
+        // but preserve user state like active statuses if possible, although the courses
+        // are static data, we just replace the courses array with the latest INITIAL_COURSES
+        merged.courses = currentState.courses;
+        return merged;
+      },
       onRehydrateStorage: () => (state) => {
         if (state && typeof window !== 'undefined') {
           const localCards = localStorage.getItem('english-app-leitner-cards');
