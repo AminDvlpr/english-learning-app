@@ -26,6 +26,14 @@ const TABS: { id: TabType; icon: React.ReactNode; label: string }[] = [
   { id: 'Watch', icon: <Tv className="w-4 h-4" />, label: 'Watch' },
 ]
 
+const getGradientProps = (gradient?: string) => {
+  if (!gradient) return { className: 'bg-gradient-to-br from-indigo-500 to-purple-600' };
+  if (gradient.includes('linear-gradient') || gradient.includes('radial-gradient') || gradient.startsWith('#') || gradient.startsWith('rgb')) {
+    return { className: '', style: { background: gradient } };
+  }
+  return { className: gradient };
+};
+
 export function ExplorerGridView({ lessonFeed, courses = [], onExploreLesson }: ExplorerGridViewProps) {
   const blockStates = useLearnerStore(state => state.blockStates)
   const { enrolledCourseIds, enrollInCourse } = useCourseStore()
@@ -128,9 +136,9 @@ export function ExplorerGridView({ lessonFeed, courses = [], onExploreLesson }: 
                     whileHover={isUnlocked ? { scale: 1.02 } : {}}
                     whileTap={isUnlocked ? { scale: 0.98 } : {}}
                     onClick={() => handleLessonTap(lesson.id, undefined, isUnlocked)}
-                    className={`relative rounded-xl overflow-hidden aspect-[4/5] border ${isUnlocked ? 'cursor-pointer border-border hover:border-primary/50' : 'cursor-not-allowed border-border/50 opacity-80'}`}
+                    className={`relative rounded-xl overflow-hidden aspect-[4/5] border bg-gradient-to-br from-indigo-600 via-purple-600 to-slate-900 ${isUnlocked ? 'cursor-pointer border-border hover:border-primary/50' : 'cursor-not-allowed border-border/50 opacity-80'}`}
                   >
-                    <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${lesson.coverArtwork})` }} />
+                    <div className="absolute inset-0 bg-cover bg-center mix-blend-overlay" style={{ backgroundImage: `url(${lesson.coverArtwork})` }} />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
                     <div className="absolute inset-0 p-4 flex flex-col justify-between">
                       <div className="flex justify-between items-start">
@@ -175,7 +183,7 @@ export function ExplorerGridView({ lessonFeed, courses = [], onExploreLesson }: 
               return (
                 <div key={course.id} onClick={() => !isEnrolled && setSelectedCourseGate(course)} className="bg-card border border-border rounded-2xl p-4 flex flex-col gap-3 cursor-pointer">
                   <div className="flex items-center gap-3">
-                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-2xl ${course.coverGradient}`}>
+                    <div {...getGradientProps(course.coverGradient)} className={`w-12 h-12 rounded-xl flex items-center justify-center text-2xl ${getGradientProps(course.coverGradient).className}`}>
                       {course.coverEmoji}
                     </div>
                     <div className="flex-1">
@@ -219,7 +227,7 @@ export function ExplorerGridView({ lessonFeed, courses = [], onExploreLesson }: 
                       onClick={() => handleLessonTap(lesson.id, lesson.courseId, true)}
                       className="relative rounded-xl overflow-hidden aspect-square border border-border cursor-pointer flex flex-col"
                     >
-                      <div className={`flex-1 flex items-center justify-center text-4xl ${lesson.coverGradient}`}>
+                      <div {...getGradientProps(lesson.coverGradient)} className={`flex-1 flex items-center justify-center text-4xl ${getGradientProps(lesson.coverGradient).className}`}>
                          {lesson.coverEmoji}
                       </div>
                       <div className="p-3 bg-card border-t border-border flex flex-col gap-1">
@@ -269,7 +277,7 @@ export function ExplorerGridView({ lessonFeed, courses = [], onExploreLesson }: 
             >
               <div className="w-12 h-1.5 bg-muted rounded-full mx-auto mb-2" />
 
-              <div className={`w-20 h-20 rounded-2xl mx-auto flex items-center justify-center text-4xl shadow-sm ${selectedCourseGate.coverGradient}`}>
+              <div {...getGradientProps(selectedCourseGate.coverGradient)} className={`w-20 h-20 rounded-2xl mx-auto flex items-center justify-center text-4xl shadow-sm ${getGradientProps(selectedCourseGate.coverGradient).className}`}>
                 {selectedCourseGate.coverEmoji}
               </div>
 
