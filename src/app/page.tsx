@@ -45,32 +45,31 @@ export default function Home() {
         <LessonTopBar
           title="English Learning Feed"
           progress={Math.min(100, xp)}
-        />
+        >
+          {isClient && (
+            <div className="flex bg-background/80 backdrop-blur border border-border rounded-full p-0.5 ml-1">
+               <button
+                  onClick={() => setViewMode('feed')}
+                  className={`p-1.5 rounded-full transition-colors ${viewMode === 'feed' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:text-foreground'}`}
+                  title="Story Feed View"
+               >
+                  <ScrollText className="w-4 h-4" />
+               </button>
+               <button
+                  onClick={() => setViewMode('explorer')}
+                  className={`p-1.5 rounded-full transition-colors ${viewMode === 'explorer' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:text-foreground'}`}
+                  title="Explorer Grid View"
+               >
+                  <LayoutGrid className="w-4 h-4" />
+               </button>
+            </div>
+          )}
+        </LessonTopBar>
       }
     >
-      <div className="relative w-full h-full flex flex-col">
-        {/* View Switcher Overlay */}
-        {isClient && (
-          <div className="absolute top-4 right-4 z-50 flex bg-background/80 backdrop-blur border border-border p-1 rounded-full shadow-sm">
-             <button
-                onClick={() => setViewMode('feed')}
-                className={`p-2 rounded-full transition-colors ${viewMode === 'feed' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:text-foreground'}`}
-                title="Story Feed View"
-             >
-                <ScrollText className="w-5 h-5" />
-             </button>
-             <button
-                onClick={() => setViewMode('explorer')}
-                className={`p-2 rounded-full transition-colors ${viewMode === 'explorer' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:text-foreground'}`}
-                title="Explorer Grid View"
-             >
-                <LayoutGrid className="w-5 h-5" />
-             </button>
-          </div>
-        )}
-
+      <div className="relative w-full h-full flex flex-col flex-1">
         {/* Main Content */}
-        <div className="flex-1 w-full relative">
+        <div className="flex-1 w-full relative flex flex-col">
           {viewMode === 'feed' ? (
              <VerticalLessonFeed lessonFeed={lessonFeed} />
           ) : (

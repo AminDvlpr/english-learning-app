@@ -20,12 +20,14 @@ export interface LessonTopBarProps {
   streak?: number
   hearts?: number
   onClose?: () => void
+  children?: React.ReactNode
 }
 
 export function LessonTopBar({
-  title,
+  // title is kept in type but not used in UI to save space
   progress,
   onClose,
+  children,
 }: LessonTopBarProps) {
   const [isMuted, setIsMuted] = React.useState(false)
   const { streakDays, hearts, gems, checkHeartRegeneration } = useGamificationStore()
@@ -58,41 +60,38 @@ export function LessonTopBar({
     >
       <div className="container flex h-14 md:h-16 items-center justify-between max-w-4xl mx-auto px-2 md:px-4">
 
-        {/* Left: Close and Title */}
-        <div className="flex items-center gap-4 flex-1">
-          <Button variant="ghost" size="icon" onClick={onClose} aria-label="Close lesson">
-            <X className="h-5 w-5 text-muted-foreground hover:text-foreground transition-colors" />
-          </Button>
+        {/* Left: Close, Nav, View Switcher */}
+        <div className="flex items-center gap-1">
+          {onClose && (
+            <Button variant="ghost" size="icon" className="w-8 h-8" onClick={onClose} aria-label="Close lesson">
+              <X className="h-4 w-4 text-muted-foreground hover:text-foreground transition-colors" />
+            </Button>
+          )}
           <Link href="/dashboard">
-            <Button variant="ghost" size="sm" className="hidden sm:flex text-muted-foreground">
-               <LayoutDashboard className="h-4 w-4 mr-2" />
-               Dashboard
+            <Button variant="ghost" size="icon" className="w-8 h-8 text-muted-foreground" title="Dashboard">
+               <LayoutDashboard className="h-4 w-4" />
             </Button>
           </Link>
           <Link href="/builder">
-            <Button variant="ghost" size="sm" className="hidden sm:flex text-muted-foreground">
-               <PenTool className="h-4 w-4 mr-2" />
-               Builder
+            <Button variant="ghost" size="icon" className="w-8 h-8 text-muted-foreground" title="Builder">
+               <PenTool className="h-4 w-4" />
             </Button>
           </Link>
-          <h1 className="text-sm md:text-base font-semibold truncate hidden md:block max-w-[150px]">
-            {title}
-          </h1>
+          {children}
         </div>
 
         {/* Center: Progress Bar */}
-        <div className="flex-1 flex justify-center max-w-md w-full px-4">
-          <Progress value={progress} className="w-full" indicatorClassName="bg-success" />
+        <div className="flex-1 flex justify-center max-w-[100px] w-full px-2">
+          <Progress value={progress} className="w-full h-2" indicatorClassName="bg-success" />
         </div>
 
         {/* Right: Stats (Streak, Hearts, Audio Toggle) */}
-        <div className="flex items-center gap-4 flex-1 justify-end">
-
-          <Button variant="ghost" size="icon" onClick={() => setAuthModalOpen(true)} aria-label="Account Sync">
+        <div className="flex items-center gap-2 justify-end">
+          <Button variant="ghost" size="icon" className="w-8 h-8" onClick={() => setAuthModalOpen(true)} aria-label="Account Sync">
             {isCloud ? (
-               <Cloud className="h-5 w-5 text-success" />
+               <Cloud className="h-4 w-4 text-success" />
             ) : (
-               <HardDrive className="h-5 w-5 text-muted-foreground" />
+               <HardDrive className="h-4 w-4 text-muted-foreground" />
             )}
           </Button>
 
@@ -102,9 +101,9 @@ export function LessonTopBar({
               initial={{ scale: 1.5, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ type: "spring", stiffness: 300, damping: 20 }}
-              className="flex items-center gap-1.5 text-warning font-bold cursor-pointer hover:opacity-80"
+              className="flex items-center gap-1 text-warning font-bold cursor-pointer hover:opacity-80 text-sm"
             >
-              <Flame className="h-5 w-5 fill-warning text-warning" />
+              <Flame className="h-4 w-4 fill-warning text-warning" />
               <span>{streakDays}</span>
             </motion.div>
           </StreakPopover>
@@ -113,10 +112,10 @@ export function LessonTopBar({
             initial={{ scale: 1.5, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ type: "spring", stiffness: 300, damping: 20 }}
-            className="flex items-center gap-1.5 text-destructive font-bold cursor-pointer hover:opacity-80"
+            className="flex items-center gap-1 text-destructive font-bold cursor-pointer hover:opacity-80 text-sm"
             onClick={() => setHeartModalOpen(true)}
           >
-            <Heart className="h-5 w-5 fill-destructive text-destructive" />
+            <Heart className="h-4 w-4 fill-destructive text-destructive" />
             <span>{hearts}</span>
           </motion.div>
           <motion.div
@@ -124,16 +123,16 @@ export function LessonTopBar({
             initial={{ scale: 1.5, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ type: "spring", stiffness: 300, damping: 20 }}
-            className="flex items-center gap-1.5 text-info font-bold"
+            className="flex items-center gap-1 text-info font-bold text-sm"
           >
-            <Gem className="h-5 w-5 fill-info text-info" />
+            <Gem className="h-4 w-4 fill-info text-info" />
             <span>{gems}</span>
           </motion.div>
-          <Button variant="ghost" size="icon" onClick={handleToggleMute} aria-label={isMuted ? "Unmute" : "Mute"}>
+          <Button variant="ghost" size="icon" className="w-8 h-8" onClick={handleToggleMute} aria-label={isMuted ? "Unmute" : "Mute"}>
             {isMuted ? (
-                <VolumeX className="h-5 w-5 text-muted-foreground" />
+                <VolumeX className="h-4 w-4 text-muted-foreground" />
             ) : (
-                <Volume2 className="h-5 w-5 text-muted-foreground" />
+                <Volume2 className="h-4 w-4 text-muted-foreground" />
             )}
           </Button>
         </div>

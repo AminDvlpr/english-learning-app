@@ -5,22 +5,22 @@ import { TieredLeaguesBoard } from "@/components/dashboard/TieredLeaguesBoard"
 
 export default function DashboardPage() {
   return (
-    <div className="w-full space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500 pb-12">
-      <div className="space-y-2">
-        <h1 className="text-3xl font-extrabold tracking-tight">Your Learning Zone</h1>
-        <p className="text-muted-foreground text-lg">Continue your journey and track your mastery.</p>
+    <div className="flex-1 overflow-y-auto p-4 space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500 pb-20 bg-background">
+      <div className="space-y-1">
+        <h1 className="text-2xl font-extrabold tracking-tight">Your Learning Zone</h1>
+        <p className="text-muted-foreground text-sm">Continue your journey and track your mastery.</p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Left Column: Learning Paths (Takes up 2 columns on large screens) */}
-        <div className="lg:col-span-2 space-y-6">
-           <div className="bg-card border border-border/50 rounded-xl p-6 shadow-sm">
+      <div className="flex flex-col gap-6">
+        {/* Learning Paths */}
+        <div className="w-full">
+           <div className="bg-card border border-border/50 rounded-xl p-4 shadow-sm">
              <LearningPathMap />
            </div>
         </div>
 
-        {/* Right Column: Analytics & Leagues */}
-        <div className="space-y-6 lg:h-[800px] flex flex-col">
+        {/* Analytics & Leagues */}
+        <div className="w-full flex flex-col gap-6">
           <div className="shrink-0">
              <MasteryAnalyticsCard />
           </div>
