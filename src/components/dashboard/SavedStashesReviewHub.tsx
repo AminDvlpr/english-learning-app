@@ -39,7 +39,7 @@ export function SavedStashesReviewHub() {
     const isFlipped = flippedCards[stash.lessonId]
 
     return (
-      <div key={stash.lessonId} className="relative w-full perspective-1000 h-[300px]">
+      <div key={stash.lessonId} className="relative w-full perspective-1000 h-[300px]" style={{ perspective: '1000px' }}>
         <motion.div
           className="w-full h-full relative preserve-3d"
           animate={{ rotateY: isFlipped ? 180 : 0 }}
@@ -50,7 +50,7 @@ export function SavedStashesReviewHub() {
           <div
             className="absolute inset-0 backface-hidden bg-card border border-border shadow-sm rounded-2xl p-5 flex flex-col justify-between cursor-pointer"
             onClick={() => toggleFlip(stash.lessonId)}
-            style={{ backfaceVisibility: 'hidden' }}
+            style={{ backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden' }}
           >
             <div>
               <div className="flex justify-between items-start mb-2">
@@ -70,7 +70,7 @@ export function SavedStashesReviewHub() {
           {/* Back of Card */}
           <div
             className="absolute inset-0 backface-hidden bg-primary/5 border border-primary/20 shadow-sm rounded-2xl p-5 flex flex-col justify-between overflow-y-auto"
-            style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
+            style={{ backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
           >
             <div className="flex-1 space-y-4">
               {stash.keyPhrases.map((phrase, idx) => (

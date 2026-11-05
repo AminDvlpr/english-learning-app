@@ -112,7 +112,7 @@ export function TieredLeaguesBoard() {
            </span>
         </div>
 
-        <div className="overflow-y-auto pr-2 space-y-1.5 flex-1 custom-scrollbar">
+        <div className="overflow-y-auto overflow-x-hidden pr-2 space-y-1.5 flex-1 custom-scrollbar">
            {allEntries.map((entry, index) => {
               const rank = index + 1
               const isPromo = rank <= 3
