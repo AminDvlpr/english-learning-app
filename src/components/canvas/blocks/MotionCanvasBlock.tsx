@@ -114,7 +114,7 @@ export function MotionCanvasBlock({ block, state, checkpoints = [], onProgress, 
         {/* Checkpoint Overlay */}
           {nextCheckpoint && localTime >= nextCheckpoint.triggerTimestamp && (
              <div
-                className="absolute inset-x-0 bottom-0 z-30 pointer-events-auto bg-gradient-to-t from-black/85 via-black/60 to-transparent pt-12 pb-14 px-4"
+                className="absolute inset-x-0 bottom-0 z-30 pointer-events-auto bg-gradient-to-t from-black/85 via-black/60 to-transparent pt-12 pb-24 px-4"
                 data-interactive="true"
                 onPointerDown={(e) => e.stopPropagation()}
              >

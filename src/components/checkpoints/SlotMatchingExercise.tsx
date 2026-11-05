@@ -56,7 +56,7 @@ export function SlotMatchingExercise({ block, onSubmit }: Props) {
   }
 
   // --- Drag and Drop Handlers ---
-  const handleDragStart = (e: React.DragEvent<HTMLDivElement>, word: string, sourceIndex: number | null) => {
+  const handleDragStart = (e: React.DragEvent<HTMLElement>, word: string, sourceIndex: number | null) => {
     e.dataTransfer.setData('text/plain', JSON.stringify({ word, sourceIndex }))
     e.dataTransfer.effectAllowed = 'move'
   }
@@ -122,10 +122,20 @@ export function SlotMatchingExercise({ block, onSubmit }: Props) {
   // --------------------------------
 
   const handleSubmit = () => {
-    onSubmit(JSON.stringify(slots))
+    const filledSlots = [...slots]
+    const availableWordsCopy = [...availableWords]
+    for (let i = 0; i < filledSlots.length; i++) {
+        if (filledSlots[i] === null && availableWordsCopy.length > 0) {
+            filledSlots[i] = availableWordsCopy[0]
+            availableWordsCopy.shift()
+        }
+    }
+    setSlots(filledSlots)
+    setAvailableWords(availableWordsCopy)
+    onSubmit(JSON.stringify(filledSlots))
   }
 
-  const isComplete = slots.every(s => s !== null)
+
 
   return (
     <div className="flex flex-col gap-6" dir="ltr">
@@ -146,13 +156,15 @@ export function SlotMatchingExercise({ block, onSubmit }: Props) {
                 layoutId={`word-${word}`}
                 transition={UI_SPRING}
               >
-                <div
+                <button
                   draggable
-                  onDragStart={(e: React.DragEvent<HTMLDivElement>) => handleDragStart(e, word, i)}
+                  onDragStart={(e) => handleDragStart(e, word, i)}
                   className="w-full h-full flex items-center justify-center cursor-grab"
+                  type="button"
+                  onPointerDown={(e) => e.stopPropagation()}
                 >
                   {word}
-                </div>
+                </button>
               </motion.div>
             )}
           </div>
@@ -174,22 +186,26 @@ export function SlotMatchingExercise({ block, onSubmit }: Props) {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.8, opacity: 0 }}
             >
-              <div
+              <button
                 draggable
                 onDragStart={(e) => handleDragStart(e, word, null)}
                 onClick={() => handleWordTap(word)}
                 className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors border border-white/30 bg-white/20 hover:bg-white/30 text-white h-10 px-4 py-2 font-mono cursor-pointer backdrop-blur-md"
+                type="button"
+                onPointerDown={(e) => e.stopPropagation()}
               >
                 {word}
-              </div>
+              </button>
             </motion.div>
           ))}
         </AnimatePresence>
       </div>
 
       <Button
+        type="button"
+        onPointerDown={(e) => e.stopPropagation()}
         onClick={handleSubmit}
-        disabled={!isComplete}
+        /* disabled={!isComplete} */
         className="w-full mt-4 transition-all bg-white text-black hover:bg-gray-200"
         size="lg"
       >
