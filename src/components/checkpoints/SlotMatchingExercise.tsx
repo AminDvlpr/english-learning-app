@@ -135,6 +135,17 @@ export function SlotMatchingExercise({ block, onSubmit }: Props) {
     onSubmit(JSON.stringify(filledSlots))
   }
 
+  useEffect(() => {
+    // Auto-submit 300ms after the last slot is filled
+    if (slots.length > 0 && slots.every(s => s !== null)) {
+      const timer = setTimeout(() => {
+        handleSubmit();
+      }, 300);
+      return () => clearTimeout(timer);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [slots]);
+
 
 
   return (

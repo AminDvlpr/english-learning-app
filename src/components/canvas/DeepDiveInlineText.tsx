@@ -4,6 +4,7 @@ import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Volume2, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useCourseStore } from '@/store/useCourseStore';
 
 export interface DeepDiveData {
   id: string;
@@ -38,20 +39,20 @@ const COLOR_MAP = {
 
 const SparkleIcon = () => (
   <motion.svg
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    className="inline-block mx-1 -mt-1 text-current"
-    animate={{ rotate: 360, scale: [1, 1.2, 1] }}
-    transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
-  >
-    <path
-      d="M12 0L13.5 8.5L22 10L13.5 11.5L12 20L10.5 11.5L2 10L10.5 8.5L12 0Z"
-      fill="currentColor"
-    />
-  </motion.svg>
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            className="inline-block mx-1 -mt-1 text-cyan-400 drop-shadow-[0_0_12px_rgba(34,211,238,0.95)]"
+            animate={{ rotate: 360 }}
+            transition={{ duration: 2.2, repeat: Infinity, ease: 'linear' }}
+          >
+            <path
+              d="M12 0L13.5 8.5L22 10L13.5 11.5L12 20L10.5 11.5L2 10L10.5 8.5L12 0Z"
+              fill="currentColor"
+            />
+          </motion.svg>
 );
 
 export function DeepDiveInlineText({
@@ -160,6 +161,40 @@ export function DeepDiveInlineText({
   const handleOpen = (dd: DeepDiveData) => {
     setActiveDeepDive(dd);
     onOpenChange?.(true);
+
+    // Auto-Add to Uncle's 5-Stage Leitner Box on Click
+    const courseStore = useCourseStore.getState() as ReturnType<typeof useCourseStore.getState> & { addLeitnerCard?: (card: unknown) => void };
+    if (courseStore.addLeitnerCard) {
+      courseStore.addLeitnerCard({
+        id: dd.id || dd.triggerText,
+        word: dd.triggerText,
+        translation: dd.title,
+        explanation: dd.explanationFa,
+        examples: dd.examples
+      });
+    }
+
+    // Read/write localStorage
+    if (typeof window !== 'undefined') {
+      try {
+        const stored = localStorage.getItem('english-app-leitner-cards');
+        const cards = stored ? JSON.parse(stored) : [];
+        if (!cards.some((c: { word: string }) => c.word === dd.triggerText)) {
+          cards.push({
+            id: dd.id || dd.triggerText,
+            word: dd.triggerText,
+            translation: dd.title,
+            explanation: dd.explanationFa,
+            boxNumber: 1,
+            addedAt: Date.now()
+          });
+          localStorage.setItem('english-app-leitner-cards', JSON.stringify(cards));
+          window.dispatchEvent(new CustomEvent('leitner-updated'));
+        }
+      } catch (e) {
+        console.error('Failed to update Leitner Box in localStorage', e);
+      }
+    }
   };
 
   const handleClose = () => {
@@ -252,6 +287,8 @@ export function DeepDiveInlineText({
               onPointerDown={(e) => e.stopPropagation()}
             >
               <div className="w-12 h-1.5 bg-neutral-300 dark:bg-neutral-700 rounded-full mx-auto mb-6" />
+
+              <div className="mb-4 inline-flex items-center gap-2 px-3 py-1.5 bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400 text-xs font-bold rounded-full w-full justify-center shadow-sm border border-emerald-200 dark:border-emerald-800/50" dir="rtl">✅ به جعبه لایتنر دایی‌جان (خانه ۱) اضافه شد</div>
 
               <div className="flex items-start justify-between mb-4">
                 <div>

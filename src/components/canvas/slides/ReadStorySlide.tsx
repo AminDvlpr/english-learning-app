@@ -129,53 +129,55 @@ export function ReadStorySlide({
       <div className="shrink-0 pb-6">
         {/* Cover */}
         <div
-          className="h-28 w-full bg-cover bg-center relative shrink-0"
+          className="h-28 w-full bg-cover bg-center relative shrink-0 overflow-hidden bg-neutral-100 dark:bg-neutral-900 border-b border-black/5 dark:border-white/5"
           style={{ background: coverImage }}
-        />
+        >
+           <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 mix-blend-overlay"></div>
+        </div>
 
         <div className="px-6 relative">
           {/* Floating Icon */}
-          <div className="-mt-8 ml-5 text-4xl drop-shadow-md bg-white dark:bg-neutral-900 rounded-lg inline-flex p-1">
+          <div className="-mt-8 ml-5 text-4xl bg-neutral-900/90 border border-white/15 rounded-2xl p-2 shadow-xl w-fit inline-flex items-center justify-center backdrop-blur-md">
             {icon}
           </div>
 
           {/* Title */}
-          <h1 className="text-3xl font-bold mt-4 mb-4 text-neutral-900 dark:text-neutral-50" dir="ltr">
+          <h1 className="text-3xl font-bold mt-4 mb-4 text-neutral-900 dark:text-neutral-50 tracking-tight" dir="ltr">
             {title}
           </h1>
 
           {/* Quote Bar */}
           {quote && (
-            <div className="border-l-[3px] border-current pl-3 py-1 my-2 text-xs opacity-85 text-neutral-600 dark:text-neutral-400 italic" dir="ltr">
+            <div className="border-l-[3px] border-amber-400 pl-3 py-1 my-2.5 text-xs opacity-85 text-neutral-600 dark:text-neutral-300 italic" dir="ltr">
               {quote}
             </div>
           )}
 
           {/* Compact 4-column Property Table */}
           {metadata && (
-            <div className="flex flex-row flex-wrap gap-x-6 gap-y-2 py-4 border-y border-neutral-100 dark:border-neutral-800 mb-6 text-sm" dir="ltr">
+            <div className="flex flex-col gap-2 py-4 border-y border-neutral-100 dark:border-neutral-800 mb-6 text-sm" dir="ltr">
               {metadata.language && (
-                <div className="flex items-center gap-2">
-                  <span className="text-neutral-400">Language</span>
-                  <span className="text-neutral-700 dark:text-neutral-300 font-medium">{metadata.language}</span>
+                <div className="grid grid-cols-[100px_1fr] items-center gap-4">
+                  <span className="text-neutral-400 flex items-center gap-1.5"><span className="opacity-50">🌐</span> Language</span>
+                  <span className="text-neutral-700 dark:text-neutral-300 font-medium bg-neutral-100 dark:bg-neutral-800 px-2 py-0.5 rounded-md w-fit">{metadata.language}</span>
                 </div>
               )}
               {metadata.level && (
-                <div className="flex items-center gap-2">
-                  <span className="text-neutral-400">Level</span>
-                  <span className="text-neutral-700 dark:text-neutral-300 font-medium">{metadata.level}</span>
+                <div className="grid grid-cols-[100px_1fr] items-center gap-4">
+                  <span className="text-neutral-400 flex items-center gap-1.5"><span className="opacity-50">📈</span> Level</span>
+                  <span className="text-neutral-700 dark:text-neutral-300 font-medium bg-neutral-100 dark:bg-neutral-800 px-2 py-0.5 rounded-md w-fit">{metadata.level}</span>
                 </div>
               )}
               {metadata.chapter && (
-                <div className="flex items-center gap-2">
-                  <span className="text-neutral-400">Episode</span>
-                  <span className="text-neutral-700 dark:text-neutral-300 font-medium">{metadata.chapter}</span>
+                <div className="grid grid-cols-[100px_1fr] items-center gap-4">
+                  <span className="text-neutral-400 flex items-center gap-1.5"><span className="opacity-50">📑</span> Episode</span>
+                  <span className="text-neutral-700 dark:text-neutral-300 font-medium bg-neutral-100 dark:bg-neutral-800 px-2 py-0.5 rounded-md w-fit">{metadata.chapter}</span>
                 </div>
               )}
               {metadata.characters && (
-                <div className="flex items-center gap-2">
-                  <span className="text-neutral-400">Characters</span>
-                  <span className="text-neutral-700 dark:text-neutral-300 font-medium">{metadata.characters}</span>
+                <div className="grid grid-cols-[100px_1fr] items-center gap-4">
+                  <span className="text-neutral-400 flex items-center gap-1.5"><span className="opacity-50">👥</span> Characters</span>
+                  <span className="text-neutral-700 dark:text-neutral-300 font-medium bg-neutral-100 dark:bg-neutral-800 px-2 py-0.5 rounded-md w-fit">{metadata.characters}</span>
                 </div>
               )}
             </div>
@@ -200,7 +202,7 @@ export function ReadStorySlide({
               initial={{ opacity: 0, y: 10, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="mt-6 p-5 rounded-2xl bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 shadow-lg"
+              className="mt-6 p-5 rounded-2xl bg-white/60 dark:bg-neutral-900/60 backdrop-blur-xl border border-neutral-200/50 dark:border-neutral-800/50 shadow-[0_8px_30px_rgb(0,0,0,0.12)]"
               onPointerDown={(e) => e.stopPropagation()} // Prevent slide pause
             >
               <p className="text-lg font-medium text-neutral-800 dark:text-neutral-200 mb-4" dir="ltr">

@@ -26,7 +26,7 @@ export function InteractiveCheckpointBlock({ block, state }: Props) {
   const blockStates = useLearnerStore(state => state.blockStates)
 
   const handleSubmit = (id: string) => {
-    if (state === 'locked' || state === 'active') {
+    if (state !== 'verification-required') {
       triggerCheckpointVerification(block.blockId)
     }
     submitCheckpointAnswer(block.blockId, id)
