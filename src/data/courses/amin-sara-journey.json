@@ -1,0 +1,541 @@
+{
+  "id": "amin-sara-journey",
+  "slug": "amin-sara-journey",
+  "titleFa": "سفر در زبان: داستان امین و سارا",
+  "titleEn": "A Journey in Language: The Story of Amin & Sara",
+  "descriptionFa": "داستانی جذاب از کودکی تا بزرگسالی امین و سارا",
+  "levelRange": "A1-B2",
+  "coverEmoji": "🌍",
+  "coverGradient": "from-blue-500 to-indigo-600",
+  "isDefaultEnrolled": true,
+  "lessons": [
+    {
+      "id": "lesson-1",
+      "courseId": "amin-sara-journey",
+      "order": 1,
+      "chapterNumber": 1,
+      "chapterTitleFa": "کودکی – رقابت و شیطنت",
+      "title": "Childhood Rivalry & Mischief",
+      "subtitleFa": "امین و سارا بر سر لوازم التحریر با هم رقابت می کنند.",
+      "level": "A1",
+      "coverEmoji": "👧👦",
+      "coverGradient": "from-pink-400 to-rose-500",
+      "formatTags": ["read", "play", "listen", "watch"],
+      "estimatedMinutes": 15,
+      "summaryStash": {
+        "lessonId": "lesson-1",
+        "courseId": "amin-sara-journey",
+        "lessonTitle": "Childhood Rivalry & Mischief",
+        "keyPhrases": [
+          {
+            "en": "Give me that pencil!",
+            "fa": "اون مداد رو به من بده!",
+            "grammarNoteFa": "جمله امری با Give"
+          }
+        ],
+        "takeawayFa": "یادگیری کلمات مربوط به مدرسه و جملات ساده امری"
+      },
+      "slides": [
+        {
+          "id": "slide-1-read",
+          "order": 1,
+          "format": "read",
+          "title": "A Day at School",
+          "chapterBadge": "Chapter 1",
+          "notionHeader": {
+            "coverGradient": "from-pink-400 to-rose-500",
+            "iconEmoji": "🏫",
+            "quoteBarText": "School days...",
+            "metadata": {
+              "language": "English",
+              "level": "A1",
+              "chapter": "1",
+              "characters": "Amin, Sara"
+            }
+          },
+          "kineticParagraphs": [
+            {
+              "id": "kp-1",
+              "textEn": "Amin and Sara are in the classroom.",
+              "highlightWords": [
+                {
+                  "word": "classroom",
+                  "color": "purple",
+                  "hasSparkle": true
+                }
+              ],
+              "translationFa": "امین و سارا در کلاس درس هستند."
+            }
+          ],
+          "deepDives": [
+            {
+              "id": "dd-1",
+              "triggerText": "classroom",
+              "title": "School Vocabulary",
+              "category": "cultural",
+              "explanationFa": "کلمات مربوط به مدرسه",
+              "examples": [
+                {
+                  "en": "I am in the classroom.",
+                  "fa": "من در کلاس هستم."
+                }
+              ]
+            }
+          ],
+          "interrupts": [
+            {
+              "id": "int-1-mid-stream",
+              "triggerAtPercentOrSec": 50,
+              "actionType": "select",
+              "promptFa": "کجا هستند؟",
+              "promptEn": "Where are they?",
+              "options": [
+                {
+                  "id": "opt-1",
+                  "textEn": "Classroom",
+                  "textFa": "کلاس درس",
+                  "isCorrect": true,
+                  "feedbackFa": "آفرین!"
+                },
+                {
+                  "id": "opt-2",
+                  "textEn": "Park",
+                  "textFa": "پارک",
+                  "isCorrect": false,
+                  "feedbackFa": "اشتباه است."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "slide-1-play",
+          "order": 2,
+          "format": "play",
+          "title": "Give me that pencil!",
+          "chapterBadge": "Chapter 1",
+          "playScene": {
+            "backgroundTheme": "childhood_class",
+            "characters": [
+              {
+                "name": "Amin",
+                "mood": "angry",
+                "dialogueEn": "Give me that pencil!",
+                "dialogueFa": "اون مداد رو به من بده!"
+              }
+            ],
+            "objects": [
+              {
+                "id": "obj-pencil",
+                "label": "Pencil",
+                "emoji": "✏️",
+                "xPercent": 20,
+                "yPercent": 50,
+                "isDraggable": true
+              },
+              {
+                "id": "obj-notebook",
+                "label": "Sara's Notebook",
+                "emoji": "📓",
+                "xPercent": 80,
+                "yPercent": 50,
+                "isDropTarget": true
+              }
+            ]
+          },
+          "deepDives": [],
+          "interrupts": [
+            {
+              "id": "int-1-play-1",
+              "triggerAtPercentOrSec": 5,
+              "actionType": "drag_and_drop",
+              "promptFa": "مداد را روی دفتر سارا بکشید.",
+              "promptEn": "Drag the pencil onto Sara's notebook.",
+              "sourceObjectId": "obj-pencil",
+              "targetObjectId": "obj-notebook"
+            },
+            {
+              "id": "int-1-play-2",
+              "triggerAtPercentOrSec": 10,
+              "actionType": "select",
+              "promptFa": "جواب دندان شکن!",
+              "promptEn": "Witty comeback!",
+              "options": [
+                {
+                  "id": "opt-witty",
+                  "textEn": "No way, it's mine!",
+                  "textFa": "عمرا، مال منه!",
+                  "isCorrect": true,
+                  "feedbackFa": "عالی!"
+                }
+              ]
+            },
+            {
+              "id": "int-1-play-3",
+              "triggerAtPercentOrSec": 15,
+              "actionType": "walk_away",
+              "promptFa": "آیا می خواهید بروید؟",
+              "promptEn": "Do you want to leave?",
+              "walkAwayLabelEn": "Leave the class",
+              "walkAwayDestination": "hallway"
+            }
+          ]
+        },
+        {
+          "id": "slide-1-listen",
+          "order": 3,
+          "format": "listen",
+          "title": "Childhood Dialogue",
+          "chapterBadge": "Chapter 1",
+          "audioScript": [
+            {
+              "speaker": "Amin",
+              "textEn": "Sara, give me the pencil.",
+              "textFa": "سارا، مداد رو بده.",
+              "durationSec": 2
+            },
+            {
+              "speaker": "Sara",
+              "textEn": "No, I need it.",
+              "textFa": "نه، لازمش دارم.",
+              "durationSec": 2
+            }
+          ],
+          "deepDives": [],
+          "interrupts": [
+            {
+              "id": "int-1-listen",
+              "triggerAtPercentOrSec": 2,
+              "actionType": "select",
+              "promptFa": "امین چه چیزی را می خواهد؟",
+              "promptEn": "What does Amin want?",
+              "options": [
+                {
+                  "id": "opt-1",
+                  "textEn": "Pencil",
+                  "textFa": "مداد",
+                  "isCorrect": true,
+                  "feedbackFa": "درست است."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "slide-1-watch",
+          "order": 4,
+          "format": "watch",
+          "title": "Recess",
+          "chapterBadge": "Chapter 1",
+          "videoDurationSec": 30,
+          "deepDives": [],
+          "interrupts": []
+        }
+      ]
+    },
+    {
+      "id": "lesson-2",
+      "courseId": "amin-sara-journey",
+      "order": 2,
+      "chapterNumber": 2,
+      "chapterTitleFa": "جوانی – عشق، خواستگاری و رضایت دایی‌جان",
+      "title": "Youth Love & Uncle's Approval",
+      "subtitleFa": "امین از دایی سختگیر سارا اجازه می خواهد.",
+      "level": "B1",
+      "coverEmoji": "💍",
+      "coverGradient": "from-yellow-400 to-orange-500",
+      "formatTags": ["read", "play", "listen"],
+      "estimatedMinutes": 20,
+      "summaryStash": {
+        "lessonId": "lesson-2",
+        "courseId": "amin-sara-journey",
+        "lessonTitle": "Youth Love & Uncle's Approval",
+        "keyPhrases": [
+          {
+            "en": "May I have a word?",
+            "fa": "میشه یه صحبتی داشته باشیم؟",
+            "grammarNoteFa": "کاربرد May برای درخواست محترمانه"
+          }
+        ],
+        "takeawayFa": "یادگیری جملات محترمانه و مودبانه"
+      },
+      "slides": [
+        {
+          "id": "slide-2-read",
+          "order": 1,
+          "format": "read",
+          "title": "The Big Day",
+          "chapterBadge": "Chapter 2",
+          "notionHeader": {
+            "coverGradient": "from-yellow-400 to-orange-500",
+            "iconEmoji": "🏠",
+            "quoteBarText": "Nervous moments...",
+            "metadata": {
+              "language": "English",
+              "level": "B1",
+              "chapter": "2",
+              "characters": "Amin, Sara, Uncle"
+            }
+          },
+          "kineticParagraphs": [
+            {
+              "id": "kp-2",
+              "textEn": "Amin is very nervous to speak with Uncle.",
+              "highlightWords": [
+                {
+                  "word": "nervous",
+                  "color": "magenta",
+                  "hasSparkle": false
+                }
+              ],
+              "translationFa": "امین خیلی عصبی است تا با دایی صحبت کند."
+            }
+          ],
+          "deepDives": [],
+          "interrupts": []
+        },
+        {
+          "id": "slide-2-play",
+          "order": 2,
+          "format": "play",
+          "title": "Serving Tea",
+          "chapterBadge": "Chapter 2",
+          "playScene": {
+            "backgroundTheme": "uncle_living_room",
+            "characters": [
+              {
+                "name": "Uncle",
+                "mood": "serious",
+                "dialogueEn": "What do you want, boy?",
+                "dialogueFa": "چی میخوای پسر؟"
+              }
+            ],
+            "objects": [
+              {
+                "id": "obj-tea",
+                "label": "Tea",
+                "emoji": "☕",
+                "xPercent": 30,
+                "yPercent": 60,
+                "isDraggable": true
+              },
+              {
+                "id": "obj-uncle",
+                "label": "Uncle",
+                "emoji": "🧔",
+                "xPercent": 70,
+                "yPercent": 60,
+                "isDropTarget": true
+              }
+            ]
+          },
+          "deepDives": [
+            {
+              "id": "dd-polite",
+              "triggerText": "May I",
+              "title": "Polite Requests",
+              "category": "grammar",
+              "explanationFa": "درخواست های مودبانه با May و Could",
+              "examples": [
+                {
+                  "en": "May I offer you some tea?",
+                  "fa": "میشه بهتون چای تعارف کنم؟"
+                }
+              ]
+            }
+          ],
+          "interrupts": [
+            {
+              "id": "int-2-play-1",
+              "triggerAtPercentOrSec": 5,
+              "actionType": "drag_and_drop",
+              "promptFa": "چای را به دایی بدهید.",
+              "promptEn": "Give the tea to the uncle.",
+              "sourceObjectId": "obj-tea",
+              "targetObjectId": "obj-uncle"
+            },
+            {
+              "id": "int-2-play-2",
+              "triggerAtPercentOrSec": 10,
+              "actionType": "select",
+              "promptFa": "چگونه محترمانه صحبت کنیم؟",
+              "promptEn": "How to speak politely?",
+              "options": [
+                {
+                  "id": "opt-polite",
+                  "textEn": "May I have your blessing?",
+                  "textFa": "می توانم اجازه شما را داشته باشم؟",
+                  "isCorrect": true,
+                  "feedbackFa": "بسیار مودبانه."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "slide-2-listen",
+          "order": 3,
+          "format": "listen",
+          "title": "The Conversation",
+          "chapterBadge": "Chapter 2",
+          "audioScript": [
+            {
+              "speaker": "Uncle",
+              "textEn": "Are you ready for this?",
+              "textFa": "برای این آماده ای؟",
+              "durationSec": 2
+            }
+          ],
+          "deepDives": [],
+          "interrupts": []
+        }
+      ]
+    },
+    {
+      "id": "lesson-3",
+      "courseId": "amin-sara-journey",
+      "order": 3,
+      "chapterNumber": 3,
+      "chapterTitleFa": "بزرگسالی – مهاجرت و بقا در لندن",
+      "title": "Adulthood Migration & Survival",
+      "subtitleFa": "اجاره آپارتمان در لندن و مصاحبه کاری.",
+      "level": "B2",
+      "coverEmoji": "🏙️",
+      "coverGradient": "from-gray-500 to-slate-700",
+      "formatTags": ["read", "play", "watch"],
+      "estimatedMinutes": 25,
+      "summaryStash": {
+        "lessonId": "lesson-3",
+        "courseId": "amin-sara-journey",
+        "lessonTitle": "Adulthood Migration & Survival",
+        "keyPhrases": [
+          {
+            "en": "I would like to sign the lease.",
+            "fa": "من می خواهم قرارداد اجاره را امضا کنم.",
+            "grammarNoteFa": "استفاده از would like برای درخواست رسمی"
+          }
+        ],
+        "takeawayFa": "عبارات تجاری و رسمی برای زندگی در خارج"
+      },
+      "slides": [
+        {
+          "id": "slide-3-read",
+          "order": 1,
+          "format": "read",
+          "title": "Welcome to London",
+          "chapterBadge": "Chapter 3",
+          "notionHeader": {
+            "coverGradient": "from-gray-500 to-slate-700",
+            "iconEmoji": "🇬🇧",
+            "quoteBarText": "A new beginning...",
+            "metadata": {
+              "language": "English",
+              "level": "B2",
+              "chapter": "3",
+              "characters": "Amin, Sara, Landlord"
+            }
+          },
+          "kineticParagraphs": [
+            {
+              "id": "kp-3",
+              "textEn": "The weather in London is gloomy, but they are hopeful.",
+              "highlightWords": [
+                {
+                  "word": "gloomy",
+                  "color": "cyan",
+                  "hasSparkle": false
+                }
+              ],
+              "translationFa": "آب و هوای لندن دلگیر است اما آنها امیدوارند."
+            }
+          ],
+          "deepDives": [],
+          "interrupts": []
+        },
+        {
+          "id": "slide-3-play",
+          "order": 2,
+          "format": "play",
+          "title": "Signing the Lease",
+          "chapterBadge": "Chapter 3",
+          "playScene": {
+            "backgroundTheme": "london_apartment",
+            "characters": [
+              {
+                "name": "Landlord",
+                "mood": "neutral",
+                "dialogueEn": "Please sign here.",
+                "dialogueFa": "لطفاً اینجا امضا کنید."
+              }
+            ],
+            "objects": [
+              {
+                "id": "obj-pen",
+                "label": "Pen",
+                "emoji": "🖊️",
+                "xPercent": 40,
+                "yPercent": 60,
+                "isDraggable": true
+              },
+              {
+                "id": "obj-contract",
+                "label": "Contract",
+                "emoji": "📄",
+                "xPercent": 60,
+                "yPercent": 60,
+                "isDropTarget": true
+              }
+            ]
+          },
+          "deepDives": [],
+          "interrupts": [
+            {
+              "id": "int-3-play-1",
+              "triggerAtPercentOrSec": 5,
+              "actionType": "drag_and_drop",
+              "promptFa": "خودکار را روی قرارداد بکشید تا امضا کنید.",
+              "promptEn": "Drag the pen onto the contract to sign.",
+              "sourceObjectId": "obj-pen",
+              "targetObjectId": "obj-contract"
+            },
+            {
+              "id": "int-3-play-2",
+              "triggerAtPercentOrSec": 10,
+              "actionType": "select",
+              "promptFa": "چگونه به صاحبخانه پاسخ دهیم؟",
+              "promptEn": "How to answer the landlord?",
+              "options": [
+                {
+                  "id": "opt-sign",
+                  "textEn": "Of course.",
+                  "textFa": "البته.",
+                  "isCorrect": true,
+                  "feedbackFa": "عالی."
+                }
+              ]
+            },
+            {
+              "id": "int-3-play-3",
+              "triggerAtPercentOrSec": 15,
+              "actionType": "walk_away",
+              "promptFa": "آیا می خواهید آپارتمان را بررسی کنید؟",
+              "promptEn": "Do you want to inspect the apartment?",
+              "walkAwayLabelEn": "Explore rooms",
+              "walkAwayDestination": "bedroom"
+            }
+          ]
+        },
+        {
+          "id": "slide-3-watch",
+          "order": 3,
+          "format": "watch",
+          "title": "First Night in London",
+          "chapterBadge": "Chapter 3",
+          "videoDurationSec": 45,
+          "deepDives": [],
+          "interrupts": []
+        }
+      ]
+    }
+  ]
+}

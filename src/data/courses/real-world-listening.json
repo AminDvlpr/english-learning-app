@@ -1,0 +1,173 @@
+{
+  "id": "real-world-listening",
+  "slug": "real-world-listening",
+  "titleFa": "شنیدار در دنیای واقعی",
+  "titleEn": "Real World Listening",
+  "descriptionFa": "دوره ای برای تقویت مهارت شنیداری با ویدیوها و پادکست های واقعی.",
+  "levelRange": "B1-C1",
+  "coverEmoji": "🎧",
+  "coverGradient": "from-teal-400 to-emerald-500",
+  "isDefaultEnrolled": false,
+  "lessons": [
+    {
+      "id": "lesson-listen-1",
+      "courseId": "real-world-listening",
+      "order": 1,
+      "chapterNumber": 1,
+      "chapterTitleFa": "پادکست های روزمره",
+      "title": "Everyday Podcasts",
+      "subtitleFa": "تمرین با مکالمات سریع و طبیعی.",
+      "level": "B1",
+      "coverEmoji": "🎙️",
+      "coverGradient": "from-purple-400 to-indigo-500",
+      "formatTags": ["listen", "play"],
+      "estimatedMinutes": 10,
+      "summaryStash": {
+        "lessonId": "lesson-listen-1",
+        "courseId": "real-world-listening",
+        "lessonTitle": "Everyday Podcasts",
+        "keyPhrases": [
+          {
+            "en": "Catch you later.",
+            "fa": "بعدا می بینمت.",
+            "grammarNoteFa": "اصطلاح عامیانه برای خداحافظی"
+          }
+        ],
+        "takeawayFa": "درک اصطلاحات روزمره در سرعت بالا"
+      },
+      "slides": [
+        {
+          "id": "slide-rwl-1-listen",
+          "order": 1,
+          "format": "listen",
+          "title": "Morning Coffee Chat",
+          "chapterBadge": "Podcast 1",
+          "audioScript": [
+            {
+              "speaker": "Host",
+              "textEn": "Welcome back to morning brew.",
+              "textFa": "به دم کرده صبحگاهی خوش آمدید.",
+              "durationSec": 3
+            }
+          ],
+          "deepDives": [],
+          "interrupts": [
+            {
+              "id": "int-rwl-1",
+              "triggerAtPercentOrSec": 2,
+              "actionType": "select",
+              "promptFa": "نام پادکست چیست؟",
+              "promptEn": "What is the podcast name?",
+              "options": [
+                {
+                  "id": "opt-brew",
+                  "textEn": "Morning brew",
+                  "textFa": "دم کرده صبحگاهی",
+                  "isCorrect": true,
+                  "feedbackFa": "کاملاً درست."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "slide-rwl-1-play",
+          "order": 2,
+          "format": "play",
+          "title": "Order a Coffee",
+          "chapterBadge": "Practice",
+          "playScene": {
+            "backgroundTheme": "cafe_counter",
+            "characters": [],
+            "objects": [
+              {
+                "id": "obj-coin",
+                "label": "Coin",
+                "emoji": "🪙",
+                "xPercent": 50,
+                "yPercent": 80,
+                "isDraggable": true
+              },
+              {
+                "id": "obj-register",
+                "label": "Register",
+                "emoji": "🧮",
+                "xPercent": 50,
+                "yPercent": 40,
+                "isDropTarget": true
+              }
+            ]
+          },
+          "deepDives": [],
+          "interrupts": [
+            {
+              "id": "int-rwl-play-1",
+              "triggerAtPercentOrSec": 3,
+              "actionType": "drag_and_drop",
+              "promptFa": "سکه را در صندوق بیندازید.",
+              "promptEn": "Drop the coin in the register.",
+              "sourceObjectId": "obj-coin",
+              "targetObjectId": "obj-register"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lesson-listen-2",
+      "courseId": "real-world-listening",
+      "order": 2,
+      "chapterNumber": 1,
+      "chapterTitleFa": "پادکست های روزمره",
+      "title": "Street Interviews",
+      "subtitleFa": "گوش دادن به لهجه های مختلف در خیابان.",
+      "level": "B2",
+      "coverEmoji": "🎤",
+      "coverGradient": "from-red-400 to-pink-500",
+      "formatTags": ["watch"],
+      "estimatedMinutes": 15,
+      "summaryStash": {
+        "lessonId": "lesson-listen-2",
+        "courseId": "real-world-listening",
+        "lessonTitle": "Street Interviews",
+        "keyPhrases": [
+          {
+            "en": "To be honest...",
+            "fa": "صادقانه بگویم...",
+            "grammarNoteFa": "شروع جمله برای بیان نظر واقعی"
+          }
+        ],
+        "takeawayFa": "درک لهجه های بریتیش و آمریکایی"
+      },
+      "slides": [
+        {
+          "id": "slide-rwl-2-watch",
+          "order": 1,
+          "format": "watch",
+          "title": "London Streets",
+          "chapterBadge": "Video 1",
+          "videoDurationSec": 120,
+          "deepDives": [],
+          "interrupts": [
+            {
+              "id": "int-rwl-2",
+              "triggerAtPercentOrSec": 60,
+              "actionType": "select",
+              "promptFa": "نظر مصاحبه شونده چه بود؟",
+              "promptEn": "What was the interviewee's opinion?",
+              "options": [
+                {
+                  "id": "opt-honest",
+                  "textEn": "They were honest.",
+                  "textFa": "آنها صادق بودند.",
+                  "isCorrect": true,
+                  "feedbackFa": "صحیح است."
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
