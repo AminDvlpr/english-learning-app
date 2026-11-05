@@ -42,9 +42,13 @@ export function TieredLeaguesBoard() {
   const { xp } = useGamificationStore()
   const [mounted, setMounted] = useState(false)
   const [timeRemaining, setTimeRemaining] = useState("")
+  const [userName, setUserName] = React.useState("شما")
 
   useEffect(() => {
     setMounted(true)
+
+    const savedName = localStorage.getItem('english-app-user-name')
+    if (savedName) setUserName(savedName)
 
     // Calculate mock time remaining for weekly sprint (e.g., reset on Sunday night)
     const calculateTimeRemaining = () => {
@@ -80,35 +84,42 @@ export function TieredLeaguesBoard() {
     Diamond: 'text-cyan-400 bg-cyan-400/10 border-cyan-400/20'
   }
 
+  const tierNames = {
+    Bronze: 'لیگ برنز',
+    Silver: 'لیگ نقره‌ای',
+    Gold: 'لیگ طلایی',
+    Diamond: 'لیگ الماس'
+  }
+
   const allEntries: LeaderboardEntry[] = [
     ...generateMockPeers(xp),
-    { id: 'me', name: 'You', xp: xp, isCurrentUser: true, trend: 'up' as const }
+    { id: 'me', name: userName, xp: xp, isCurrentUser: true, trend: 'up' as const }
   ].sort((a, b) => b.xp - a.xp)
 
   const userRank = allEntries.findIndex(e => e.id === 'me') + 1
   const isInPromotionZone = userRank <= 3
 
   return (
-    <Card className="h-full border-border/50 bg-card/50 backdrop-blur-sm shadow-sm flex flex-col">
+    <Card className="h-full border-border/50 bg-card/50 backdrop-blur-sm shadow-sm flex flex-col" dir="rtl">
       <CardHeader className="pb-4">
         <div className="flex justify-between items-start">
            <div>
              <CardTitle className="text-lg flex items-center gap-2">
-               <Trophy className="w-5 h-5 text-warning" /> League Standings
+               <Trophy className="w-5 h-5 text-warning" /> رنکینگ
              </CardTitle>
-             <CardDescription>Top 3 advance to the next tier</CardDescription>
+             <CardDescription>۳ نفر اول به لیگ بعدی صعود می‌کنند</CardDescription>
            </div>
            <div className={cn("px-3 py-1.5 rounded-md border text-sm font-bold shadow-sm", tierColors[currentTier])}>
-              {currentTier} League
+              {tierNames[currentTier]}
            </div>
         </div>
       </CardHeader>
       <CardContent className="flex-1 overflow-hidden flex flex-col p-0 px-6 pb-6">
 
         <div className="flex justify-between text-xs font-semibold text-muted-foreground pb-2 mb-2 border-b border-border/50">
-           <span>Rank</span>
-           <span className="text-right flex items-center gap-1">
-             <Clock className="w-3 h-3" /> Ends in {timeRemaining}
+           <span>رتبه</span>
+           <span className="text-left flex items-center gap-1" dir="ltr">
+             <Clock className="w-3 h-3" /> {timeRemaining.replace('d', ' روز').replace('h', ' ساعت')}
            </span>
         </div>
 
@@ -147,7 +158,7 @@ export function TieredLeaguesBoard() {
 
                     <div className="flex items-center gap-3">
                        <span className={cn("text-sm font-bold", entry.isCurrentUser ? "text-primary" : "text-foreground")}>
-                          {entry.xp} XP
+                          {entry.xp} امتیاز
                        </span>
                        <div className="w-4 flex justify-center">
                           {entry.trend === 'up' && <ArrowUp className="w-3 h-3 text-success" />}
@@ -164,11 +175,11 @@ export function TieredLeaguesBoard() {
         <div className="pt-4 mt-2 border-t border-border/50 text-center">
             {isInPromotionZone ? (
                <span className="text-sm font-semibold text-success flex items-center justify-center gap-2">
-                  <ArrowUp className="w-4 h-4" /> Promotion Zone! Keep it up!
+                  <ArrowUp className="w-4 h-4" /> شما در منطقه صعود هستید!
                </span>
             ) : (
                <span className="text-sm font-medium text-muted-foreground">
-                  You need {allEntries[2].xp - xp + 1} more XP to reach promotion.
+                  برای صعود به {allEntries[2].xp - xp + 1} امتیاز دیگر نیاز دارید.
                </span>
             )}
         </div>
