@@ -3,10 +3,8 @@
 import React, { useMemo, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { FeedLesson } from "@/data/lesson-feed"
-import { useLearnerStore } from "@/store/useLearnerStore"
 import { useCourseStore } from "@/store/useCourseStore"
-import { Lock, Unlock, PlaySquare, Compass, Play, Headphones, Tv, BookOpen } from "lucide-react"
-import { Badge } from "@/components/ui/badge"
+import { Play } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { CourseDocument } from "@/types/course"
 
@@ -16,14 +14,14 @@ interface ExplorerGridViewProps {
   onExploreLesson: (lessonId: string) => void
 }
 
-type TabType = 'For You' | 'Explore' | 'Play' | 'Listen' | 'Watch'
+type TabType = 'همه' | 'داستانی' | 'ویدیویی' | 'صوتی' | 'دوره‌های من'
 
-const TABS: { id: TabType; icon: React.ReactNode; label: string }[] = [
-  { id: 'For You', icon: <Compass className="w-4 h-4" />, label: 'For You' },
-  { id: 'Explore', icon: <BookOpen className="w-4 h-4" />, label: 'Explore' },
-  { id: 'Play', icon: <Play className="w-4 h-4" />, label: 'Play' },
-  { id: 'Listen', icon: <Headphones className="w-4 h-4" />, label: 'Listen' },
-  { id: 'Watch', icon: <Tv className="w-4 h-4" />, label: 'Watch' },
+const TABS: { id: TabType; label: string }[] = [
+  { id: 'همه', label: 'همه' },
+  { id: 'داستانی', label: 'داستانی' },
+  { id: 'ویدیویی', label: 'ویدیویی' },
+  { id: 'صوتی', label: 'صوتی' },
+  { id: 'دوره‌های من', label: 'دوره‌های من' },
 ]
 
 const getGradientProps = (gradient?: string) => {
@@ -34,11 +32,10 @@ const getGradientProps = (gradient?: string) => {
   return { className: gradient };
 };
 
-export function ExplorerGridView({ lessonFeed, courses = [], onExploreLesson }: ExplorerGridViewProps) {
-  const blockStates = useLearnerStore(state => state.blockStates)
+export function ExplorerGridView({ courses = [], onExploreLesson }: ExplorerGridViewProps) {
   const { enrolledCourseIds, enrollInCourse } = useCourseStore()
 
-  const [activeTab, setActiveTab] = useState<TabType>('For You')
+  const [activeTab, setActiveTab] = useState<TabType>('همه')
   const [selectedCourseGate, setSelectedCourseGate] = useState<CourseDocument | null>(null)
 
   // Memoize all lessons across all courses for the filtered tabs
@@ -51,27 +48,6 @@ export function ExplorerGridView({ lessonFeed, courses = [], onExploreLesson }: 
       }))
     )
   }, [courses])
-
-  const masteredMap = useMemo(() => {
-    const map: Record<string, boolean> = {}
-    lessonFeed.forEach(lesson => {
-      if (lesson.blocks.length === 0) {
-        map[lesson.id] = false;
-        return;
-      }
-      map[lesson.id] = lesson.blocks.every(b => blockStates[b.blockId]?.state === "completed");
-    })
-    return map;
-  }, [lessonFeed, blockStates])
-
-  const activeLessonId = useMemo(() => {
-    for (const lesson of lessonFeed) {
-      if (!masteredMap[lesson.id]) {
-        return lesson.id;
-      }
-    }
-    return lessonFeed[lessonFeed.length - 1]?.id || '';
-  }, [lessonFeed, masteredMap])
 
   const handleLessonTap = (lessonId: string, courseId?: string, isUnlocked = true) => {
     if (courseId && !enrolledCourseIds.includes(courseId)) {
@@ -98,8 +74,8 @@ export function ExplorerGridView({ lessonFeed, courses = [], onExploreLesson }: 
   return (
     <div className="flex-1 w-full bg-background flex flex-col overflow-hidden relative">
 
-      {/* 5-Tab Bar (Sticky) */}
-      <div className="w-full bg-background/95 backdrop-blur-sm z-20 border-b border-border/50 sticky top-0 px-2 py-3 flex gap-1 overflow-x-auto no-scrollbar">
+      {/* 5-Tab Bar (Sticky Glassmorphism) */}
+      <div className="sticky top-3 z-30 mx-3 my-2 px-2 py-1.5 rounded-2xl bg-white/70 dark:bg-neutral-900/70 backdrop-blur-xl border border-white/30 dark:border-white/10 shadow-sm flex items-center gap-1.5 overflow-x-auto no-scrollbar" dir="rtl">
         {TABS.map(tab => (
           <button
             key={tab.id}
@@ -110,153 +86,49 @@ export function ExplorerGridView({ lessonFeed, courses = [], onExploreLesson }: 
                 : 'bg-muted/50 text-muted-foreground hover:bg-muted'
             }`}
           >
-            {tab.icon}
             {tab.label}
           </button>
         ))}
       </div>
 
-      <div className="w-full flex-1 overflow-y-auto p-3 flex flex-col gap-4 pb-24">
+      <div className="flex-1 min-h-0 overflow-y-auto px-2 pb-24 custom-scrollbar">
+        <div className="grid grid-cols-2 auto-rows-[145px] gap-2 mt-2" dir="rtl">
+          {allCourseLessons
+            .filter(lesson => {
+               if (activeTab === 'همه') return true;
+               if (activeTab === 'دوره‌های من') return enrolledCourseIds.includes(lesson.courseId);
+               if (activeTab === 'داستانی') return lesson.formatTags.includes('read') || lesson.formatTags.includes('play');
+               if (activeTab === 'ویدیویی') return lesson.formatTags.includes('watch');
+               if (activeTab === 'صوتی') return lesson.formatTags.includes('listen');
+               return true;
+            })
+            .map((lesson) => {
+            const isEnrolled = enrolledCourseIds.includes(lesson.courseId)
+            const spanClass = isEnrolled ? 'col-span-2 row-span-2' : 'col-span-1 row-span-1'
+            const cleanTitle = lesson.title.replace(/\s*\([^)]*\)/g, '').trim();
 
-        {/* TAB CONTENT: For You */}
-        {activeTab === 'For You' && (
-          <div className="flex flex-col gap-2">
-            <div>
-                <h1 className="text-2xl font-bold tracking-tight">Your Path</h1>
-                <p className="text-muted-foreground text-sm mt-1">Continue where you left off.</p>
-            </div>
-            <div className="grid grid-cols-2 gap-2.5 mt-2">
-              {lessonFeed.map((lesson, index) => {
-                const isMastered = masteredMap[lesson.id];
-                const isUnlocked = index === 0 || masteredMap[lessonFeed[index - 1].id];
-
-                return (
-                  <motion.div
-                    key={lesson.id}
-                    whileHover={isUnlocked ? { scale: 1.02 } : {}}
-                    whileTap={isUnlocked ? { scale: 0.98 } : {}}
-                    onClick={() => handleLessonTap(lesson.id, undefined, isUnlocked)}
-                    className={`relative rounded-xl overflow-hidden aspect-[4/5] border bg-gradient-to-br from-indigo-600 via-purple-600 to-slate-900 ${isUnlocked ? 'cursor-pointer border-border hover:border-primary/50' : 'cursor-not-allowed border-border/50 opacity-80'}`}
-                  >
-                    <div className="absolute inset-0 bg-cover bg-center mix-blend-overlay" style={{ backgroundImage: `url(${lesson.coverArtwork})` }} />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                    <div className="absolute inset-0 p-4 flex flex-col justify-between">
-                      <div className="flex justify-between items-start">
-                        <div className="flex flex-wrap gap-2">
-                          {lesson.tags.map(tag => (
-                            <Badge key={tag} variant="secondary" className="bg-background/80 backdrop-blur text-foreground border-none text-[10px] px-1.5 py-0">
-                              {tag}
-                            </Badge>
-                          ))}
-                        </div>
-                        {isMastered ? (
-                            <div className="bg-primary/90 text-primary-foreground p-1.5 rounded-full backdrop-blur">
-                                <Unlock className="w-3.5 h-3.5" />
-                            </div>
-                        ) : !isUnlocked ? (
-                            <div className="bg-black/50 text-white p-1.5 rounded-full backdrop-blur">
-                                <Lock className="w-3.5 h-3.5" />
-                            </div>
-                        ) : null}
-                      </div>
-                      <div>
-                        <h3 className="text-sm font-bold text-white mb-1 leading-tight">{lesson.title}</h3>
-                        <p className="text-white/80 text-[10px] font-medium">{lesson.blocks.length} blocks</p>
-                      </div>
-                    </div>
-                  </motion.div>
-                )
-              })}
-            </div>
-          </div>
-        )}
-
-        {/* TAB CONTENT: Explore */}
-        {activeTab === 'Explore' && (
-          <div className="flex flex-col gap-4">
-            <div>
-              <h1 className="text-2xl font-bold tracking-tight">Instagram Explore</h1>
-              <p className="text-muted-foreground text-sm mt-1">Explore all episodes and courses.</p>
-            </div>
-            <div className="grid grid-cols-3 gap-1 mt-2">
-              {allCourseLessons.map((lesson, idx) => {
-                const isFeatured = lesson.course.titleFa === 'سفر در زبان: داستان امین و سارا' && idx === 0
-                return (
-                  <motion.div
-                    key={lesson.id}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    onClick={() => handleLessonTap(lesson.id, lesson.courseId, true)}
-                    className={`relative overflow-hidden cursor-pointer flex flex-col bg-card ${isFeatured ? 'col-span-2 row-span-2 aspect-square' : 'col-span-1 row-span-1 aspect-square'}`}
-                  >
-                    <div {...getGradientProps(lesson.coverGradient)} className={`flex-1 flex items-center justify-center text-4xl ${getGradientProps(lesson.coverGradient).className}`}>
-                      {lesson.coverEmoji}
-                    </div>
-                    {isFeatured && (
-                      <div className="absolute top-2 right-2 flex items-center gap-1 bg-black/50 text-white px-2 py-1 rounded-full text-xs font-bold backdrop-blur">
-                        <Play className="w-3 h-3 fill-white" /> 4,999
-                      </div>
-                    )}
-                    <div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/80 to-transparent flex flex-col gap-1">
-                      <h3 className="text-xs font-bold text-white leading-tight line-clamp-2" dir="rtl">{lesson.title}</h3>
-                    </div>
-                  </motion.div>
-                )
-              })}
-            </div>
-          </div>
-        )}
-
-        {/* TAB CONTENT: Formats (Play, Listen, Watch) */}
-        {['Play', 'Listen', 'Watch'].includes(activeTab) && (
-          <div className="flex flex-col gap-2">
-            <div>
-                <h1 className="text-2xl font-bold tracking-tight">{activeTab} Mode</h1>
-                <p className="text-muted-foreground text-sm mt-1">Filter by {activeTab.toLowerCase()} formats.</p>
-            </div>
-            <div className="grid grid-cols-2 gap-2.5 mt-2">
-              {allCourseLessons
-                .filter(l => l.formatTags.includes(activeTab.toLowerCase() as "read" | "watch" | "listen" | "play"))
-                .map((lesson) => {
-                  const isEnrolled = enrolledCourseIds.includes(lesson.courseId)
-
-                  return (
-                    <motion.div
-                      key={lesson.id}
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      onClick={() => handleLessonTap(lesson.id, lesson.courseId, true)}
-                      className="relative rounded-xl overflow-hidden aspect-square border border-border cursor-pointer flex flex-col"
-                    >
-                      <div {...getGradientProps(lesson.coverGradient)} className={`flex-1 flex items-center justify-center text-4xl ${getGradientProps(lesson.coverGradient).className}`}>
-                         {lesson.coverEmoji}
-                      </div>
-                      <div className="p-3 bg-card border-t border-border flex flex-col gap-1">
-                        <h3 className="text-xs font-bold leading-tight line-clamp-2">{lesson.title}</h3>
-                        {!isEnrolled && (
-                           <div className="flex items-center gap-1 text-[10px] text-muted-foreground mt-1">
-                              <Lock className="w-3 h-3" /> Requires Enrollment
-                           </div>
-                        )}
-                      </div>
-                    </motion.div>
-                  )
-              })}
-            </div>
-          </div>
-        )}
-
-      </div>
-
-      {/* Sticky Bottom CTA for "For You" only */}
-      {activeTab === 'For You' && (
-        <div className="absolute bottom-4 left-0 right-0 px-4 z-10 flex justify-center">
-          <Button size="lg" onClick={() => onExploreLesson(activeLessonId)} className="w-full max-w-sm gap-2 shadow-xl rounded-full h-14 text-base font-semibold">
-              <PlaySquare className="w-5 h-5" />
-              Continue Learning
-          </Button>
+            return (
+              <motion.div
+                key={lesson.id}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => handleLessonTap(lesson.id, lesson.courseId, true)}
+                className={`relative rounded-xl overflow-hidden border border-border cursor-pointer flex flex-col bg-card ${spanClass}`}
+              >
+                <div {...getGradientProps(lesson.coverGradient)} className={`flex-1 flex items-center justify-center ${isEnrolled ? 'text-6xl' : 'text-4xl'} ${getGradientProps(lesson.coverGradient).className}`}>
+                  {lesson.coverEmoji}
+                </div>
+                <div className="absolute top-2 right-2 flex items-center gap-1 bg-black/50 text-white px-2 py-1 rounded-full text-xs font-bold backdrop-blur">
+                  {isEnrolled ? "در حال یادگیری ✨" : "ثبت‌نام رایگان"}
+                </div>
+                <div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/80 to-transparent flex flex-col gap-1">
+                  <h3 className={`${isEnrolled ? 'text-sm' : 'text-xs'} font-bold text-white leading-tight line-clamp-2 text-right`} dir="rtl">{cleanTitle}</h3>
+                </div>
+              </motion.div>
+            )
+          })}
         </div>
-      )}
+      </div>
 
       {/* Unified Course Enrollment Gate (Bottom Sheet) */}
       <AnimatePresence>

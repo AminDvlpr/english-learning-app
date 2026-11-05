@@ -4,6 +4,7 @@ import * as React from "react"
 import { cn } from "@/lib/utils"
 import { usePathname, useRouter } from "next/navigation"
 import { Smile, Trophy, Compass, Swords, User } from "lucide-react"
+import { useCourseStore } from "@/store/useCourseStore"
 
 interface AppShellProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode
@@ -48,16 +49,36 @@ export function AppShell({ children, topBar, className, ...props }: AppShellProp
     { id: "دایی‌جان", icon: Smile, label: "دایی‌جان" }
   ]
 
+  const setActiveBottomTab = useCourseStore(state => state.setActiveBottomTab)
+
   const handleTabChange = (tabId: string) => {
     setActiveTab(tabId)
     localStorage.setItem('english-app-active-tab', tabId)
-    window.dispatchEvent(new Event('tab-changed'))
+    if (setActiveBottomTab) {
+      // the store type might be limited to english tab names, mapping or type assertion needed
+      setActiveBottomTab(tabId as "uncle" | "challenge" | "explore" | "ranking" | "profile")
+    }
+    window.dispatchEvent(new CustomEvent('tab-changed', { detail: tabId }))
     if (tabId === "اکسپلور") {
       router.push("/")
     } else {
       router.push("/dashboard")
     }
   }
+
+  React.useEffect(() => {
+    const handleTabChangeEvt = (e: Event) => {
+      const customEvent = e as CustomEvent
+      if (customEvent.detail) {
+        setActiveTab(customEvent.detail)
+      } else {
+        const savedTab = localStorage.getItem('english-app-active-tab')
+        if (savedTab) setActiveTab(savedTab)
+      }
+    }
+    window.addEventListener('tab-changed', handleTabChangeEvt)
+    return () => window.removeEventListener('tab-changed', handleTabChangeEvt)
+  }, [])
 
   if (!mounted) return null
 
@@ -98,7 +119,7 @@ export function AppShell({ children, topBar, className, ...props }: AppShellProp
                 {topBar}
               </div>
             )}
-            <main className="flex-1 flex flex-col w-full h-full relative overflow-hidden">
+            <main className="flex-1 min-h-0 w-full flex flex-col overflow-hidden relative">
               {children}
             </main>
 
