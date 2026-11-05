@@ -73,9 +73,8 @@ export function CalloutBlock({ block }: CalloutBlockProps) {
       whileInView="visible"
       viewport={{ once: true, margin: "-50px" }}
       className={cn(
-        "flex flex-col gap-4 p-5 rounded-lg border",
+        "w-full h-full flex flex-col justify-center px-6 py-12 gap-4",
         styles.bg,
-        styles.border
       )}
     >
       <div className="flex items-start gap-3">

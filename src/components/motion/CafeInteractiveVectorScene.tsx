@@ -30,10 +30,10 @@ export function CafeInteractiveVectorScene({
   }, [currentTimeSec, isCorrect, triggerName])
 
   return (
-    <div className="relative w-full h-full flex-1 bg-amber-50 dark:bg-amber-950/20 overflow-hidden shadow-inner flex items-center justify-center p-4 object-cover">
+    <div className="relative w-full h-full flex-1 bg-amber-50 dark:bg-amber-950/20 overflow-hidden shadow-inner flex flex-col justify-start pt-10 p-4 object-cover">
       {/* Background Elements */}
-      <div className="absolute inset-0 opacity-50 flex items-center justify-center pointer-events-none">
-        <svg className="w-full h-full" viewBox="0 0 800 450" preserveAspectRatio="xMidYMid slice" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <div className="absolute top-0 inset-x-0 h-[55%] opacity-50 flex items-end justify-center pointer-events-none">
+        <svg className="w-full h-full max-h-[300px]" viewBox="0 0 800 450" preserveAspectRatio="xMidYMax meet" fill="none" xmlns="http://www.w3.org/2000/svg">
           {/* Cafe counter */}
           <rect x="0" y="300" width="800" height="150" fill="currentColor" className="text-amber-200 dark:text-amber-900" />
           {/* Coffee machine */}
@@ -55,7 +55,7 @@ export function CafeInteractiveVectorScene({
       </div>
 
       {/* Characters */}
-      <div className="relative z-10 w-full max-w-2xl flex justify-between items-end h-full pb-8">
+      <div className="relative z-10 w-full max-w-2xl flex justify-between items-end h-[45%] pb-8 mx-auto mt-4">
 
         {/* Barista */}
         <div className="flex flex-col items-center">
@@ -156,7 +156,7 @@ export function CafeInteractiveVectorScene({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.8, y: -20 }}
 
-            className="absolute inset-x-8 top-1/4 bg-emerald-500 text-white p-4 rounded-xl shadow-xl flex items-center justify-center gap-4 z-20"
+            className="absolute inset-x-8 top-20 bg-emerald-500 text-white p-4 rounded-xl shadow-xl flex items-center justify-center gap-4 z-20 mx-auto max-w-sm"
           >
             <div className="text-3xl">✨</div>
             <div className="font-bold text-lg">Perfect Request!</div>

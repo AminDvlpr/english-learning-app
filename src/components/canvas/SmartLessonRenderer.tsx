@@ -4,9 +4,8 @@ import React, { useEffect, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { LessonBlock } from "@/types"
 import { useLearnerStore } from "@/store/useLearnerStore"
-import { MotionBlockWrapper } from "@/components/motion/MotionBlockWrapper"
+import { BlockWrapper } from "@/components/canvas/BlockWrapper"
 import { HeadingIntroBlock, CalloutBlock, ToggleTableBlock, MotionCanvasBlock } from "@/components/canvas/blocks"
-import { InteractiveCheckpointBlock } from "@/components/checkpoints/InteractiveCheckpointBlock"
 import {
   HeadingIntroBlock as HeadingIntroBlockType,
   CalloutBlock as CalloutBlockType,
@@ -33,26 +32,28 @@ export function SmartLessonRenderer({ lesson }: SmartLessonRendererProps) {
 
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0)
   const [videoProgress, setVideoProgress] = useState(0)
-  // Group slides so that checkpoints immediately following a motion_canvas are embedded inside it
-  const storySlides: { main: LessonBlock, checkpoints: InteractiveCheckpointBlockType[] }[] = React.useMemo(() => {
-    const slides: { main: LessonBlock, checkpoints: InteractiveCheckpointBlockType[] }[] = []
-    for (let i = 0; i < lesson.length; i++) {
-      const block = lesson[i]
-      if (block.type === 'interactive_checkpoint' && slides.length > 0 && slides[slides.length - 1].main.type === 'motion_canvas') {
-        slides[slides.length - 1].checkpoints.push(block as InteractiveCheckpointBlockType)
-      } else {
-        slides.push({ main: block, checkpoints: [] })
-      }
-    }
-    return slides
+
+  // Extract all checkpoints and group them into the motion_canvas slide
+  const { storySlides, allVideoCheckpoints } = React.useMemo(() => {
+    const allVideoCheckpoints = lesson
+      .filter(b => b.type === 'interactive_checkpoint')
+      .sort((a, b) => (a.triggerTimestamp ?? 0) - (b.triggerTimestamp ?? 0)) as InteractiveCheckpointBlockType[]
+
+    const storySlides = lesson.filter(b => b.type !== 'interactive_checkpoint')
+
+    return { storySlides, allVideoCheckpoints }
   }, [lesson])
 
-  const currentSlide = storySlides[currentSlideIndex]
-  const currentBlock = currentSlide?.main
+  const currentBlock = storySlides[currentSlideIndex]
   const currentState = currentBlock ? (blockStates[currentBlock.blockId]?.state || 'locked') : 'locked'
 
   // Hold-to-pause logic for reading slides
   const [isReadingPaused, setIsReadingPaused] = useState(false)
+
+  // Unified Hold/Tap logic
+  const pointerDownTimeRef = React.useRef(0)
+  const pointerDownXRef = React.useRef(0)
+  const [isTimelinePulsing, setIsTimelinePulsing] = useState(false)
 
   // Independent 2.0s Reading Timer
   const READING_TIME_MS = 2000
@@ -82,18 +83,6 @@ export function SmartLessonRenderer({ lesson }: SmartLessonRendererProps) {
   }, [currentSlideIndex, currentBlock, currentBlock?.blockId, currentState, completeContentBlock, isReadingPaused])
 
 
-  const goNext = () => {
-    if (currentState === 'completed' && currentSlideIndex < storySlides.length - 1) {
-      setCurrentSlideIndex(prev => prev + 1)
-    }
-  }
-
-  const goPrev = () => {
-    if (currentSlideIndex > 0) {
-      setCurrentSlideIndex(prev => prev - 1)
-    }
-  }
-
   if (!currentBlock) return null
 
   return (
@@ -104,21 +93,20 @@ export function SmartLessonRenderer({ lesson }: SmartLessonRendererProps) {
         {/* Segmented Top Progress Bars */}
         <div className="flex gap-1 p-4 w-full z-10 bg-gradient-to-b from-black/5 to-transparent dark:from-black/20">
           {storySlides.map((slide, idx) => {
-            const b = slide.main
-            const bState = blockStates[b.blockId]?.state || 'locked'
-            const isCompleted = bState === 'completed'
+            const b = slide
             const isCurrent = idx === currentSlideIndex
             const isReadingSlide = ['heading_intro', 'callout', 'toggle_table'].includes(b.type)
 
             let fillPercent = 0
-            if (isCompleted || idx < currentSlideIndex) fillPercent = 100
+            if (idx < currentSlideIndex) fillPercent = 100
+            else if (idx > currentSlideIndex) fillPercent = 0
             else if (isCurrent && isReadingSlide) fillPercent = (readProgress / READING_TIME_MS) * 100
             else if (isCurrent && b.type === 'motion_canvas') fillPercent = videoProgress
 
             return (
               <div key={b.blockId} className="h-1.5 flex-1 bg-stone-200 dark:bg-stone-700 rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-stone-800 dark:bg-stone-200 transition-all duration-75 ease-linear"
+                  className={`h-full bg-stone-800 dark:bg-stone-200 transition-all duration-75 ease-linear ${isCurrent && isTimelinePulsing ? 'h-2.5 bg-amber-400 shadow-[0_0_12px_rgba(251,191,36,0.9)]' : ''}`}
                   style={{ width: `${fillPercent}%` }}
                 />
               </div>
@@ -127,26 +115,46 @@ export function SmartLessonRenderer({ lesson }: SmartLessonRendererProps) {
         </div>
 
         {/* Slide Content */}
-        {/* Left/Right Tap Zones */}
         <div
-          className="absolute inset-y-0 left-0 w-1/4 z-30 cursor-pointer"
-          onClick={goPrev}
-          onPointerDown={() => setIsReadingPaused(true)}
-          onPointerUp={() => setIsReadingPaused(false)}
+          className="flex-1 overflow-hidden relative"
+          onPointerDown={(e) => {
+            const target = e.target as HTMLElement
+            if (target.tagName === 'BUTTON' || target.tagName === 'INPUT' || target.closest('[data-interactive="true"]')) {
+              return
+            }
+            pointerDownTimeRef.current = Date.now()
+            pointerDownXRef.current = e.clientX
+            setIsReadingPaused(true)
+          }}
+          onPointerUp={(e) => {
+            setIsReadingPaused(false)
+            const target = e.target as HTMLElement
+            if (target.tagName === 'BUTTON' || target.tagName === 'INPUT' || target.closest('[data-interactive="true"]')) {
+              return
+            }
+            const holdDuration = Date.now() - pointerDownTimeRef.current
+            if (holdDuration < 220) {
+              const rect = e.currentTarget.getBoundingClientRect()
+              const isLeft = e.clientX - rect.left < rect.width * 0.3
+              if (isLeft) {
+                if (currentSlideIndex > 0) {
+                  setCurrentSlideIndex(prev => prev - 1)
+                  setReadProgress(0)
+                  setVideoProgress(0)
+                }
+              } else {
+                if (currentState === 'completed' && currentSlideIndex < storySlides.length - 1) {
+                  setCurrentSlideIndex(prev => prev + 1)
+                } else if (currentState !== 'completed') {
+                  setIsTimelinePulsing(true)
+                  setTimeout(() => setIsTimelinePulsing(false), 600)
+                }
+              }
+            }
+          }}
           onPointerCancel={() => setIsReadingPaused(false)}
           onPointerLeave={() => setIsReadingPaused(false)}
-        />
-        <div
-          className="absolute inset-y-0 right-0 w-3/4 z-30 cursor-pointer"
-          onClick={goNext}
-          onPointerDown={() => setIsReadingPaused(true)}
-          onPointerUp={() => setIsReadingPaused(false)}
-          onPointerCancel={() => setIsReadingPaused(false)}
-          onPointerLeave={() => setIsReadingPaused(false)}
-        />
-
-        {/* Slide Content */}
-        <div className="flex-1 overflow-hidden relative">
+        >
           <AnimatePresence mode="wait">
             <motion.div
               key={currentBlock.blockId}
@@ -156,7 +164,7 @@ export function SmartLessonRenderer({ lesson }: SmartLessonRendererProps) {
               transition={{ duration: 0.3, ease: "easeOut" }}
               className="h-full w-full"
             >
-              <MotionBlockWrapper block={currentBlock} state={currentState}>
+              <BlockWrapper block={currentBlock} state={currentState}>
                 {currentBlock.type === 'heading_intro' && (
                   <HeadingIntroBlock block={currentBlock as HeadingIntroBlockType} state={currentState} />
                 )}
@@ -170,20 +178,15 @@ export function SmartLessonRenderer({ lesson }: SmartLessonRendererProps) {
                   <MotionCanvasBlock
                     block={currentBlock as MotionCanvasBlockType}
                     state={currentState}
-                    checkpoints={currentSlide.checkpoints}
+                    checkpoints={allVideoCheckpoints}
                     onProgress={setVideoProgress}
                     currentTimeSec={0} // Managed internally now
                     isPlaying={true}
+                    isPausedByHold={isReadingPaused}
                     onPlayPause={() => {}}
                   />
                 )}
-                {currentBlock.type === 'interactive_checkpoint' && (
-                  <InteractiveCheckpointBlock
-                    block={currentBlock as InteractiveCheckpointBlockType}
-                    state={currentState}
-                  />
-                )}
-              </MotionBlockWrapper>
+              </BlockWrapper>
             </motion.div>
           </AnimatePresence>
         </div>

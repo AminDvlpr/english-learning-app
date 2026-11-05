@@ -48,7 +48,7 @@ export function HeadingIntroBlock({ block }: HeadingIntroBlockProps) {
   }
 
   return (
-    <div className="flex flex-col gap-6 p-6 bg-transparent text-card-foreground">
+    <div className="w-full h-full flex flex-col justify-center gap-6 px-6 py-12 bg-transparent text-card-foreground">
       <div className="flex justify-between items-start">
         <div className="flex flex-col gap-3">
           <Badge variant="secondary" className="w-fit bg-slate-100 text-slate-700 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700 border-none rounded-sm font-medium tracking-wide">
