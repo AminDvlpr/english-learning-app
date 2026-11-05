@@ -81,11 +81,11 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[425px]" dir="rtl">
         <DialogHeader>
-          <DialogTitle>Account Sync</DialogTitle>
-          <DialogDescription>
-            Connect your account to save progress across devices.
+          <DialogTitle className="text-right">همگام‌سازی حساب کاربری</DialogTitle>
+          <DialogDescription className="text-right">
+            حساب کاربری خود را متصل کنید تا پیشرفتتان در همه دستگاه‌ها ذخیره شود.
           </DialogDescription>
         </DialogHeader>
 
@@ -98,13 +98,13 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
               <HardDrive className="w-5 h-5 text-muted-foreground" />
             )}
             <span className="text-sm font-medium">
-              {isCloud ? "Cloud Sync Available" : "Local Mode Only (No Credentials)"}
+              {isCloud ? "همگام‌سازی ابری فعال است" : "حالت محلی (بدون نیاز به ورود)"}
             </span>
           </div>
 
           {!isCloud && (
-            <div className="text-sm text-center text-muted-foreground">
-              Supabase environment variables are missing. Playing in local browser storage mode.
+            <div className="text-sm text-center text-muted-foreground leading-relaxed">
+              متغیرهای محیطی Supabase تنظیم نشده‌اند. در حال استفاده از حالت ذخیره‌سازی محلی مرورگر هستید.
             </div>
           )}
 
@@ -112,8 +112,8 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
             <div className="flex flex-col gap-3">
               {!showEmailInput ? (
                 <>
-                  <Button onClick={handleGoogleLogin} disabled={loading} className="w-full" variant="outline">
-                    <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
+                  <Button onClick={handleGoogleLogin} disabled={loading} className="w-full justify-start text-right" variant="outline">
+                    <svg className="ml-2 h-4 w-4 shrink-0" viewBox="0 0 24 24">
                       <path
                         d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
                         fill="#4285F4"
@@ -132,22 +132,22 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
                       />
                       <path d="M1 1h22v22H1z" fill="none" />
                     </svg>
-                    Continue with Google
+                    ورود با حساب گوگل
                   </Button>
-                  <Button onClick={() => setShowEmailInput(true)} disabled={loading} className="w-full" variant="outline">
-                    <Mail className="mr-2 h-4 w-4" /> Continue with Email
+                  <Button onClick={() => setShowEmailInput(true)} disabled={loading} className="w-full justify-start text-right" variant="outline">
+                    <Mail className="ml-2 h-4 w-4 shrink-0" /> ورود با ایمیل
                   </Button>
                 </>
               ) : (
-                <form onSubmit={handleEmailLogin} className="flex flex-col gap-4">
+                <form onSubmit={handleEmailLogin} className="flex flex-col gap-4 text-right">
                   {emailSent ? (
                     <div className="text-sm text-center text-success bg-success/10 p-3 rounded-md">
-                      Check your email for the magic link!
+                      لینک ورود به ایمیل شما ارسال شد!
                     </div>
                   ) : (
                     <>
                       <div className="space-y-2">
-                        <Label htmlFor="email">Email</Label>
+                        <Label htmlFor="email" className="block text-right">ایمیل</Label>
                         <Input
                           id="email"
                           type="email"
@@ -155,15 +155,17 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
                           required
                           value={email}
                           onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+                          dir="ltr"
+                          className="text-left"
                         />
                       </div>
                       <Button type="submit" disabled={loading} className="w-full">
-                        Send Magic Link
+                        ارسال لینک ورود
                       </Button>
                     </>
                   )}
                   <Button type="button" variant="ghost" className="w-full" onClick={() => setShowEmailInput(false)}>
-                    Back to options
+                    بازگشت
                   </Button>
                 </form>
               )}
@@ -173,17 +175,17 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
           {isCloud && user && (
             <div className="flex flex-col gap-4 items-center">
               <div className="text-center">
-                <p className="text-sm font-medium">Signed in as</p>
-                <p className="text-sm text-muted-foreground">{user.email}</p>
+                <p className="text-sm font-medium">وارد شده به عنوان</p>
+                <p className="text-sm text-muted-foreground" dir="ltr">{user.email}</p>
               </div>
               <Button onClick={handleSignOut} disabled={loading} variant="destructive" className="w-full">
-                <LogOut className="mr-2 h-4 w-4" /> Sign Out
+                <LogOut className="ml-2 h-4 w-4 shrink-0" /> خروج از حساب
               </Button>
             </div>
           )}
 
           <Button variant="ghost" onClick={() => onOpenChange(false)}>
-            {isCloud && !user ? "Continue in Guest Mode" : "Close"}
+            {isCloud && !user ? "ادامه به عنوان کاربر مهمان" : "بستن"}
           </Button>
         </div>
       </DialogContent>

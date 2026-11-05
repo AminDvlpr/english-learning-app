@@ -48,43 +48,43 @@ export function SavedStashesReviewHub() {
         >
           {/* Front of Card */}
           <div
-            className="absolute inset-0 backface-hidden bg-card border border-border shadow-sm rounded-2xl p-5 flex flex-col justify-between cursor-pointer"
+            className="absolute inset-0 backface-hidden bg-card border-2 border-border shadow-sm rounded-2xl p-5 flex flex-col justify-between cursor-pointer"
             onClick={() => toggleFlip(stash.lessonId)}
             style={{ backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden' }}
           >
             <div>
               <div className="flex justify-between items-start mb-2">
                 <Badge variant={isDue ? "destructive" : "secondary"}>
-                  {isDue ? 'Due for Review' : `Stage ${stash.srsStage}`}
+                  {isDue ? 'مرور روزانه' : `مرحله ${stash.srsStage}`}
                 </Badge>
                 <BrainCircuit className="w-5 h-5 text-muted-foreground" />
               </div>
               <h3 className="font-bold text-lg leading-tight mt-2">{stash.lessonTitle}</h3>
-              <p className="text-muted-foreground text-sm mt-1" dir="rtl">{stash.takeawayFa}</p>
+              <p className="text-muted-foreground text-sm mt-1">{stash.takeawayFa}</p>
             </div>
             <div className="text-center text-xs font-medium text-muted-foreground flex items-center justify-center gap-1">
-              <RotateCcw className="w-3 h-3" /> Tap to Flip
+              <RotateCcw className="w-3 h-3" /> برای چرخش ضربه بزنید
             </div>
           </div>
 
           {/* Back of Card */}
           <div
-            className="absolute inset-0 backface-hidden bg-primary/5 border border-primary/20 shadow-sm rounded-2xl p-5 flex flex-col justify-between overflow-y-auto"
+            className="absolute inset-0 backface-hidden bg-primary/5 border-2 border-primary/20 shadow-sm rounded-2xl p-5 flex flex-col justify-between overflow-y-auto"
             style={{ backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
           >
             <div className="flex-1 space-y-4">
               {stash.keyPhrases.map((phrase, idx) => (
                 <div key={idx} className="bg-background rounded-lg p-3 shadow-sm border border-border">
                   <div className="flex justify-between items-start gap-2">
-                    <span className="font-medium text-sm text-foreground" dir="ltr">{phrase.en}</span>
                     <button
                       onClick={(e) => { e.stopPropagation(); playTTS(phrase.en); }}
                       className="text-primary hover:text-primary/80 shrink-0 p-1"
                     >
                       <Volume2 className="w-4 h-4" />
                     </button>
+                    <span className="font-medium text-sm text-foreground text-left flex-1" dir="ltr">{phrase.en}</span>
                   </div>
-                  <p className="text-xs text-muted-foreground mt-1" dir="rtl">{phrase.fa}</p>
+                  <p className="text-xs text-muted-foreground mt-1 font-medium">{phrase.fa}</p>
                 </div>
               ))}
             </div>
@@ -93,24 +93,24 @@ export function SavedStashesReviewHub() {
               <div className="flex gap-2 mt-4">
                 <button
                   onClick={(e) => { e.stopPropagation(); handleReview(stash.lessonId, false); }}
-                  className="flex-1 bg-destructive/10 text-destructive text-sm font-bold py-2 rounded-xl"
+                  className="flex-1 bg-destructive/10 text-destructive text-sm font-bold py-2 rounded-xl border border-destructive/20 shadow-sm"
                 >
-                  Need Practice
+                  نیاز به تمرین
                 </button>
                 <button
                   onClick={(e) => { e.stopPropagation(); handleReview(stash.lessonId, true); toggleFlip(stash.lessonId); }}
-                  className="flex-1 bg-primary text-primary-foreground text-sm font-bold py-2 rounded-xl flex items-center justify-center gap-1"
+                  className="flex-1 bg-primary text-primary-foreground text-sm font-bold py-2 rounded-xl flex items-center justify-center gap-1 shadow-sm hover:opacity-90"
                 >
-                  <CheckCircle2 className="w-4 h-4" /> Remembered
+                  <CheckCircle2 className="w-4 h-4" /> یاد گرفتم
                 </button>
               </div>
             )}
             {!isDue && (
               <button
                 onClick={(e) => { e.stopPropagation(); toggleFlip(stash.lessonId); }}
-                className="w-full text-center text-xs font-medium text-muted-foreground mt-4"
+                className="w-full text-center text-xs font-bold text-muted-foreground mt-4 hover:text-foreground"
               >
-                Tap to close
+                بستن فلش‌کارت
               </button>
             )}
           </div>
@@ -119,39 +119,61 @@ export function SavedStashesReviewHub() {
     )
   }
 
-  if (savedStashes.length === 0) {
-    return (
-      <div className="w-full text-center py-10 bg-card rounded-2xl border border-border">
-        <BrainCircuit className="w-12 h-12 mx-auto text-muted-foreground/30 mb-3" />
-        <h3 className="font-medium text-foreground">Review Stash Empty</h3>
-        <p className="text-sm text-muted-foreground mt-1">Complete lessons and save them to your stash to review them here.</p>
-      </div>
-    )
-  }
+  // Default phrases from Amin & Sara's episodes if no stashes are saved
+  const mockStashes = [{
+    courseId: "mock-course",
+    lessonId: "mock-1",
+    lessonTitle: "اپیزود ۱: تولد و دعوا",
+    takeawayEn: "Birthday party vocabulary",
+    takeawayFa: "کلمات مربوط به جشن تولد",
+    srsStage: 1,
+    nextReviewAt: 0,
+    savedAt: 0,
+    keyPhrases: [
+      { en: "Happy birthday to you!", fa: "تولدت مبارک!", grammarNoteFa: "" },
+      { en: "Make a wish and blow out the candles.", fa: "آرزو کن و شمع‌ها رو فوت کن.", grammarNoteFa: "" }
+    ]
+  }]
+
+  const displayDue = savedStashes.length > 0 ? dueStashes : mockStashes
+  const displayRemembered = rememberedStashes
 
   return (
-    <div className="w-full flex flex-col gap-6">
+    <div className="w-full flex flex-col gap-6" dir="rtl">
 
-      {dueStashes.length > 0 && (
+      <div className="pb-1 border-b-2 border-border/50 mb-2">
+        <h2 className="text-xl font-black relative inline-block">
+          مرور با دایی‌جان
+          <span className="absolute bottom-1 left-0 w-full h-2.5 bg-amber-300/60 -z-10 rounded-sm"></span>
+        </h2>
+      </div>
+
+      {displayDue.length > 0 && (
         <div className="space-y-3">
-          <h2 className="text-lg font-bold flex items-center gap-2">
+          <h3 className="text-lg font-bold flex items-center gap-2">
             <span className="bg-destructive w-2 h-2 rounded-full animate-pulse" />
-            Due Now ({dueStashes.length})
-          </h2>
+            مرور امروز ({displayDue.length})
+          </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {dueStashes.map(stash => renderStashCard(stash, true))}
+            {displayDue.map(stash => renderStashCard(stash, true))}
           </div>
         </div>
       )}
 
-      {rememberedStashes.length > 0 && (
-        <div className="space-y-3">
-          <h2 className="text-lg font-bold text-muted-foreground">
-            Remembered / Need Practice ({rememberedStashes.length})
-          </h2>
+      {displayRemembered.length > 0 && (
+        <div className="space-y-3 mt-4">
+          <h3 className="text-lg font-bold text-muted-foreground">
+            یادگرفته‌شده‌ها ({displayRemembered.length})
+          </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {rememberedStashes.map(stash => renderStashCard(stash, false))}
+            {displayRemembered.map(stash => renderStashCard(stash, false))}
           </div>
+        </div>
+      )}
+
+      {savedStashes.length === 0 && (
+        <div className="text-sm text-muted-foreground bg-secondary/50 p-4 rounded-xl text-center">
+          شما هنوز هیچ درسی را ذخیره نکرده‌اید. این فلش‌کارت‌ها به صورت نمونه نمایش داده شده‌اند.
         </div>
       )}
 

@@ -2,12 +2,9 @@
 
 import React, { useEffect, useState } from "react"
 import { motion } from "framer-motion"
-import { getLearningPaths, LearningPath } from "@/data/curriculum-paths"
-import { useLearnerStore } from "@/store/useLearnerStore"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Play, CheckCircle2, Lock, Clock, Layers } from "lucide-react"
+import { getLearningPaths } from "@/data/curriculum-paths"
+import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Play, Lock, Clock } from "lucide-react"
 import Link from "next/link"
 
 // Simple SVG Ring Component
@@ -49,88 +46,127 @@ const ProgressRing = ({ progress }: { progress: number }) => {
 }
 
 export function LearningPathMap() {
-  const [paths, setPaths] = useState<LearningPath[]>([])
-  const { currentLessonId, masteryScore } = useLearnerStore()
+  const [selectedEpisode, setSelectedEpisode] = useState<string | null>(null)
 
   useEffect(() => {
-    setPaths(getLearningPaths())
+    getLearningPaths()
   }, [])
 
   return (
-    <div className="space-y-8">
-      {paths.map((path) => (
-        <div key={path.id} className="space-y-4">
-          <div className="px-1">
-            <h2 className="text-xl font-bold tracking-tight">{path.title}</h2>
-            <p className="text-sm text-muted-foreground">{path.description}</p>
-          </div>
+    <div className="space-y-8" dir="rtl">
 
+      <div className="pb-1 border-b-2 border-border/50 mb-2">
+        <h2 className="text-xl font-black relative inline-block">
+          مسیر یادگیری
+          <span className="absolute bottom-1 left-0 w-full h-2.5 bg-amber-300/60 -z-10 rounded-sm"></span>
+        </h2>
+      </div>
+
+      <div className="space-y-4">
           <div className="grid grid-cols-1 gap-3 relative">
             {/* Connecting line for visual structure */}
-            <div className="absolute left-6 top-6 bottom-6 w-0.5 bg-border block" />
+            <div className="absolute right-6 top-6 bottom-6 w-0.5 bg-border block" />
 
-            {path.lessons.map((lesson, lessonIndex) => {
-              const isCurrentLesson = currentLessonId === lesson.id
-              const isMastered = isCurrentLesson && masteryScore >= 0.8
-              const progress = isCurrentLesson ? masteryScore * 100 : 0
-              const isLocked = !isCurrentLesson && lessonIndex > 0 && !path.lessons[lessonIndex-1].isCustom && currentLessonId !== path.lessons[lessonIndex-1].id
+            {/* Mock Episode 1 - Unlocked */}
+            <Card
+              className="relative overflow-hidden transition-all shadow-md bg-card border-2 border-primary/20 hover:border-primary/40 cursor-pointer"
+              onClick={() => setSelectedEpisode('ep1')}
+            >
+              <CardHeader className="pb-3 flex flex-row items-start justify-between space-y-0 relative z-10">
+                <div className="space-y-1">
+                  <CardTitle className="text-base font-semibold flex items-center gap-2">
+                    <span className="text-xl">🎂</span> اپیزود ۱: تولد و دعوا
+                  </CardTitle>
+                  <CardDescription className="flex items-center gap-3 text-xs pt-1">
+                    <span className="flex items-center gap-1">
+                      <Clock className="w-3 h-3" /> ۱۵ دقیقه
+                    </span>
+                    <span className="flex items-center gap-1 text-primary font-medium">
+                      <Play className="w-3 h-3 fill-primary" /> در حال پخش
+                    </span>
+                  </CardDescription>
+                </div>
+                <ProgressRing progress={45} />
+              </CardHeader>
+            </Card>
 
-              return (
-                <Card
-                  key={lesson.id}
-                  className={`relative overflow-hidden transition-all hover:shadow-md ${isLocked ? 'opacity-70 bg-muted/50' : 'bg-card'}`}
-                >
-                  <CardHeader className="pb-3 flex flex-row items-start justify-between space-y-0">
-                    <div className="space-y-1">
-                      <CardTitle className="text-base font-semibold flex items-center gap-2">
-                        {lesson.title}
-                        {lesson.isCustom && <Badge variant="secondary" className="text-[10px]">Custom</Badge>}
-                      </CardTitle>
-                      <CardDescription className="flex items-center gap-3 text-xs">
-                        <span className="flex items-center gap-1">
-                          <Clock className="w-3 h-3" /> {lesson.estimatedTimeMin}m
-                        </span>
-                        <span className="flex items-center gap-1">
-                          <Layers className="w-3 h-3" /> {lesson.blockCount} blocks
-                        </span>
-                      </CardDescription>
-                    </div>
-                    <ProgressRing progress={progress} />
-                  </CardHeader>
-                  <CardContent>
-                    <div className="flex items-center justify-between mt-2">
-                       <Badge
-                          variant={lesson.difficulty === 'beginner' ? 'default' : lesson.difficulty === 'intermediate' ? 'secondary' : 'destructive'}
-                          className="capitalize"
-                       >
-                         {lesson.difficulty}
-                       </Badge>
+            {/* Mock Episode 2 - Locked */}
+            <Card
+              className="relative overflow-hidden transition-all opacity-70 bg-muted/30 border-2 border-dashed border-border/50"
+            >
+              <CardHeader className="pb-3 flex flex-row items-start justify-between space-y-0 relative z-10">
+                <div className="space-y-1">
+                  <CardTitle className="text-base font-semibold flex items-center gap-2 text-muted-foreground">
+                    <span className="text-xl opacity-50">🎨</span> اپیزود ۲: کلاس نقاشی
+                  </CardTitle>
+                  <CardDescription className="flex items-center gap-3 text-xs pt-1">
+                    <span className="flex items-center gap-1">
+                      <Clock className="w-3 h-3" /> ۲۰ دقیقه
+                    </span>
+                  </CardDescription>
+                </div>
+                <div className="w-12 h-12 flex items-center justify-center rounded-full bg-secondary/50 text-muted-foreground">
+                   <Lock className="w-5 h-5" />
+                </div>
+              </CardHeader>
+            </Card>
 
-                       {isLocked ? (
-                          <Button variant="outline" size="sm" disabled className="gap-2">
-                            <Lock className="w-4 h-4" /> Locked
-                          </Button>
-                       ) : isMastered ? (
-                          <Button variant="default" size="sm" className="gap-2 bg-success text-success-foreground hover:bg-success/90" asChild>
-                            <Link href="/">
-                              <CheckCircle2 className="w-4 h-4" /> Review
-                            </Link>
-                          </Button>
-                       ) : (
-                          <Button variant="default" size="sm" className="gap-2" asChild>
-                             <Link href="/">
-                               <Play className="w-4 h-4" /> {progress > 0 ? "Continue" : "Start"}
-                             </Link>
-                          </Button>
-                       )}
-                    </div>
-                  </CardContent>
-                </Card>
-              )
-            })}
+            {/* Mock Episode 3 - Locked */}
+            <Card
+              className="relative overflow-hidden transition-all opacity-70 bg-muted/30 border-2 border-dashed border-border/50"
+            >
+              <CardHeader className="pb-3 flex flex-row items-start justify-between space-y-0 relative z-10">
+                <div className="space-y-1">
+                  <CardTitle className="text-base font-semibold flex items-center gap-2 text-muted-foreground">
+                    <span className="text-xl opacity-50">🎒</span> اپیزود ۳: مدرسه
+                  </CardTitle>
+                  <CardDescription className="flex items-center gap-3 text-xs pt-1">
+                    <span className="flex items-center gap-1">
+                      <Clock className="w-3 h-3" /> ۲۵ دقیقه
+                    </span>
+                  </CardDescription>
+                </div>
+                <div className="w-12 h-12 flex items-center justify-center rounded-full bg-secondary/50 text-muted-foreground">
+                   <Lock className="w-5 h-5" />
+                </div>
+              </CardHeader>
+            </Card>
           </div>
+      </div>
+
+      {/* Episode Bottom Sheet Modal */}
+      {selectedEpisode && (
+        <div className="fixed inset-0 z-[100] flex flex-col justify-end">
+          <div className="absolute inset-0 bg-neutral-950/60 backdrop-blur-sm" onClick={() => setSelectedEpisode(null)} />
+          <motion.div
+            initial={{ y: "100%" }}
+            animate={{ y: 0 }}
+            exit={{ y: "100%" }}
+            transition={{ type: "spring", damping: 25, stiffness: 200 }}
+            className="relative bg-background rounded-t-[32px] p-6 pb-12 shadow-2xl border-t border-border z-10"
+          >
+             <div className="w-12 h-1.5 bg-border rounded-full mx-auto mb-6" />
+             <h2 className="text-2xl font-black mb-2 flex items-center gap-2">
+                <span className="text-3xl">🎂</span> اپیزود ۱: تولد و دعوا
+             </h2>
+             <p className="text-muted-foreground text-sm leading-relaxed mb-8">
+                آشنایی با امین و سارا و شروع رقابت... در این قسمت با مفاهیم اولیه، مکالمات روزمره و جملات کاربردی در مهمانی‌ها آشنا می‌شویم.
+             </p>
+
+             <Link href="/">
+                <button className="bg-amber-300 hover:bg-amber-400 text-neutral-900 border-2 border-neutral-900 shadow-[3px_3px_0px_#171717] rounded-2xl py-3.5 px-5 flex items-center justify-between w-full font-bold transition-transform active:translate-y-[2px] active:shadow-none">
+                   <div className="flex items-center gap-2">
+                      <span className="bg-neutral-900 text-amber-300 text-xs px-2 py-0.5 rounded-md">۱+ سطح</span>
+                   </div>
+                   <div className="flex items-center gap-2 text-lg">
+                      شروع <Play className="w-5 h-5 fill-neutral-900" />
+                   </div>
+                </button>
+             </Link>
+          </motion.div>
         </div>
-      ))}
+      )}
+
     </div>
   )
 }
