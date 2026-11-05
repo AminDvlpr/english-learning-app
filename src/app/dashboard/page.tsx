@@ -61,7 +61,7 @@ export default function DashboardPage() {
 
         {(activeTab === "پروفایل" || activeTab === "چالش") && (
           <div className="w-full">
-             <MasteryAnalyticsCard />
+             <MasteryAnalyticsCard viewMode={activeTab === "چالش" ? "challenge" : "profile"} />
           </div>
         )}
 
