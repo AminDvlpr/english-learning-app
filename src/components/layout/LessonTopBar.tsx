@@ -125,7 +125,7 @@ export function LessonTopBar({
             transition={{ type: "spring", stiffness: 300, damping: 20 }}
             className="flex items-center gap-1 text-info font-bold text-sm"
           >
-            <Gem className="h-4 w-4 fill-info text-info" />
+            <Gem className="h-4 w-4 fill-sky-500/25 text-sky-500" />
             <span>{gems}</span>
           </motion.div>
           <Button variant="ghost" size="icon" className="w-8 h-8" onClick={handleToggleMute} aria-label={isMuted ? "Unmute" : "Mute"}>

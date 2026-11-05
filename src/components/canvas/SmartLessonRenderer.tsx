@@ -191,8 +191,7 @@ export function SmartLessonRenderer({ lesson }: SmartLessonRendererProps) {
   if (isCourseLesson && !courseLesson) return null
 
   return (
-    <div className="flex flex-col w-full min-h-[100dvh] bg-stone-50 dark:bg-stone-950 relative sm:p-4">
-      <div className="w-full max-w-[420px] mx-auto bg-white dark:bg-stone-900 sm:rounded-[28px] overflow-hidden h-[100dvh] sm:h-[calc(100dvh-5rem)] sm:max-h-[820px] flex flex-col relative sm:shadow-2xl">
+    <div className="w-full h-full flex-1 flex flex-col bg-background text-foreground relative overflow-hidden">
 
         {!hasSeenGestureGuide && (
             <GestureOnboardingOverlay onDismiss={() => useCourseStore.setState({ hasSeenGestureGuide: true })} />
@@ -218,9 +217,9 @@ export function SmartLessonRenderer({ lesson }: SmartLessonRendererProps) {
             }
 
             return (
-              <div key={idx} className="h-1.5 flex-1 bg-stone-200/50 dark:bg-stone-700/50 backdrop-blur rounded-full overflow-hidden">
+              <div key={idx} className={`flex-1 bg-stone-200/50 dark:bg-stone-700/50 backdrop-blur rounded-full transition-all duration-200 ${isCurrent && isTimelinePulsing ? 'h-2.5 ring-2 ring-amber-400/80 shadow-[0_0_12px_rgba(251,191,36,0.9)]' : 'h-1.5'}`}>
                 <div
-                  className={`h-full bg-stone-800 dark:bg-stone-200 transition-all duration-75 ease-linear ${isCurrent && isTimelinePulsing ? 'h-2.5 bg-amber-400 shadow-[0_0_12px_rgba(251,191,36,0.9)]' : ''}`}
+                  className={`h-full rounded-full bg-stone-800 dark:bg-stone-200 transition-all duration-75 ease-linear ${isCurrent && isTimelinePulsing ? 'bg-amber-400' : ''}`}
                   style={{ width: `${fillPercent}%` }}
                 />
               </div>
@@ -273,7 +272,6 @@ export function SmartLessonRenderer({ lesson }: SmartLessonRendererProps) {
             </motion.div>
           </AnimatePresence>
         </div>
-      </div>
     </div>
   )
 }

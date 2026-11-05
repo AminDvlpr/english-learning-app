@@ -19,7 +19,7 @@ export function AppShell({ children, topBar, className, ...props }: AppShellProp
 
   return (
     <div className="bg-neutral-950 min-h-[100dvh] flex justify-center items-center">
-      <div className={cn(containerClass, className, "font-sans")} {...props}>
+      <div className={cn(containerClass, className, "font-sans antialiased")} {...props}>
         {topBar && (
           <div className="flex-none">
             {topBar}

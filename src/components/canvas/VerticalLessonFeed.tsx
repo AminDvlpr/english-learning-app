@@ -8,7 +8,7 @@ import { useLearnerStore } from "@/store/useLearnerStore"
 import { useCourseStore } from "@/store/useCourseStore"
 import { CourseLesson } from "@/types/course"
 
-import { Lock, Unlock } from "lucide-react"
+import { Unlock } from "lucide-react"
 
 interface VerticalLessonFeedProps {
   lessonFeed?: FeedLesson[]
@@ -67,7 +67,7 @@ export function VerticalLessonFeed({ lessonFeed, lessons }: VerticalLessonFeedPr
   return (
     <div
       ref={feedRef}
-      className="flex-1 w-full h-full overflow-y-auto snap-y snap-mandatory bg-stone-950 relative no-scrollbar"
+      className="flex-1 w-full h-full overflow-y-auto snap-y snap-mandatory bg-background relative no-scrollbar"
     >
       {visibleLessons.map((lesson, index) => {
         const isMastered = masteredLessonsMap[lesson.id];
@@ -78,10 +78,10 @@ export function VerticalLessonFeed({ lessonFeed, lessons }: VerticalLessonFeedPr
           <div
             key={lesson.id}
             id={`lesson-container-${lesson.id}`}
-            className="snap-start min-h-full w-full flex flex-col relative"
+            className="w-full h-full shrink-0 snap-start flex flex-col relative overflow-hidden"
           >
             {/* Lesson Content Wrapper */}
-            <div className="flex-1 w-full h-full relative flex items-center justify-center bg-stone-950">
+            <div className="flex-1 w-full h-full relative flex items-center justify-center bg-background">
               <SmartLessonRenderer lesson={isCourseFormat ? (lesson as CourseLesson) : (lesson as FeedLesson).blocks} />
             </div>
 
@@ -95,10 +95,9 @@ export function VerticalLessonFeed({ lessonFeed, lessons }: VerticalLessonFeedPr
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: 20 }}
-                      className="bg-card/90 backdrop-blur border border-border shadow-lg rounded-full px-6 py-3 flex items-center gap-3"
+                      className="mx-auto max-w-[92%] w-fit rounded-2xl px-4 py-2.5 bg-background/95 backdrop-blur-md border border-border shadow-lg flex items-center justify-center gap-2 text-center"
                     >
-                      <Lock className="w-5 h-5 text-muted-foreground" />
-                      <span className="text-sm font-medium text-foreground" dir="rtl">
+                      <span className="text-xs sm:text-sm font-medium text-foreground leading-relaxed" dir="rtl">
                         🔒 استوری‌های این درس را تا آخر ببینید تا قفل اسکرول به درس بعدی باز شود
                       </span>
                     </motion.div>
