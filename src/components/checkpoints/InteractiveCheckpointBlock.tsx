@@ -22,9 +22,13 @@ interface Props {
 
 export function InteractiveCheckpointBlock({ block, state }: Props) {
   const submitCheckpointAnswer = useLearnerStore(state => state.submitCheckpointAnswer)
+  const triggerCheckpointVerification = useLearnerStore(state => state.triggerCheckpointVerification)
   const blockStates = useLearnerStore(state => state.blockStates)
 
   const handleSubmit = (id: string) => {
+    if (state === 'locked' || state === 'active') {
+      triggerCheckpointVerification(block.blockId)
+    }
     submitCheckpointAnswer(block.blockId, id)
   }
 
