@@ -24,7 +24,8 @@ export interface ReadStorySlideProps {
     chapter?: string;
     characters?: string;
   };
-  content: string; // The full text to stream
+  content?: string; // The full text to stream (legacy or fallback)
+  slide?: { kineticParagraphs?: Record<string, unknown>[], [key: string]: unknown }; // The full slide object to safely extract text
   deepDives?: DeepDiveData[];
   highlightWords?: HighlightWord[];
   interrupts?: ReadStoryInterrupt[];
@@ -40,7 +41,8 @@ export function ReadStorySlide({
   title,
   quote,
   metadata,
-  content,
+  content = '',
+  slide,
   deepDives = [],
   highlightWords = [],
   interrupts = [],
@@ -55,6 +57,17 @@ export function ReadStorySlide({
   const [streamFinished, setStreamFinished] = useState(false);
   const audioContextRef = useRef<AudioContext | null>(null);
 
+  const fullTextEn = React.useMemo(() => {
+    if (slide?.kineticParagraphs && slide.kineticParagraphs.length > 0) {
+      return slide.kineticParagraphs.map((p: { textEn?: string }) => p?.textEn || '').filter(Boolean).join('\n\n');
+    }
+    const anySlide = slide as unknown as Record<string, unknown>;
+    if (typeof anySlide?.content === 'string') return anySlide.content;
+    if (typeof anySlide?.textEn === 'string') return anySlide.textEn;
+    if (content) return content;
+    return 'Every big journey in English begins with a small childhood rivalry.';
+  }, [slide, content]);
+
   useEffect(() => {
     // Split content into words while preserving inline syntax for DeepDiveInlineText
     // This simple split by space might break [[phrase|title|desc]] if they contain spaces.
@@ -63,11 +76,11 @@ export function ReadStorySlide({
     // To ensure DeepDiveInlineText works properly, we will gradually build the `streamedText`
     // character by character or word by word. For simplicity and robustness with the syntax,
     // let's do a word-by-word streaming on the raw string.
-    const rawWords = content.split(' ');
+    const rawWords = (fullTextEn || '').split(' ');
     setWords(rawWords);
     setCurrentWordIndex(0);
     setStreamFinished(false);
-  }, [content]);
+  }, [fullTextEn]);
 
   useEffect(() => {
     if (streamFinished || isPausedByHold || isDeepDiveOpen || activeInterrupt) return;
